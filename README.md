@@ -1,7 +1,7 @@
-# D17Map - Backend
+# D17Map - Backend Side 🗺 🔍
 
 
-## How to run?
+## 🔷 How to run?
 The following command should be issued from the root directory of the project.
 
 1. `docker compose build`
