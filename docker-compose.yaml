@@ -3,7 +3,6 @@ services:
     container_name: postgres-db
     image: postgres:latest
     restart: unless-stopped
-
     environment:
       POSTGRES_DB: d17_map
       POSTGRES_USER: d17_map
@@ -12,12 +11,12 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
-
     networks:
       - ktor-postgres
-
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U d17_map" ]
+    env_file:
+      - .env
 
   web:
     container_name: ktor-server
@@ -27,16 +26,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
     networks:
       - ktor-postgres
-
-    environment:
-      POSTGRES_PASSWORD: ${PASSWORD}
 
 volumes:
   db-data: {}
 
 networks:
   ktor-postgres: {}
-
