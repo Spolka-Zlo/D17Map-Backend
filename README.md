@@ -2,7 +2,7 @@
 
 
 ## 🔷 How to run?
-### Setup
+### 🔹 Setup
 Before running any of the following commands, you should create a `.env` file
 in the same directory as `docker-compose.yaml`. The `.env` file should
 contain your password to the database:
@@ -12,14 +12,14 @@ contain your password to the database:
 PASSWORD=<your_password>
 ```
 
-### Commands
+### 🔹 Commands
 The following commands should be issued from the root directory of the project.
 
 1. `docker compose build`
 2. `docker compose up -d`
 
 
-## Cleaning Docker
+## 🔷 Cleaning Docker
 Sometimes docker has problems with itself, but there is a couple of commands which you can try to fix it
 
 1. `docker compose down` - this command stops containers and removes them.
