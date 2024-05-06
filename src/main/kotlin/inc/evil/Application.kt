@@ -11,12 +11,12 @@ fun main(args: Array<String>) {
 
 // przykład tylko, ale działający u mnie ;>
 fun Application.module() {
-    Database.connect(
-            "jdbc:postgresql://localhost:5432/d17_map",
-            driver = "org.postgresql.Driver",
-            user = "d17_map",
-            password = System.getenv("POSTGRES_PASSWORD")
-        )
+//    Database.connect(
+//            "jdbc:postgresql://localhost:5432/d17_map",
+//            driver = "org.postgresql.Driver",
+//            user = "d17_map",
+//            password = System.getenv("POSTGRES_PASSWORD")
+//        )
 
 
 //    configureSerialization()
