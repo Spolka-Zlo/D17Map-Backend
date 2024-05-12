@@ -20,16 +20,18 @@ jobs:
           distribution: 'adopt'
 
       - name: Set up environment variables
-        run: echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+        run: |
+          echo "PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: ./gradlew build
 
       - name: Build Docker images
-        run: docker compose build
+        run: |
+          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
       - name: Start Docker containers
-        run: docker compose up -d
+        run: docker-compose up -d
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2
