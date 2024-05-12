@@ -18,7 +18,6 @@ jobs:
         with:
           java-version: '17'
 
-      # Set up the POSTGRES_PASSWORD environment variable from the secret
       - name: Set up environment variables
         run: echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
 
