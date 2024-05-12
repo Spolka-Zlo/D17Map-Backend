@@ -22,7 +22,7 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: ./gradlew build
