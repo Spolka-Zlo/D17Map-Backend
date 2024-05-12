@@ -1,9 +1,10 @@
 name: D17Map build
 
 on:
+  pull_request:
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
