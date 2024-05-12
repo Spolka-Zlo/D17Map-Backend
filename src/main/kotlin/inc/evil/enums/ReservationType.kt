@@ -6,5 +6,6 @@ enum class ReservationType {
     TEST,
     CONSULTATIONS,
     CONFERENCE,
-    STUDENTS_CLUB_MEETING
+    STUDENTS_CLUB_MEETING,
+    EVENT
 }
