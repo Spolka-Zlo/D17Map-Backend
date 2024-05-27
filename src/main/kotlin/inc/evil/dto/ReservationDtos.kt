@@ -1,8 +1,8 @@
 package inc.evil.dto
 
 import inc.evil.plugins.UUIDSerializer
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
+import java.time.LocalDateTime
 
 import java.util.*
 
