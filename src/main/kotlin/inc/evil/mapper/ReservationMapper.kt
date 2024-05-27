@@ -15,7 +15,7 @@ object ReservationMapper {
         userEntity: UserEntity
     ): ReservationFullDto {
         val classroomDto = ClassroomSummaryDto(
-            id = UUID.fromString(classroomEntity.id),
+            id = (classroomEntity.id),
             name = classroomEntity.description
         )
 
@@ -38,7 +38,7 @@ object ReservationMapper {
         return ReservationEntity(
             id = dto.id,
             userId = dto.user.id,
-            classroomId = dto.classroom.id.toString(),
+            classroomId = dto.classroom.id,
             name = dto.name,
             startDate = dto.startDate,
             endDate = dto.endDate,

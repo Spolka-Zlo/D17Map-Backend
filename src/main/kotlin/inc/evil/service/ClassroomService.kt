@@ -3,21 +3,24 @@ package inc.evil.service
 import inc.evil.dao.ClassroomDAO
 import inc.evil.dto.ClassroomFullDto
 import inc.evil.dto.ClassroomSummaryDto
+import inc.evil.mapper.ClassroomMapper
 import org.koin.core.component.KoinComponent
 import java.util.*
 
 
-class ClassroomService(private val classroomDAO: ClassroomDAO) : KoinComponent {
+class ClassroomService(
+    private val classroomDAO: ClassroomDAO,
+    private val classroomMapper: ClassroomMapper,
+) : KoinComponent {
     fun getAll(): List<ClassroomSummaryDto> {
         val classrooms = classroomDAO.getAllClassrooms()
 
-
-        // TODO introduce mapper
+        // TODO improve mapper
         val classroomsDtoList = ArrayList<ClassroomSummaryDto>()
 
 
         classrooms.forEach { classroom ->
-            val classroomDto = ClassroomSummaryDto(classroom.id, classroom.description)
+            val classroomDto = classroomMapper.toClassroomSummaryDto(classroom)
             classroomsDtoList.add(classroomDto)
         }
 
@@ -26,18 +29,29 @@ class ClassroomService(private val classroomDAO: ClassroomDAO) : KoinComponent {
     }
 
     fun getByID(id: UUID): ClassroomFullDto? {
-        val classroom = classroomDAO.getClassroomById(id)
-        val classroomDetails = classroomDAO.getClassroomDetails(id)
+        // TODO fix nulls...
+        val classroom = classroomDAO.getClassroomById(id) ?: return null
+        val classroomDetails = classroomDAO.getClassroomDetails(id) ?: return null
 
-        return null
+        val dto = classroomMapper.toFullDto(classroom, classroomDetails)
+        return dto
     }
 
     fun getByName(name :String) : ClassroomFullDto? {
+//        // TODO fix nulls...
+//        val classroom = classroomDAO.get) ?: return null
+//        val classroomDetails = classroomDAO.getClassroomDetails(id) ?: return null
+//
+//        val dto = classroomMapper.toFullDto(classroom, classroomDetails)
+//        return dto
+
         return null
     }
 
     fun post(dto: ClassroomFullDto) : ClassroomSummaryDto? {
-        // TODO create new entity
+
+        val entity = classroomMapper.fromFullDto(dto)
+       // classroomDAO.createClassroom(entity)
         return null
     }
 

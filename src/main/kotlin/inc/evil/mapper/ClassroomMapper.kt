@@ -11,7 +11,7 @@ object ClassroomMapper {
 
     fun toFullDto(classroomEntity: ClassroomEntity, detailsEntity: ClassroomDetailsEntity): ClassroomFullDto {
         return ClassroomFullDto(
-            id = UUID.fromString(classroomEntity.id),
+            id = classroomEntity.id,
             description = classroomEntity.description,
             details = ClassroomDetailsDto(
                 numberOfSeats = detailsEntity.numberOfSeats,
@@ -22,7 +22,7 @@ object ClassroomMapper {
 
     fun toClassroomSummaryDto(classroomEntity: ClassroomEntity): ClassroomSummaryDto {
         return ClassroomSummaryDto(
-            id = UUID.fromString(classroomEntity.id),
+            id = classroomEntity.id,
             name = classroomEntity.description
         )
     }
@@ -37,12 +37,12 @@ object ClassroomMapper {
     // from ClassroomFullDto to Pair: ClassroomEntity and ClassroomDetailsEntity
     fun fromFullDto(fullDto: ClassroomFullDto): Pair<ClassroomEntity, ClassroomDetailsEntity> {
         val classroomEntity = ClassroomEntity(
-            id = fullDto.id.toString(),
+            id = fullDto.id,
             description = fullDto.description,
             details = fullDto.details.equipment.joinToString(", ")
         )
         val detailsEntity = ClassroomDetailsEntity(
-            classroomId = fullDto.id.toString(),
+            classroomId = fullDto.id,
             numberOfSeats = fullDto.details.numberOfSeats,
             equipment = fullDto.details.equipment.joinToString(", ")
         )
