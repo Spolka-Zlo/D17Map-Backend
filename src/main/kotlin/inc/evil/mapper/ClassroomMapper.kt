@@ -5,8 +5,6 @@ import inc.evil.dto.ClassroomFullDto
 import inc.evil.dto.ClassroomSummaryDto
 import inc.evil.entities.ClassroomDetailsEntity
 import inc.evil.entities.ClassroomEntity
-import java.util.*
-
 object ClassroomMapper {
 
     fun toFullDto(classroomEntity: ClassroomEntity, detailsEntity: ClassroomDetailsEntity): ClassroomFullDto {

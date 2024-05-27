@@ -1,5 +1,6 @@
 package inc.evil
 
+import inc.evil.plugins.configureDI
 import inc.evil.plugins.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*

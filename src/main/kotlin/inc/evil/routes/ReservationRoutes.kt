@@ -10,8 +10,14 @@ import io.ktor.server.routing.*
 import java.util.*
 
 fun Route.reservationRoutes(reservationService: ReservationService) {
+    route("/") {
+        get{
+            call.respondText("Hello World!")
+        }
+    }
     route("/reservation") {
         // get all reservations -> for admins maybe ? TODO add pagination
+
         get {
             call.respond(reservationService.getReservations())
         }
