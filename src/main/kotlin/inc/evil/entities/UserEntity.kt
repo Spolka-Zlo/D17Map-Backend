@@ -14,7 +14,7 @@ data class UserEntity(
     companion object {
         fun fromResultRow(row: ResultRow): UserEntity {
             return UserEntity(
-                id = row[User.id],
+                id = row[User.id].value,
                 password = row[User.password],
                 email = row[User.email],
                 role = UserType.valueOf(row[User.role].toString())

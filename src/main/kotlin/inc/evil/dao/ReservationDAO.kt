@@ -1,7 +1,10 @@
 package inc.evil.dao
 
 import inc.evil.entities.ReservationEntity
+import inc.evil.tables.Classroom
 import inc.evil.tables.Reservation
+import inc.evil.tables.User
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -27,9 +30,9 @@ class ReservationDAO : KoinComponent {
     fun createReservation(reservation: ReservationEntity) {
         transaction {
             Reservation.insert {
-                it[id] = reservation.id
-                it[userId] = reservation.userId
-                it[classroomId] = reservation.classroomId
+                it[id] = EntityID(reservation.id, Reservation)
+                it[userId] = EntityID(reservation.userId, User)
+                it[classroomId] = EntityID(reservation.classroomId, Classroom)
                 it[name] = reservation.name
                 it[startDate] = reservation.startDate
                 it[endDate] = reservation.endDate
@@ -41,8 +44,8 @@ class ReservationDAO : KoinComponent {
     fun updateReservation(reservation: ReservationEntity) {
         transaction {
             Reservation.update({ Reservation.id eq reservation.id }) {
-                it[userId] = reservation.userId
-                it[classroomId] = reservation.classroomId
+                it[userId] = EntityID(reservation.userId, User)
+                it[classroomId] = EntityID(reservation.classroomId, Classroom)
                 it[name] = reservation.name
                 it[startDate] = reservation.startDate
                 it[endDate] = reservation.endDate
@@ -53,7 +56,8 @@ class ReservationDAO : KoinComponent {
 
     fun deleteReservation(reservationId: UUID) {
         transaction {
-            Reservation.deleteWhere { Reservation.id eq reservationId}
+            Reservation.deleteWhere { Reservation.id eq reservationId }
         }
     }
 }
+

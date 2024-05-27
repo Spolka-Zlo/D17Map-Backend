@@ -10,7 +10,7 @@ import org.koin.ktor.plugin.Koin
 
 val appModules = module {
     single<ClassroomDAO> { ClassroomDAO() }
-    single<ClassroomService> { ClassroomService(get()) }
+//    single<ClassroomService> { ClassroomService() }
 
     single<ReservationDAO> { ReservationDAO() }
     single<ReservationService> { ReservationService(get()) }

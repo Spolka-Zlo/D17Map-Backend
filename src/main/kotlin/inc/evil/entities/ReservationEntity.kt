@@ -1,7 +1,7 @@
 package inc.evil.entities
 
-import inc.evil.tables.Reservation
 import inc.evil.enums.ReservationType
+import inc.evil.tables.Reservation
 import org.jetbrains.exposed.sql.ResultRow
 import java.time.LocalDateTime
 import java.util.*
@@ -18,13 +18,13 @@ data class ReservationEntity(
     companion object {
         fun fromResultRow(row: ResultRow): ReservationEntity {
             return ReservationEntity(
-                id = row[Reservation.id],
-                userId = row[Reservation.userId],
-                classroomId = row[Reservation.classroomId],
+                id = row[Reservation.id].value,
+                userId = row[Reservation.userId].value,
+                classroomId = row[Reservation.classroomId].value,
                 name = row[Reservation.name],
                 startDate = row[Reservation.startDate],
                 endDate = row[Reservation.endDate],
-                type = ReservationType.valueOf(row[Reservation.type].toString())
+                type = row[Reservation.type]
             )
         }
     }

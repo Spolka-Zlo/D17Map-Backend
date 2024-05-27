@@ -1,9 +1,9 @@
 package inc.evil.tables
 
+import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.Table
 
-object Classroom : Table() {
-    val id = uuid("id").uniqueIndex()
+object Classroom : UUIDTable() {
     val description = text("description")
     val details = text("details")
 }

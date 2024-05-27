@@ -13,7 +13,7 @@ data class ClassroomEntity(
     companion object {
         fun fromResultRow(row: ResultRow): ClassroomEntity {
             return ClassroomEntity(
-                id = row[Classroom.id],
+                id = row[Classroom.id].value,
                 description = row[Classroom.description],
                 details = row[Classroom.details]
             )
@@ -29,7 +29,7 @@ data class ClassroomDetailsEntity(
     companion object {
         fun fromResultRow(row: ResultRow): ClassroomDetailsEntity {
             return ClassroomDetailsEntity(
-                classroomId = row[ClassroomDetails.classroomId],
+                classroomId = row[ClassroomDetails.classroomId].value,  // Extract UUID from EntityID
                 numberOfSeats = row[ClassroomDetails.numberOfSeats],
                 equipment = row[ClassroomDetails.equipment]
             )

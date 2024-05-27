@@ -4,6 +4,7 @@ import inc.evil.entities.ClassroomDetailsEntity
 import inc.evil.entities.ClassroomEntity
 import inc.evil.tables.Classroom
 import inc.evil.tables.ClassroomDetails
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -29,7 +30,7 @@ class ClassroomDAO : KoinComponent {
     fun createClassroom(classroom: ClassroomEntity) {
         transaction {
             Classroom.insert {
-                it[id] = classroom.id
+                it[id] = EntityID(classroom.id, Classroom)
                 it[description] = classroom.description
                 it[details] = classroom.details
             }
