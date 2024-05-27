@@ -7,8 +7,9 @@ import inc.evil.tables.ClassroomDetails
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.core.component.KoinComponent
 
-class ClassroomDAO {
+class ClassroomDAO : KoinComponent {
     fun getClassroomById(classroomId: String): ClassroomEntity? {
         return transaction {
             Classroom.select { Classroom.id eq classroomId }
