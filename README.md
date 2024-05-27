@@ -59,3 +59,12 @@ class OrderRouteTests {
 ## Object model
 
 ![Object Model](docs/object_model.png)
+
+
+## Problems / TODO
+
+- [ ] Fixing model / how to save object with a reference to other object
+- [ ] Adjusting DAO layer
+- [ ] Fix mappings
+- [ ] Introduce exceptions to service layer
+- [ ] Introduce status pages / exception handling in controller layer
