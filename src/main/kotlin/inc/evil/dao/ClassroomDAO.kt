@@ -8,9 +8,10 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
+import java.util.*
 
 class ClassroomDAO : KoinComponent {
-    fun getClassroomById(classroomId: String): ClassroomEntity? {
+    fun getClassroomById(classroomId: UUID): ClassroomEntity? {
         return transaction {
             Classroom.select { Classroom.id eq classroomId }
                 .map { ClassroomEntity.fromResultRow(it) }
@@ -44,13 +45,13 @@ class ClassroomDAO : KoinComponent {
         }
     }
 
-    fun deleteClassroom(classroomId: String) {
+    fun deleteClassroom(classroomId: UUID) {
         transaction {
             Classroom.deleteWhere { Classroom.id eq classroomId }
         }
     }
 
-    fun getClassroomDetails(classroomId: String): ClassroomDetailsEntity? {
+    fun getClassroomDetails(classroomId: UUID): ClassroomDetailsEntity? {
         return transaction {
             ClassroomDetails.select { ClassroomDetails.classroomId eq classroomId }
                 .map { ClassroomDetailsEntity.fromResultRow(it) }

@@ -8,9 +8,10 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import org.koin.core.component.KoinComponent
 import java.util.*
 
-class UserDAO {
+class UserDAO : KoinComponent {
     fun getUserById(userId: UUID): UserEntity? {
         return transaction {
             User.select { User.id eq userId }

@@ -3,7 +3,7 @@ package inc.evil.tables
 import org.jetbrains.exposed.sql.Table
 
 object Classroom : Table() {
-    val id = text("id").uniqueIndex()
+    val id = uuid("id").uniqueIndex()
     val description = text("description")
     val details = text("details")
 }

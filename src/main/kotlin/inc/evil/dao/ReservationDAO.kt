@@ -5,9 +5,10 @@ import inc.evil.tables.Reservation
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.core.component.KoinComponent
 import java.util.*
 
-class ReservationDAO {
+class ReservationDAO : KoinComponent {
     fun getReservationById(reservationId: UUID): ReservationEntity? {
         return transaction {
             Reservation.select { Reservation.id eq reservationId }
