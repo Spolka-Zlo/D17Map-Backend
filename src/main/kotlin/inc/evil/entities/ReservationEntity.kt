@@ -9,7 +9,7 @@ import java.util.*
 data class ReservationEntity(
     val id: UUID,
     val userId: UUID,
-    val classroomId: String,
+    val classroomId: UUID,
     val name: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,

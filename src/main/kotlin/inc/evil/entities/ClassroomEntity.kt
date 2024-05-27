@@ -3,9 +3,10 @@ package inc.evil.entities
 import inc.evil.tables.Classroom
 import inc.evil.tables.ClassroomDetails
 import org.jetbrains.exposed.sql.ResultRow
+import java.util.UUID
 
 data class ClassroomEntity(
-    val id: String,
+    val id: UUID,
     val description: String,
     val details: String
 ) {
@@ -21,7 +22,7 @@ data class ClassroomEntity(
 }
 
 data class ClassroomDetailsEntity(
-    val classroomId: String,
+    val classroomId: UUID,
     val numberOfSeats: Int,
     val equipment: String
 ) {

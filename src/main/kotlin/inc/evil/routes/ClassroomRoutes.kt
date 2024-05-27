@@ -1,26 +1,15 @@
 package inc.evil.routes
 
-import inc.evil.dto.ClassroomDetailsDto
-import inc.evil.dto.ClassroomFullDto
 import inc.evil.service.ClassroomService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.*
-
-
-val classroom1Details = ClassroomDetailsDto(2, listOf("Laptop", "Gniazdko"))
-val classroom2Details = ClassroomDetailsDto(3, listOf("Komputer", "Rzutnik", "Kamera"))
-val classroom1 = ClassroomFullDto(UUID.randomUUID(), "Sala sieciowa", classroom1Details)
-val classroom2 = ClassroomFullDto(UUID.randomUUID(), "Sala wykladowa", classroom2Details)
-
-val classrooms: List<ClassroomFullDto> = listOf(classroom1, classroom2)
 
 fun Route.classroomRoutes(classroomService: ClassroomService) {
     route("/classroom") {
         // list all classrooms
         get {
-            // TODO create service that gets data from database
+            val classrooms = classroomService.getAll()
             // TODO add pagination / query parameters
             // TODO add validation
             call.respond(classrooms)
