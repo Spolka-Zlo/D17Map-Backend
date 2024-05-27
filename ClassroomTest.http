@@ -1,0 +1,53 @@
+POST http://127.0.0.1:8080/classroom
+Content-Type: application/json
+
+{
+  "id": "eb7693c4-90ae-4dac-af48-d9cc5a64be6b",
+  "description": "Laboratory classroom",
+  "details": {
+    "numberOfSeats": 12,
+    "equipment": [
+      "PC's",
+      "whiteboard"
+    ]
+  }
+}
+###
+
+POST http://127.0.0.1:8080/classroom
+Content-Type: application/json
+
+{
+  "id": "eb7693c4-90ae-4dac-af48-d9cc5a64be6b",
+  "description": "Networks classroom",
+  "details": {
+    "numberOfSeats": 23,
+    "equipment": [
+      "PC's",
+      "projector",
+      "whiteboard"
+    ]
+  }
+}
+###
+
+POST http://127.0.0.1:8080/classroom
+Content-Type: application/json
+
+{
+  "id": "eb7693c4-90ae-4dac-af48-d9cc5a64be6b",
+  "description": "Maths classroom",
+  "details": {
+    "numberOfSeats": 32,
+    "equipment": [
+      "projector",
+      "whiteboard",
+      "chalkboard"
+    ]
+  }
+}
+###
+
+GET http://127.0.0.1:8080/classroom
+Accept: application/json
+###
