@@ -45,5 +45,9 @@ class ClassroomService(private val classroomDAO: ClassroomDAO) : KoinComponent {
         return null
     }
 
+    fun delete(id: UUID) {
+        classroomDAO.deleteClassroom(id)
+    }
+
 
 }
