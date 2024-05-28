@@ -79,7 +79,7 @@ class OrderRouteTests {
 # TODO new
 
 - [ ] Either do it in service and DTO or change a model (I think it'd be better) so a reservation has date, startTime, endTIme
-- [ ] GET all classrooms (without description)
+- [x] GET all classrooms (without description)
 - [ ] GET all reservations (without owner), (with type, start, end, classroom)
 - [ ] GET all your reservations
 - [ ] GET all reservations by date
