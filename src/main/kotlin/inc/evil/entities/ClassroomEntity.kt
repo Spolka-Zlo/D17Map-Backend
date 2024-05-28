@@ -8,7 +8,7 @@ import java.util.UUID
 data class ClassroomEntity(
     val id: UUID,
     val description: String,
-    val details: String
+    val details: ClassroomDetails
 ) {
     companion object {
         fun fromResultRow(row: ResultRow): ClassroomEntity {

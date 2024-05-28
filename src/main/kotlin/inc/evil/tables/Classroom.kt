@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object Classroom : UUIDTable() {
     val description = text("description")
-    val details = text("details")
+    val details = ClassroomDetails
 }
 
 object ClassroomDetails : Table() {
