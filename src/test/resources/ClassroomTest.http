@@ -1,0 +1,51 @@
+POST localhost:8080/classrooms
+Content-Type: application/json
+
+{
+  "name": "3.14",
+  "description": "Sala Garka Maruchy",
+  "capacity": 43,
+  "equipment":
+  [
+    "Projektor",
+    "Komputery",
+    "Terminale"
+  ]
+}
+###
+
+POST localhost:8080/classrooms
+Content-Type: application/json
+
+{
+  "name": "4.23",
+  "description": "Sala sieciowa Luke'a",
+  "capacity": 12,
+  "equipment":
+  [
+    "Projektor",
+    "Komputery",
+    "Terminale",
+    "Routery",
+    "Kable"
+  ]
+}
+###
+
+POST localhost:8080/classrooms
+Content-Type: application/json
+
+{
+  "name": "1.38",
+  "description": "Sala Maga",
+  "capacity": 250,
+  "equipment":
+  [
+    "Projektor",
+    "Kable",
+    "Inne"
+  ]
+}
+###
+
+

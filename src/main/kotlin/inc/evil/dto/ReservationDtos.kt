@@ -21,7 +21,7 @@ data class ReservationDayDto(
 
 @Serializable
 data class ReservationPostDto(
-    @Serializable(with = UUIDSerializer::class) val id: UUID?,
+    @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
     val name: String,
     val type: ReservationType,
     @Serializable(with = UUIDSerializer::class) val userId: UUID,
@@ -33,7 +33,7 @@ data class ReservationPostDto(
 
 @Serializable
 data class UserReservationDto(
-    @Serializable(with = UUIDSerializer::class) val id: UUID?,
+    @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
     val name: String,
     val type: ReservationType,
     @Serializable(with = LocalDateIso8601Serializer::class) val date: LocalDate,

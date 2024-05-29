@@ -2,7 +2,7 @@ package inc.evil.dao
 
 import inc.evil.entities.ReservationEntity
 import inc.evil.tables.Classroom
-import inc.evil.tables.Reservation
+import inc.evil.tables.Reservations
 import inc.evil.tables.User
 import kotlinx.datetime.toJavaLocalDateTime
 import org.jetbrains.exposed.dao.id.EntityID
@@ -13,15 +13,13 @@ import org.koin.core.component.KoinComponent
 import java.util.*
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
-import kotlinx.datetime.toKotlinLocalTime
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 
 class ReservationDAO : KoinComponent {
     fun getReservationById(reservationId: UUID): ReservationEntity? {
         return transaction {
-            Reservation.select { Reservation.id eq reservationId }
+            Reservations.select { Reservations.id eq reservationId }
                 .map { ReservationEntity.fromResultRow(it) }
                 .singleOrNull()
         }
@@ -29,7 +27,7 @@ class ReservationDAO : KoinComponent {
 
     fun getUserReservations(userId: String): List<ReservationEntity> {
         return transaction {
-            Reservation.select { Reservation.userId eq UUID.fromString(userId) }
+            Reservations.select { Reservations.userId eq UUID.fromString(userId) }
                 .map { ReservationEntity.fromResultRow(it) }
         }
     }
@@ -37,32 +35,32 @@ class ReservationDAO : KoinComponent {
     fun getUserFutureReservations(userId: String): List<ReservationEntity> {
         val currentTime =  LocalDateTime.now()
         return transaction {
-            Reservation.select {
-                (Reservation.userId eq UUID.fromString(userId)) and
-                        (Reservation.startTime greaterEq currentTime)
+            Reservations.select {
+                (Reservations.userId eq UUID.fromString(userId)) and
+                        (Reservations.startTime greaterEq currentTime)
             }.map { ReservationEntity.fromResultRow(it) }
         }
     }
 
     fun getAllReservationsForDay(day: LocalDate): List<ReservationEntity> {
         return transaction {
-            Reservation.selectAll()
-                .filter { it[Reservation.date].toKotlinLocalDate() == day }
+            Reservations.selectAll()
+                .filter { it[Reservations.date].toKotlinLocalDate() == day }
                 .map { ReservationEntity.fromResultRow(it) }
         }
     }
 
     fun getAllReservations(): List<ReservationEntity> {
         return transaction {
-            Reservation.selectAll()
+            Reservations.selectAll()
                 .map { ReservationEntity.fromResultRow(it) }
         }
     }
 
     fun createReservation(reservation: ReservationEntity) {
         transaction {
-            Reservation.insert {
-                it[id] = EntityID(reservation.id, Reservation)
+            Reservations.insert {
+                it[id] = EntityID(reservation.id, Reservations)
                 it[userId] = EntityID(reservation.userId, User)
                 it[classroomId] = EntityID(reservation.classroomId, Classroom)
                 it[name] = reservation.name
@@ -75,7 +73,7 @@ class ReservationDAO : KoinComponent {
 
     fun updateReservation(reservation: ReservationEntity) {
         transaction {
-            Reservation.update({ Reservation.id eq reservation.id }) {
+            Reservations.update({ Reservations.id eq reservation.id }) {
                 it[userId] = EntityID(reservation.userId, User)
                 it[classroomId] = EntityID(reservation.classroomId, Classroom)
                 it[name] = reservation.name
@@ -88,7 +86,7 @@ class ReservationDAO : KoinComponent {
 
     fun deleteReservation(reservationId: UUID) {
         transaction {
-            Reservation.deleteWhere { Reservation.id eq reservationId }
+            Reservations.deleteWhere { Reservations.id eq reservationId }
         }
     }
 }

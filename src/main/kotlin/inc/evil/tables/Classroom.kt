@@ -1,14 +1,22 @@
 package inc.evil.tables
 
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
-object Classroom : UUIDTable() {
+object Classrooms : UUIDTable() {
     val name = text("name")
     val description = text("description")
+    val numberOfSeats = integer("numberOfSeats")
 }
 
-object ClassroomDetails : UUIDTable() {
-    val classroomId = reference("classroom_id", Classroom.id).uniqueIndex()
-    val numberOfSeats = integer("number_of_seats")
-    val equipment = text("equipment")
+class Classroom(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<Classroom>(Classrooms)
+    var name by Classrooms.name
+    var description by Classrooms.description
+    var numberOfSeats by Classrooms.numberOfSeats
+    val equipment by Equipment referencedOn Equipments.classroom
 }
+

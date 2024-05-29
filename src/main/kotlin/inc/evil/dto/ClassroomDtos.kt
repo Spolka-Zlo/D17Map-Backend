@@ -15,7 +15,7 @@ data class ClassroomSummaryDto(
 
 @Serializable
 data class ClassroomPostDto(
-    @Serializable(with = UUIDSerializer::class) val id: UUID?,
+    @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
     val name: String,
     val description: String,
     val capacity: Int,
