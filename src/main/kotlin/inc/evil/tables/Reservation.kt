@@ -2,10 +2,10 @@ package inc.evil.tables
 
 import inc.evil.enums.ReservationType
 import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.`java-time`.date
-import org.jetbrains.exposed.sql.`java-time`.datetime
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.javatime.time
 import java.util.UUID
 
 object Reservations : UUIDTable() {
@@ -13,8 +13,8 @@ object Reservations : UUIDTable() {
     val classroom = reference("classroom", Classrooms)
     val name = text("name")
     val date = date("date")
-    val startTime = datetime("start_time")
-    val endTime = datetime("end_time")
+    val startTime = time("start_time")
+    val endTime = time("end_time")
     val type = enumerationByName("type", 10, ReservationType::class)
 }
 

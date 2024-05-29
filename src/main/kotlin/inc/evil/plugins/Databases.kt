@@ -1,7 +1,7 @@
 package inc.evil.plugins
 
 import inc.evil.tables.Classrooms
-import inc.evil.tables.ClassroomDetails
+import inc.evil.tables.Equipments
 import inc.evil.tables.Reservations
 import inc.evil.tables.Users
 import org.jetbrains.exposed.sql.Database
@@ -19,7 +19,7 @@ object DatabaseSingleton {
 
         transaction(database) {
             SchemaUtils.create(Users)
-            SchemaUtils.create(ClassroomDetails)
+            SchemaUtils.create(Equipments)
             SchemaUtils.create(Classrooms)
             SchemaUtils.create(Reservations)
         }
