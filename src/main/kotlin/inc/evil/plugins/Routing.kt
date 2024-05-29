@@ -18,10 +18,5 @@ fun Application.configureRouting() {
         classroomRoutes(classroomService)
         reservationRoutes(reservationService)
         userRoutes(reservationService)
-
-        //customerRouting()
-        //listOrderRoute()
-        //getOrderRoute()
-        //totalizeOrderRoute()
     }
 }
