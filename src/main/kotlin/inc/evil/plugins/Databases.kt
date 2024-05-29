@@ -1,5 +1,8 @@
 package inc.evil.plugins
 
+import inc.evil.tables.Classroom
+import inc.evil.tables.ClassroomDetails
+import inc.evil.tables.Reservation
 import inc.evil.tables.User
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -15,10 +18,10 @@ object DatabaseSingleton {
         val database = Database.connect(jdbcURL, driverClassName, user, password)
 
         transaction(database) {
-//            SchemaUtils.create(Reservation)
             SchemaUtils.create(User)
-//            SchemaUtils.create(ClassroomDetails)
-//            SchemaUtils.create(Classroom)
+            SchemaUtils.create(ClassroomDetails)
+            SchemaUtils.create(Classroom)
+            SchemaUtils.create(Reservation)
         }
     }
 }
