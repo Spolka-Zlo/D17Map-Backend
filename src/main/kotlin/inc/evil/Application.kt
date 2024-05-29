@@ -1,9 +1,8 @@
 package inc.evil
 
-import inc.evil.plugins.configureDI
-import inc.evil.plugins.configureRouting
-import inc.evil.plugins.configureSerialization
+import inc.evil.plugins.*
 import io.ktor.server.application.*
+import org.jetbrains.exposed.sql.Database
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -12,10 +11,11 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
 //    install(Resources) // for future maybe
+    DatabaseSingleton.init()
     configureDI()
     configureRouting()
     configureSerialization()
-    // configureDatabases()
+
 
 
 }
