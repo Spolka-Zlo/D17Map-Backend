@@ -14,6 +14,7 @@ import java.util.*
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalTime
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 
@@ -34,7 +35,7 @@ class ReservationDAO : KoinComponent {
     }
 
     fun getUserFutureReservations(userId: String): List<ReservationEntity> {
-        val currentTime = LocalTime.now().toKotlinLocalTime()
+        val currentTime =  LocalDateTime.now()
         return transaction {
             Reservation.select {
                 (Reservation.userId eq UUID.fromString(userId)) and
