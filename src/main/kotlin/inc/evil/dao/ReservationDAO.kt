@@ -10,6 +10,11 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import java.util.*
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalTime
+import java.time.LocalTime
+
 
 class ReservationDAO : KoinComponent {
     fun getReservationById(reservationId: UUID): ReservationEntity? {
@@ -17,6 +22,31 @@ class ReservationDAO : KoinComponent {
             Reservation.select { Reservation.id eq reservationId }
                 .map { ReservationEntity.fromResultRow(it) }
                 .singleOrNull()
+        }
+    }
+
+    fun getUserReservations(userId: String): List<ReservationEntity> {
+        return transaction {
+            Reservation.select { Reservation.userId eq UUID.fromString(userId) }
+                .map { ReservationEntity.fromResultRow(it) }
+        }
+    }
+
+    fun getUserFutureReservations(userId: String): List<ReservationEntity> {
+        val currentTime = LocalTime.now().toKotlinLocalTime()
+        return transaction {
+            Reservation.select {
+                (Reservation.userId eq UUID.fromString(userId)) and
+                        (Reservation.startTime greaterEq currentTime)
+            }.map { ReservationEntity.fromResultRow(it) }
+        }
+    }
+
+    fun getAllReservationsForDay(day: LocalDate): List<ReservationEntity> {
+        return transaction {
+            Reservation.selectAll()
+                .filter { it[Reservation.date].toKotlinLocalDate() == day }
+                .map { ReservationEntity.fromResultRow(it) }
         }
     }
 
@@ -34,8 +64,8 @@ class ReservationDAO : KoinComponent {
                 it[userId] = EntityID(reservation.userId, User)
                 it[classroomId] = EntityID(reservation.classroomId, Classroom)
                 it[name] = reservation.name
-                it[startDate] = reservation.startDate
-                it[endDate] = reservation.endDate
+                it[startTime] = reservation.startTime.toJavaLocalDateTime()
+                it[endTime] = reservation.endTime.toJavaLocalDateTime()
                 it[type] = reservation.type
             }
         }
@@ -47,8 +77,8 @@ class ReservationDAO : KoinComponent {
                 it[userId] = EntityID(reservation.userId, User)
                 it[classroomId] = EntityID(reservation.classroomId, Classroom)
                 it[name] = reservation.name
-                it[startDate] = reservation.startDate
-                it[endDate] = reservation.endDate
+                it[startTime] = reservation.startTime.toJavaLocalDateTime()
+                it[endTime] = reservation.endTime.toJavaLocalDateTime()
                 it[type] = reservation.type
             }
         }
@@ -60,4 +90,3 @@ class ReservationDAO : KoinComponent {
         }
     }
 }
-

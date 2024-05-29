@@ -3,7 +3,7 @@ package inc.evil.entities
 import inc.evil.enums.ReservationType
 import inc.evil.tables.Reservation
 import org.jetbrains.exposed.sql.ResultRow
-import java.time.LocalDateTime
+
 import java.util.*
 
 data class ReservationEntity(
@@ -11,8 +11,9 @@ data class ReservationEntity(
     val userId: UUID,
     val classroomId: UUID,
     val name: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val date: LocalDate,
+    val startTime: LocalDateTime,
+    val endTime: LocalDateTime,
     val type: ReservationType
 ) {
     companion object {
@@ -22,8 +23,9 @@ data class ReservationEntity(
                 userId = row[Reservation.userId].value,
                 classroomId = row[Reservation.classroomId].value,
                 name = row[Reservation.name],
-                startDate = row[Reservation.startDate],
-                endDate = row[Reservation.endDate],
+                date = row[Reservation.date].toKotlinLocalDate(),
+                startTime = row[Reservation.startTime].toKotlinLocalDateTime(),
+                endTime = row[Reservation.endTime].toKotlinLocalDateTime(),
                 type = row[Reservation.type]
             )
         }

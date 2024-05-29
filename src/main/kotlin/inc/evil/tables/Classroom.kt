@@ -1,15 +1,13 @@
 package inc.evil.tables
 
 import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.Table
 
 object Classroom : UUIDTable() {
     val description = text("description")
-    val details = ClassroomDetails
 }
 
-object ClassroomDetails : Table() {
+object ClassroomDetails : UUIDTable() {
     val classroomId = reference("classroom_id", Classroom.id).uniqueIndex()
-    val numberOfSeats = integer("numberOfSeats")
+    val numberOfSeats = integer("number_of_seats")
     val equipment = text("equipment")
 }

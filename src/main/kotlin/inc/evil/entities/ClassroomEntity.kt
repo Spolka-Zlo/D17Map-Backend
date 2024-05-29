@@ -8,14 +8,14 @@ import java.util.UUID
 data class ClassroomEntity(
     val id: UUID,
     val description: String,
-    val details: ClassroomDetails
+    val details: ClassroomDetailsEntity
 ) {
     companion object {
-        fun fromResultRow(row: ResultRow): ClassroomEntity {
+        fun fromResultRow(classroomRow: ResultRow, detailsRow: ResultRow): ClassroomEntity {
             return ClassroomEntity(
-                id = row[Classroom.id].value,
-                description = row[Classroom.description],
-                details = row[Classroom.details]
+                id = classroomRow[Classroom.id].value,
+                description = classroomRow[Classroom.description],
+                details = ClassroomDetailsEntity.fromResultRow(detailsRow)
             )
         }
     }
@@ -29,7 +29,7 @@ data class ClassroomDetailsEntity(
     companion object {
         fun fromResultRow(row: ResultRow): ClassroomDetailsEntity {
             return ClassroomDetailsEntity(
-                classroomId = row[ClassroomDetails.classroomId].value,  // Extract UUID from EntityID
+                classroomId = row[ClassroomDetails.classroomId].value,
                 numberOfSeats = row[ClassroomDetails.numberOfSeats],
                 equipment = row[ClassroomDetails.equipment]
             )

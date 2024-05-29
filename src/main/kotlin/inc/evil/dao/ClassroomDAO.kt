@@ -14,40 +14,63 @@ import java.util.*
 class ClassroomDAO : KoinComponent {
     fun getClassroomById(classroomId: UUID): ClassroomEntity? {
         return transaction {
-            Classroom.select { Classroom.id eq classroomId }
-                .map { ClassroomEntity.fromResultRow(it) }
+            val classroomResultRow = Classroom.select { Classroom.id eq classroomId }
                 .singleOrNull()
+            val detailsResultRow = ClassroomDetails.select { ClassroomDetails.classroomId eq classroomId }
+                .singleOrNull()
+
+            if (classroomResultRow != null && detailsResultRow != null) {
+                ClassroomEntity.fromResultRow(classroomResultRow, detailsResultRow)
+            } else {
+                null
+            }
         }
     }
 
     fun getAllClassrooms(): List<ClassroomEntity> {
         return transaction {
-            Classroom.selectAll()
-                .map { ClassroomEntity.fromResultRow(it) }
+            (Classroom innerJoin ClassroomDetails)
+                .selectAll()
+                .map { row ->
+                    val classroomRow = row[Classroom.id]
+                    val detailsRow = ClassroomDetails.select { ClassroomDetails.classroomId eq classroomRow.value }
+                        .singleOrNull()
+                    ClassroomEntity.fromResultRow(row, detailsRow!!)
+                }
         }
     }
 
     fun createClassroom(classroom: ClassroomEntity) {
         transaction {
+            ClassroomDetails.insert {
+                it[classroomId] = EntityID(classroom.id, Classroom)
+                it[numberOfSeats] = classroom.details.numberOfSeats
+                it[equipment] = classroom.details.equipment
+            }
+
             Classroom.insert {
                 it[id] = EntityID(classroom.id, Classroom)
                 it[description] = classroom.description
-                it[details] = classroom.details
             }
         }
     }
 
     fun updateClassroom(classroom: ClassroomEntity) {
         transaction {
+            ClassroomDetails.update({ ClassroomDetails.classroomId eq classroom.id }) {
+                it[numberOfSeats] = classroom.details.numberOfSeats
+                it[equipment] = classroom.details.equipment
+            }
+
             Classroom.update({ Classroom.id eq classroom.id }) {
                 it[description] = classroom.description
-                it[details] = classroom.details
             }
         }
     }
 
     fun deleteClassroom(classroomId: UUID) {
         transaction {
+            ClassroomDetails.deleteWhere { ClassroomDetails.classroomId eq classroomId }
             Classroom.deleteWhere { Classroom.id eq classroomId }
         }
     }
@@ -60,3 +83,4 @@ class ClassroomDAO : KoinComponent {
         }
     }
 }
+
