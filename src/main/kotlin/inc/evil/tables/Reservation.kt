@@ -9,8 +9,8 @@ import org.jetbrains.exposed.dao.id.EntityID
 import java.util.UUID
 
 object Reservations : UUIDTable() {
-    val userId = reference("user_id", id)
-    val classroomId = reference("classroom_id", id)
+    val user = reference("user", Users)
+    val classroom = reference("classroom", Classrooms)
     val name = text("name")
     val date = date("date")
     val startTime = datetime("start_time")
@@ -21,8 +21,8 @@ object Reservations : UUIDTable() {
 class Reservation(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<Reservation>(Reservations)
 
-    var userId by Reservations.userId
-    var classroomId by Reservations.classroomId
+    var user by Reservations.user
+    var classroom by Reservations.classroom
     var name by Reservations.name
     var date by Reservations.date
     var startTime by Reservations.startTime
