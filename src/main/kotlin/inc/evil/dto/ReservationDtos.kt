@@ -1,17 +1,45 @@
 package inc.evil.dto
 
+import inc.evil.enums.ReservationType
 import inc.evil.plugins.UUIDSerializer
-import kotlinx.serialization.Contextual
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.serializers.LocalDateIso8601Serializer
+import kotlinx.datetime.serializers.LocalTimeComponentSerializer
+import kotlinx.datetime.serializers.LocalTimeIso8601Serializer
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
 import java.util.*
 
 @Serializable
-data class ReservationFullDto(
+data class ReservationDayDto(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val name: String,
-    val classroom: ClassroomSummaryDto,
-    @Contextual val startDate: LocalDateTime,
-    @Contextual val endDate: LocalDateTime,
-    val user: UserSummaryDto
+    val type: ReservationType,
+    @Serializable(with = LocalTimeComponentSerializer::class) val startTime: LocalTime,
+    @Serializable(with = LocalTimeIso8601Serializer::class) val endTime: LocalTime,
+    val classroom: ClassroomBasicInfoDto
 )
+
+@Serializable
+data class ReservationPostDto(
+    @Serializable(with = UUIDSerializer::class) val id: UUID?,
+    val name: String,
+    val type: ReservationType,
+    @Serializable(with = UUIDSerializer::class) val userId: UUID,
+    @Serializable(with = LocalDateIso8601Serializer::class) val date: LocalDate,
+    @Serializable(with = LocalTimeIso8601Serializer::class) val startTime: LocalTime,
+    @Serializable(with = LocalTimeIso8601Serializer::class) val endTime: LocalTime,
+    @Serializable(with = UUIDSerializer::class) val classroomId: UUID
+)
+
+@Serializable
+data class UserReservationDto(
+    @Serializable(with = UUIDSerializer::class) val id: UUID?,
+    val name: String,
+    val type: ReservationType,
+    @Serializable(with = LocalDateIso8601Serializer::class) val date: LocalDate,
+    @Serializable(with = LocalTimeIso8601Serializer::class) val startTime: LocalTime,
+    @Serializable(with = LocalTimeIso8601Serializer::class) val endTime: LocalTime,
+    @Serializable(with = UUIDSerializer::class) val classroomId: UUID
+)
+
+

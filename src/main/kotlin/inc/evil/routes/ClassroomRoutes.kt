@@ -2,6 +2,7 @@ package inc.evil.routes
 
 import inc.evil.dto.ClassroomPostDto
 import inc.evil.service.ClassroomService
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -32,8 +33,7 @@ fun Route.classroomRoutes(classroomService: ClassroomService) {
         }
 
         /*
-       * [{
-       *    "id": <optional>
+       * {
        *    "name": "3.14",
        *    "description": "Sala Marka Maruchy",
        *    "capacity": 34,
@@ -43,15 +43,16 @@ fun Route.classroomRoutes(classroomService: ClassroomService) {
        *      "laptop",
        *      "tablica"
        *    ]
-       * }, ...
-       * ]
+       * }
+       *
        *
        * */
         post {
-            val classroomDto = call.receive<ClassroomPostDto>()
-            val classroom = classroomService.createClassroom(classroomDto)
+            val classroomRequest = call.receive<ClassroomPostDto>()
+            val classroomResponse = classroomService.createClassroom(classroomRequest)
             // TODO add validation
-            call.respond(classroom)
+            call.respond(HttpStatusCode.Created,classroomResponse)
         }
+
     }
 }

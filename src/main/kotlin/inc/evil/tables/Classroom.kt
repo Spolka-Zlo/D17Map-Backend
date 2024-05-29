@@ -3,6 +3,7 @@ package inc.evil.tables
 import org.jetbrains.exposed.dao.id.UUIDTable
 
 object Classroom : UUIDTable() {
+    val name = text("name")
     val description = text("description")
 }
 

@@ -1,81 +1,61 @@
 package inc.evil.routes
 
-import inc.evil.dto.ReservationFullDto
+import inc.evil.dto.ReservationPostDto
 import inc.evil.service.ReservationService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.*
 
 fun Route.reservationRoutes(reservationService: ReservationService) {
-    route("/") {
-        get{
-            call.respondText("Hello World!")
-        }
-    }
-    route("/reservation") {
-        // get all reservations -> for admins maybe ? TODO add pagination
 
+    route("/reservations") {
+
+        /*
+        * [{
+        *    "id": 1234,
+        *    "type": "TEST",
+        *    "startTime": "21:15",
+        *    "endTime": "22:30",
+        *    "classroom":
+        *      {
+        *        "id": 1345,
+        *        "name": "3.12"
+        *      }
+        *   }, ...
+        * ]
+        *
+        * */
         get {
-            call.respond(reservationService.getReservations())
-        }
-
-        // get single reservation TODO add pagination
-        get("/{id}") {
-            val id = call.parameters["id"] ?: return@get call.respondText(
-                "Missing or malformed id",
+            val day = call.request.queryParameters["day"] ?: return@get call.respondText(
+                "Query parameter 'date' must be specified",
                 status = HttpStatusCode.BadRequest
             )
 
-            val uuid = UUID.fromString(id)
-            // TODO validate uuid
-            val reservation = reservationService.getReservationById(uuid) ?: return@get call.respondText(
-                "Reservation not found",
-                status = HttpStatusCode.NotFound
-            )
-
-            call.respond(reservation)
+            val reservations = reservationService.getGivenDayReservations(day)
+            call.respond(HttpStatusCode.OK, reservations)
         }
 
-        // add new reservation
+
+        /*
+        *  {
+        *
+        *    "name": "Moja rezerwacja",
+        *    "type": "TEST",
+        *    "userId": 1234,
+        *    "date": "2024-06-22"
+        *    "startTime": "22:15",
+        *    "endTime": "23:45"
+        *    "classroomId": 1234
+        *
+        *  }
+        * */
+
         post {
-            val reservation = call.receive<ReservationFullDto>()
-
-            val createdReservation = reservationService.post(reservation) ?: return@post call.respondText(
-                "Error while creating reservation",
-                status = HttpStatusCode.InternalServerError // TODO check how to do it correctly
-            )
-
-            call.respond(HttpStatusCode.Created, createdReservation)
-        }
-
-        // edit existing reservation
-        patch("/{id}") {
-            val id = call.parameters["id"] ?: return@patch call.respondText(
-                "Missing or malformed id",
-                status = HttpStatusCode.BadRequest
-            )
-
-            val reservation = call.receive<ReservationFullDto>()
-
-            val uuid = UUID.fromString(id)
-            val updatedReservation = reservationService.patch(reservation) ?: return@patch call.respondText(
-                "Error while creating reservation",
-                status = HttpStatusCode.InternalServerError // TODO check
-            )
-        }
-
-        // delete reservation
-        delete("/{id}") {
-            val id = call.parameters["id"] ?: return@delete call.respondText(
-                "Missing or malformed id",
-                status = HttpStatusCode.BadRequest
-            )
-            val uuid = UUID.fromString(id)
-            reservationService.delete(uuid)
-            call.respond(HttpStatusCode.NoContent)
+            val reservationRequest = call.receive<ReservationPostDto>()
+            val reservationResponse = reservationService.createReservation(reservationRequest)
+            call.respond(HttpStatusCode.Created, reservationResponse)
         }
 
     }

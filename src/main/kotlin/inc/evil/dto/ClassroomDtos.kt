@@ -21,3 +21,9 @@ data class ClassroomPostDto(
     val capacity: Int,
     val equipment: List<String>
 )
+
+@Serializable
+data class ClassroomBasicInfoDto(
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
+    val name: String
+)

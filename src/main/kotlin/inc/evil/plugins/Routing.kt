@@ -2,6 +2,7 @@ package inc.evil.plugins
 
 import inc.evil.routes.classroomRoutes
 import inc.evil.routes.reservationRoutes
+import inc.evil.routes.userRoutes
 import inc.evil.service.ClassroomService
 import inc.evil.service.ReservationService
 import io.ktor.server.application.*
@@ -16,6 +17,7 @@ fun Application.configureRouting() {
     routing {
         classroomRoutes(classroomService)
         reservationRoutes(reservationService)
+        userRoutes(reservationService)
 
         //customerRouting()
         //listOrderRoute()

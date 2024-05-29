@@ -2,6 +2,10 @@ package inc.evil.entities
 
 import inc.evil.enums.ReservationType
 import inc.evil.tables.Reservation
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.jetbrains.exposed.sql.ResultRow
 
 import java.util.*

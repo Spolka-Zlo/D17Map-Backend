@@ -24,6 +24,8 @@ object UUIDSerializer : KSerializer<UUID> {
 }
 
 
+
+
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         json()

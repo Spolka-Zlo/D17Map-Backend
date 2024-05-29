@@ -4,6 +4,7 @@ import inc.evil.entities.ReservationEntity
 import inc.evil.tables.Classroom
 import inc.evil.tables.Reservation
 import inc.evil.tables.User
+import kotlinx.datetime.toJavaLocalDateTime
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

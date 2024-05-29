@@ -78,12 +78,12 @@ class OrderRouteTests {
 
 # TODO new
 
-- [ ] Either do it in service and DTO or change a model (I think it'd be better) so a reservation has date, startTime, endTIme
+- [x] Either do it in service and DTO or change a model (I think it'd be better) so a reservation has date, startTime, endTIme
 - [x] GET all classrooms (without description)
-- [ ] GET all reservations (without owner), (with type, start, end, classroom)
-- [ ] GET all your reservations
-- [ ] GET all reservations by date
-- [ ] POST new reservation
-- [ ] GET /rooms (but Radek says with name... is name and description not the same here?)
-- [ ] GET /dayReservations
-- change equipment (hashmap)
+- [x] GET all reservations (without owner), (with type, start, end, classroom)
+- [x] GET all your reservations
+- [x] GET all reservations by date
+- [x] POST new reservation
+- [x] GET /rooms (but Radek says with name... is name and description not the same here?)
+przyszłe danego usera
+na dany dzień
