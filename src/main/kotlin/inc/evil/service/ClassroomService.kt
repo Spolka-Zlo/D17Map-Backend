@@ -4,7 +4,6 @@ import inc.evil.dao.ClassroomDAO
 import inc.evil.dto.ClassroomPostDto
 import inc.evil.dto.ClassroomSummaryDto
 import inc.evil.mapper.ClassroomMapper
-import inc.evil.plugins.UserService.Users.uuid
 import org.koin.core.component.KoinComponent
 import java.util.*
 
