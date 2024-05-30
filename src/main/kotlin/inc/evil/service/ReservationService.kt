@@ -3,10 +3,12 @@ package inc.evil.service
 import inc.evil.dto.ReservationDayDto
 import inc.evil.dto.ReservationPostDto
 import inc.evil.dto.UserReservationDto
+import inc.evil.tables.Reservation
 import org.koin.core.component.KoinComponent
-import kotlinx.datetime.LocalDate
-
-
+import inc.evil.tables.Classrooms
+import inc.evil.tables.Users
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toJavaLocalTime
 
 class ReservationService() : KoinComponent {
 
@@ -18,6 +20,14 @@ class ReservationService() : KoinComponent {
     }
 
     fun createReservation(reservationRequest: ReservationPostDto) {
+
+        Reservation.new {
+            name = reservationRequest.name
+            date = reservationRequest.date.toJavaLocalDate()
+            startTime = reservationRequest.startTime.toJavaLocalTime()
+            endTime = reservationRequest.endTime.toJavaLocalTime()
+            type = reservationRequest.type
+        }
 //        val reservationEntity = ReservationMapper.postDtoToEntity(reservationRequest)
 //        reservationDAO.createReservation(reservationEntity)
     }
