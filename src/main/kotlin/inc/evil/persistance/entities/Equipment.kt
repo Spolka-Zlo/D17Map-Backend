@@ -1,4 +1,4 @@
-package inc.evil.tables
+package inc.evil.persistance.entities
 
 
 import org.jetbrains.exposed.dao.UUIDEntity

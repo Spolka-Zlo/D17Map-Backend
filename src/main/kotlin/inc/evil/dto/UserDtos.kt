@@ -1,8 +1,8 @@
 package inc.evil.dto
 
-import inc.evil.plugins.UUIDSerializer
+import inc.evil.config.UUIDSerializer
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import java.util.*
 
 @Serializable
 data class UserSummaryDto(

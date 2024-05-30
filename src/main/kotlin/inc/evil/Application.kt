@@ -1,9 +1,9 @@
 package inc.evil
 
-import inc.evil.plugins.DatabaseSingleton
-import inc.evil.plugins.configureDI
-import inc.evil.plugins.configureRouting
-import inc.evil.plugins.configureSerialization
+import inc.evil.config.DatabaseSingleton
+import inc.evil.config.configureDI
+import inc.evil.config.configureRouting
+import inc.evil.config.configureSerialization
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {

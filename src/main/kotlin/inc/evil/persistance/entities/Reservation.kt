@@ -1,12 +1,13 @@
-package inc.evil.tables
+package inc.evil.persistance.entities
 
 import inc.evil.enums.ReservationType
-import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.dao.*
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.javatime.date
 import org.jetbrains.exposed.sql.javatime.time
-import java.util.UUID
+import java.util.*
 
 object Reservations : UUIDTable() {
     val user = reference("user", Users)

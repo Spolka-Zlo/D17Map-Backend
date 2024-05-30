@@ -1,9 +1,9 @@
-package inc.evil.plugins
+package inc.evil.config
 
-import inc.evil.tables.Classrooms
-import inc.evil.tables.Equipments
-import inc.evil.tables.Reservations
-import inc.evil.tables.Users
+import inc.evil.persistance.entities.Classrooms
+import inc.evil.persistance.entities.Equipments
+import inc.evil.persistance.entities.Reservations
+import inc.evil.persistance.entities.Users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction

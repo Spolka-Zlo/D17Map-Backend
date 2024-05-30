@@ -1,7 +1,7 @@
 package inc.evil.dto
 
+import inc.evil.config.UUIDSerializer
 import inc.evil.enums.ReservationType
-import inc.evil.plugins.UUIDSerializer
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.serializers.LocalDateIso8601Serializer

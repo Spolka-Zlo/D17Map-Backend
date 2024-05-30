@@ -1,6 +1,7 @@
-package inc.evil.plugins
+package inc.evil.config
 
 import inc.evil.routes.classroomRoutes
+import inc.evil.routes.helloRoute
 import inc.evil.routes.reservationRoutes
 import inc.evil.routes.userRoutes
 import inc.evil.service.ClassroomService
@@ -15,6 +16,7 @@ fun Application.configureRouting() {
     val reservationService : ReservationService by inject()
 
     routing {
+        helloRoute()
         classroomRoutes(classroomService)
         reservationRoutes(reservationService)
         userRoutes(reservationService)

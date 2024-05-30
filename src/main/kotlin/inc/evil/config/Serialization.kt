@@ -1,4 +1,4 @@
-package inc.evil.plugins
+package inc.evil.config
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
