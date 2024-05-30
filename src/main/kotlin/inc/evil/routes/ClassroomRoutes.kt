@@ -27,7 +27,6 @@ fun Route.classroomRoutes(classroomService: ClassroomService) {
         * */
         get {
             val classrooms = classroomService.getAll()
-            // TODO add pagination / query parameters
             // TODO add validation
             call.respond(classrooms)
         }
