@@ -10,6 +10,7 @@ import java.util.*
 class ClassroomService(private val classroomRepository: ClassroomRepository) : KoinComponent {
 
     fun getAll(): List<ClassroomSummaryDto> {
+//        return classroomRepository.findAll()
         TODO("Not implemented yet")
     }
 

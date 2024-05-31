@@ -27,6 +27,8 @@ fun Route.classroomRoutes(classroomService: ClassroomService) {
         * */
         get {
             val classrooms = classroomService.getAll()
+
+            // TODO check EmptyList<> serialization (reason may be located in lower layers
             // TODO add validation
             call.respond(classrooms)
         }

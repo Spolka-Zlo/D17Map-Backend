@@ -3,6 +3,7 @@ package inc.evil.persistance.repositories.impl
 import inc.evil.persistance.repositories.Repository
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.sql.transactions.transaction
 
 open class BaseRepository<ID : Comparable<ID>, T : Entity<ID>>(private val entityClass: EntityClass<ID, T>) :
     Repository<ID, T> {
@@ -15,7 +16,9 @@ open class BaseRepository<ID : Comparable<ID>, T : Entity<ID>>(private val entit
     }
 
     override fun findAll(): List<T> {
-        TODO("Not yet implemented")
+        return transaction { // example
+            entityClass.all().toList()
+        }
     }
 
     override fun <S : T> save(entity: S): S {

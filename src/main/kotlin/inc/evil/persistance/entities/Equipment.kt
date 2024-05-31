@@ -9,12 +9,12 @@ import java.util.*
 
 object Equipments : UUIDTable() {
     val name = text("name")
-    val classroom = reference("classroom", Classrooms)
+   // val classroom = reference("classroom", Classrooms)
 }
 
 class Equipment(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<Equipment>(Equipments)
     var name by Equipments.name
-    var classroom by Classroom referencedOn Equipments.classroom
+   // val classroom by Classroom referencedOn Equipments.classroom
 }
 

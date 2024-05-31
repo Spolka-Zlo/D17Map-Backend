@@ -15,7 +15,6 @@ class ReservationService(private val reservationRepository: ReservationRepositor
 
     fun createReservation(reservationRequest: ReservationPostDto) {
         TODO("Not yet implemented")
-        Classroom.all();
     }
 
 
