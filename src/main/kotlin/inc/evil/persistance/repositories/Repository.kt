@@ -4,7 +4,7 @@ package inc.evil.persistance.repositories
 * Repository is an interface based on Spring's CrudRepository interface
 * Commented out methods are left for future tasks
 * */
-interface Repository<T, ID> {
+interface Repository<ID, T> {
     fun count(): Unit
     //fun delete(entity: T)
     fun deleteAll(): Unit

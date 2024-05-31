@@ -4,5 +4,5 @@ import inc.evil.persistance.entities.User
 import inc.evil.persistance.repositories.UserRepository
 import java.util.UUID
 
-class UserRepositoryImpl : BaseRepository<User, UUID>(), UserRepository {
+class UserRepositoryImpl : BaseRepository<UUID, User>(User), UserRepository {
 }

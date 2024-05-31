@@ -1,15 +1,17 @@
 package inc.evil.persistance.repositories.impl
 
 import inc.evil.persistance.repositories.Repository
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
 
-open class BaseRepository<T, ID> : Repository<T, ID> {
+open class BaseRepository<ID : Comparable<ID>, T : Entity<ID>>(private val entityClass: EntityClass<ID, T>) :
+    Repository<ID, T> {
     override fun count() {
         TODO("Not yet implemented")
     }
 
     override fun deleteAll() {
         TODO("Not yet implemented")
-
     }
 
     override fun findAll(): List<T> {

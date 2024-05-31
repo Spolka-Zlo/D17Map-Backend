@@ -4,5 +4,5 @@ import inc.evil.persistance.entities.Equipment
 import inc.evil.persistance.repositories.EquipmentRepository
 import java.util.*
 
-class EquipmentRepositoryImpl : BaseRepository<Equipment, UUID>(), EquipmentRepository {
+class EquipmentRepositoryImpl : BaseRepository<UUID, Equipment>(Equipment), EquipmentRepository {
 }

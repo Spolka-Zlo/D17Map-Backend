@@ -3,6 +3,7 @@ package inc.evil.service
 import inc.evil.dto.ReservationDayDto
 import inc.evil.dto.ReservationPostDto
 import inc.evil.dto.UserReservationDto
+import inc.evil.persistance.entities.Classroom
 import inc.evil.persistance.repositories.ReservationRepository
 import org.koin.core.component.KoinComponent
 
@@ -14,6 +15,7 @@ class ReservationService(private val reservationRepository: ReservationRepositor
 
     fun createReservation(reservationRequest: ReservationPostDto) {
         TODO("Not yet implemented")
+        Classroom.all();
     }
 
 
