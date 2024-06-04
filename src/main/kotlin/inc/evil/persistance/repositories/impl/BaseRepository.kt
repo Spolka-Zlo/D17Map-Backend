@@ -7,33 +7,48 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 open class BaseRepository<ID : Comparable<ID>, T : Entity<ID>>(private val entityClass: EntityClass<ID, T>) :
     Repository<ID, T> {
-    override fun count() {
-        TODO("Not yet implemented")
+
+    override fun count(): Long {
+        return transaction {
+            entityClass.all().count()
+        }
     }
 
     override fun deleteAll() {
-        TODO("Not yet implemented")
+        transaction {
+            entityClass.all().forEach { it.delete() }
+        }
     }
 
     override fun findAll(): List<T> {
-        return transaction { // example
+        return transaction {
             entityClass.all().toList()
         }
     }
 
     override fun <S : T> save(entity: S): S {
-        TODO("Not yet implemented")
+        return transaction {
+            entity.apply {
+                this.flush()
+            }
+        }
     }
 
     override fun findById(id: ID): T? {
-        TODO("Not yet implemented")
+        return transaction {
+            entityClass.findById(id)
+        }
     }
 
     override fun existsById(id: ID): Boolean {
-        TODO("Not yet implemented")
+        return transaction {
+            entityClass.findById(id) != null
+        }
     }
 
     override fun deleteById(id: ID) {
-        TODO("Not yet implemented")
+        transaction {
+            entityClass.findById(id)?.delete()
+        }
     }
 }

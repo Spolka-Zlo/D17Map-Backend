@@ -5,7 +5,7 @@ package inc.evil.persistance.repositories
 * Commented out methods are left for future tasks
 * */
 interface Repository<ID, T> {
-    fun count(): Unit
+    fun count(): Long
     //fun delete(entity: T)
     fun deleteAll(): Unit
     //fun deleteAll(entities: Iterable<T>)

@@ -4,5 +4,5 @@ import inc.evil.persistance.entities.Classroom
 import java.util.UUID
 
 interface ClassroomRepository : Repository<UUID, Classroom> {
-    // TODO( add type specific methods)
+    fun findByName(name: String): List<Classroom>
 }
