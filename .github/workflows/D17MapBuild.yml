@@ -1,4 +1,4 @@
-name: D17Map build
+ame: D17Map build
 
 on:
   pull_request:
@@ -23,9 +23,6 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
-
-      - name: Build with Gradle
-        run: ./gradlew build
 
       - name: Build Docker images
         run: |
