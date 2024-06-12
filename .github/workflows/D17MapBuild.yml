@@ -1,4 +1,4 @@
-ame: D17Map build
+name: D17Map build
 
 on:
   pull_request:
