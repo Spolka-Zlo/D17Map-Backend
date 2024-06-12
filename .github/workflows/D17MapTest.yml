@@ -20,7 +20,8 @@ jobs:
           distribution: 'adopt'
 
       - name: Set up environment variables
-        run: echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+        run: |
+          echo "PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Build Docker images
         run: |
