@@ -24,7 +24,7 @@ The following commands should be issued from the root directory of the project.
 ## 🔷 Cleaning Docker
 Sometimes docker has problems with itself, but there is a couple of commands which you can try to fix it
 
-1. `docker compose down` - this command stops containers and removes them.
+1. `docker compose down -v` - this command stops containers and removes them.
 2. `docker system prune` - removes all dangling/untagged resources
 3. `docker system prune -a` - removes a little bit more ;)
 4. `docker volume rm <your volume name>` - obvious (use `docker volume ls` to list all volumes)
@@ -34,56 +34,9 @@ Other useful commands may be found [here](https://contabo.com/blog/how-to-remove
 
 
 
-## Testing for future
-
-```kotlin
-package com.example
-
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.server.testing.*
-import kotlin.test.*
-
-class OrderRouteTests {
-    @Test
-    fun testGetOrder() = testApplication {
-        val response = client.get("/order/2020-04-06-01")
-        assertEquals(
-            """{"number":"2020-04-06-01","contents":[{"item":"Ham Sandwich","amount":2,"price":5.5},{"item":"Water","amount":1,"price":1.5},{"item":"Beer","amount":3,"price":2.3},{"item":"Cheesecake","amount":1,"price":3.75}]}""",
-            response.bodyAsText()
-        )
-        assertEquals(HttpStatusCode.OK, response.status)
-    }
-}
-```
-
-
-
 ## Object model
+
+> Note: This is the old one!
 
 ![Object Model](docs/object_model.png)
 
-
-
-## Problems / TODO
-
-- [ ] Fixing model / how to save object with a reference to other object
-- [ ] Adjusting DAO layer
-- [ ] Fix mappings
-- [ ] Introduce exceptions to service layer
-- [ ] Introduce status pages / exception handling in controller layer
-
-
-
-# TODO new
-
-- [x] Either do it in service and DTO or change a model (I think it'd be better) so a reservation has date, startTime, endTIme
-- [x] GET all classrooms (without description)
-- [x] GET all reservations (without owner), (with type, start, end, classroom)
-- [x] GET all your reservations
-- [x] GET all reservations by date
-- [x] POST new reservation
-- [x] GET /rooms (but Radek says with name... is name and description not the same here?)
-przyszłe danego usera
-na dany dzień
