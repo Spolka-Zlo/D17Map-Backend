@@ -12,6 +12,7 @@ import inc.evil.persistance.repositories.impl.UserRepositoryImpl
 import inc.evil.service.ClassroomService
 import inc.evil.service.EquipmentService
 import inc.evil.service.ReservationService
+import inc.evil.service.UserService
 import io.ktor.server.application.*
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
@@ -27,6 +28,7 @@ val appModules = module {
     single<ReservationService> {ReservationService(get())}
     single<ClassroomService> {ClassroomService(get())}
     single<EquipmentService> {EquipmentService()}
+    single<UserService> {UserService()}
 }
 
 
