@@ -14,6 +14,51 @@ Content-Type: application/json
 }
 ###
 
+
+GET localhost:8080/classrooms
+
+####
+
+POST localhost:8080/equipments
+Content-Type: application/json
+
+{
+  "name": "Projektor"
+}
+
+###
+
+POST localhost:8080/equipments
+Content-Type: application/json
+
+{
+  "name": "Komputery"
+}
+
+###
+
+POST localhost:8080/equipments
+Content-Type: application/json
+
+{
+  "name": "Terminale"
+}
+
+###
+
+POST localhost:8080/equipments
+Content-Type: application/json
+
+{
+  "name": "Routery"
+}
+
+###
+
+
+GET localhost:8080/equipments
+###
+
 POST localhost:8080/classrooms
 Content-Type: application/json
 
