@@ -14,7 +14,7 @@ import java.util.*
 data class ReservationDayDto(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val type: ReservationType,
-    @Serializable(with = LocalTimeComponentSerializer::class) val startTime: LocalTime,
+    @Serializable(with = LocalTimeIso8601Serializer::class) val startTime: LocalTime,
     @Serializable(with = LocalTimeIso8601Serializer::class) val endTime: LocalTime,
     val classroom: ClassroomBasicInfoDto
 )
@@ -22,7 +22,7 @@ data class ReservationDayDto(
 @Serializable
 data class ReservationPostDto(
     @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
-    val name: String,
+    val title: String,
     val type: ReservationType,
     @Serializable(with = UUIDSerializer::class) val userId: UUID,
     @Serializable(with = LocalDateIso8601Serializer::class) val date: LocalDate,
@@ -34,7 +34,7 @@ data class ReservationPostDto(
 @Serializable
 data class UserReservationDto(
     @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
-    val name: String,
+    val title: String,
     val type: ReservationType,
     @Serializable(with = LocalDateIso8601Serializer::class) val date: LocalDate,
     @Serializable(with = LocalTimeIso8601Serializer::class) val startTime: LocalTime,
