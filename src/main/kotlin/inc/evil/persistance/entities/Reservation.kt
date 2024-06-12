@@ -12,7 +12,7 @@ import java.util.*
 object Reservations : UUIDTable() {
     val user = reference("user", Users)
     val classroom = reference("classroom", Classrooms)
-    val name = text("name")
+    val title = text("title")
     val date = date("date")
     val startTime = time("start_time")
     val endTime = time("end_time")
@@ -21,10 +21,9 @@ object Reservations : UUIDTable() {
 
 class Reservation(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<Reservation>(Reservations)
-
-    var user by Reservations.user
-    var classroom by Reservations.classroom
-    var name by Reservations.name
+    var user by User referencedOn Reservations.user
+    var classroom by Classroom referencedOn Reservations.classroom
+    var title by Reservations.title
     var date by Reservations.date
     var startTime by Reservations.startTime
     var endTime by Reservations.endTime

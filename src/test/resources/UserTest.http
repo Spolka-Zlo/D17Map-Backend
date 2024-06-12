@@ -1,0 +1,21 @@
+POST localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "miidzik@agh.edu.pl",
+  "password": "I<3Burito",
+  "role": "TEACHER"
+}
+
+###
+
+POST localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "amezydlo@student.agh.edu.pl",
+  "password": "MySecretPassword",
+  "role": "STUDENT"
+}
+
+###

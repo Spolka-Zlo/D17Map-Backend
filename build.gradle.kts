@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName")
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -29,28 +31,41 @@ repositories {
 
 
 dependencies {
+    // Core Ktor
     implementation("io.ktor:ktor-server-core-jvm")
+    implementation("io.ktor:ktor-server-netty-jvm")
+    implementation("io.ktor:ktor-server-config-yaml:2.3.10")
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    // Dependency injection
+    implementation("io.insert-koin:koin-ktor:3.5.6")
+    implementation("io.insert-koin:koin-core:3.5.6")
+
+    // Serialization
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
+    // Postgres
+    implementation("org.postgresql:postgresql:$postgresql_driver_version")
+
+    // Exposed to be evicted (just thrown out...) or not?
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
 
-
-    implementation("com.h2database:h2:$h2_version")
-    implementation("org.postgresql:postgresql:$postgresql_driver_version")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-config-yaml:2.3.10")
+    // Tests
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
 
-    // resources saved for future
-    implementation("io.ktor:ktor-server-resources:$ktor_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
 
-    implementation("io.insert-koin:koin-ktor:3.5.6")
-    implementation("io.insert-koin:koin-core:3.5.6")
+}
+
+sourceSets {
+    main {
+        kotlin {
+            exclude("/home/amezydlo/AGH/sem6/PP/D17Map/D17Map-Backend/src/main/kotlin/inc/evil/CelePogladowe.kt")
+        }
+    }
 }

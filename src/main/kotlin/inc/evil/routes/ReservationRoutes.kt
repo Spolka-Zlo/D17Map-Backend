@@ -28,9 +28,9 @@ fun Route.reservationRoutes(reservationService: ReservationService) {
         *
         * */
         get {
-            val day = call.request.queryParameters["day"] ?: return@get call.respondText(
-                "Query parameter 'date' must be specified",
-                status = HttpStatusCode.BadRequest
+            val day = call.request.queryParameters["day"] ?: return@get call.respond(
+                HttpStatusCode.BadRequest,
+                "Query parameter 'date' must be specified"
             )
 
             val reservations = reservationService.getGivenDayReservations(day)
