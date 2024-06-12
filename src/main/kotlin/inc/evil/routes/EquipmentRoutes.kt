@@ -20,22 +20,23 @@ fun Route.equipmentRoutes(equipmentService: EquipmentService) {
             }
         }
 
-
         post {
             val equipmentRequest = call.receive<EquipmentPostDto>()
-
-
-
-
-
-
             if (equipmentRequest.name.isBlank()) {
-                call.respond(HttpStatusCode.BadRequest, "Invalid equipment data")
-                return@post
+                call.respond(HttpStatusCode.BadRequest, "Invalid equipment request")
             }
             val equipmentResponse = equipmentService.createEquipment(equipmentRequest)
             call.respond(HttpStatusCode.Created, equipmentResponse)
         }
 
+        // not sure about this one, ktor says it cannot handle generic Lists, but it actually does
+        post("/batch") {
+            val equipmentRequest = call.receive<List<String>>()
+            if (equipmentRequest.isEmpty()){
+                call.respond(HttpStatusCode.BadRequest, "Empty equipment list")
+            }
+            val createdEquipmentIds = equipmentService.createEquipment(equipmentRequest)
+            call.respond(HttpStatusCode.Created, createdEquipmentIds)
+        }
     }
 }

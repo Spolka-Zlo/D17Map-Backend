@@ -17,4 +17,12 @@ class EquipmentService {
         }
         EquipmentPostDto(equipment.id.value, equipment.name)
     }
+
+    fun createEquipment(equipmentList: List<String>) = transaction {
+        equipmentList.map {
+            Equipment.new {
+                name = it
+            }.id.value.toString()
+        }
+    }
 }
