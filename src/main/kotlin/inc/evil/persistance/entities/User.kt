@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
 
 object Users : UUIDTable() {
-    val email = text("email")
+    val email = text("email").uniqueIndex()
     val password = text("password")
     val role = enumerationByName("role", 10, UserType::class)
 }

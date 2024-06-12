@@ -9,7 +9,7 @@ import java.util.*
 
 
 object Classrooms : UUIDTable() {
-    val name = text("name")
+    val name = text("name").uniqueIndex()
     val description = text("description")
     val capacity = integer("capacity")
 }
@@ -31,5 +31,6 @@ class Classroom(id: EntityID<UUID>) : UUIDEntity(id) {
     var description by Classrooms.description
     var capacity by Classrooms.capacity
     var equipments by Equipment via ClassroomsEquipments
+    val reservations by Reservation referrersOn Reservations.classroom
 }
 

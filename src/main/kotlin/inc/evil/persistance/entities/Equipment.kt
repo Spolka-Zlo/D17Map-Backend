@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
 
 object Equipments : UUIDTable() {
-    val name = text("name")
+    val name = text("name").uniqueIndex()
 }
 
 class Equipment(id: EntityID<UUID>) : UUIDEntity(id) {
