@@ -1,6 +1,5 @@
 package inc.evil.persistance.entities
 
-import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

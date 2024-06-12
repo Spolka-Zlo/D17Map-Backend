@@ -54,3 +54,11 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:3.5.6")
     implementation("io.insert-koin:koin-core:3.5.6")
 }
+
+sourceSets {
+    main {
+        kotlin {
+            exclude("/home/amezydlo/AGH/sem6/PP/D17Map/D17Map-Backend/src/main/kotlin/inc/evil/CelePogladowe.kt")
+        }
+    }
+}
