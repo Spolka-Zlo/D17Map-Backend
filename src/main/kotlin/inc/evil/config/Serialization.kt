@@ -1,10 +1,8 @@
-package inc.evil.plugins
+package inc.evil.config
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -22,6 +20,8 @@ object UUIDSerializer : KSerializer<UUID> {
 
     override fun deserialize(decoder: Decoder): UUID = UUID.fromString(decoder.decodeString())
 }
+
+
 
 
 fun Application.configureSerialization() {

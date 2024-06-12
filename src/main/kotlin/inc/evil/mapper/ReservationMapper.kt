@@ -1,48 +1,52 @@
-package inc.evil.mapper
-
-import inc.evil.dto.*
-import inc.evil.entities.ClassroomEntity
-import inc.evil.entities.ReservationEntity
-import inc.evil.entities.UserEntity
-import inc.evil.enums.ReservationType
-import java.util.*
-
-object ReservationMapper {
-
-    fun toFullDto(
-        reservationEntity: ReservationEntity,
-        classroomEntity: ClassroomEntity,
-        userEntity: UserEntity
-    ): ReservationFullDto {
-        val classroomDto = ClassroomSummaryDto(
-            id = UUID.fromString(classroomEntity.id),
-            name = classroomEntity.description
-        )
-
-        val userDto = UserSummaryDto(
-            id = userEntity.id,
-            email = userEntity.email
-        )
-
-        return ReservationFullDto(
-            id = reservationEntity.id,
-            name = reservationEntity.name,
-            classroom = classroomDto,
-            startDate = reservationEntity.startDate,
-            endDate = reservationEntity.endDate,
-            user = userDto
-        )
-    }
-
-    fun toEntity(dto: ReservationFullDto, reservationType : ReservationType): ReservationEntity {
-        return ReservationEntity(
-            id = dto.id,
-            userId = dto.user.id,
-            classroomId = dto.classroom.id.toString(),
-            name = dto.name,
-            startDate = dto.startDate,
-            endDate = dto.endDate,
-            type = reservationType
-        )
-    }
-}
+//package inc.evil.mapper
+//
+//import inc.evil.dto.ClassroomBasicInfoDto
+//import inc.evil.dto.ReservationDayDto
+//import inc.evil.dto.ReservationPostDto
+//import inc.evil.dto.UserReservationDto
+//import inc.evil.entities.ReservationEntity
+//import kotlinx.datetime.atTime
+//import java.util.*
+//
+//object ReservationMapper {
+//    fun entityToDayDto(entity: ReservationEntity): ReservationDayDto {
+//        return ReservationDayDto(
+//            id = entity.id,
+//            type = entity.type,
+//            startTime = entity.startTime.time,
+//            endTime = entity.endTime.time,
+//            classroom = ClassroomBasicInfoDto(
+//                id = entity.classroomId,
+//                name = "Unknown"
+//            )
+//        )
+//    }
+//
+//    fun postDtoToEntity(dto: ReservationPostDto): ReservationEntity {
+//        val startDateTime = dto.date.atTime(dto.startTime)
+//        val endDateTime = dto.date.atTime(dto.endTime)
+//
+//        return ReservationEntity(
+//            id = dto.id ?: UUID.randomUUID(),
+//            userId = dto.userId,
+//            classroomId = dto.classroomId,
+//            name = dto.name,
+//            date = dto.date,
+//            startTime = startDateTime,
+//            endTime = endDateTime,
+//            type = dto.type
+//        )
+//    }
+//
+//    fun entityToUserReservationDto(entity: ReservationEntity): UserReservationDto {
+//        return UserReservationDto(
+//            id = entity.id,
+//            name = entity.name,
+//            type = entity.type,
+//            date = entity.date,
+//            startTime = entity.startTime.time,
+//            endTime = entity.endTime.time,
+//            classroomId = entity.classroomId
+//        )
+//    }
+//}

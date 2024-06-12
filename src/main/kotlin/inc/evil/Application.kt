@@ -1,28 +1,22 @@
 package inc.evil
 
-import inc.evil.dao.ClassroomDAO
-import inc.evil.plugins.configureDI
-import inc.evil.plugins.configureRouting
-import inc.evil.plugins.configureSerialization
-import inc.evil.service.ClassroomService
+import inc.evil.config.DatabaseSingleton
+import inc.evil.config.configureDI
+import inc.evil.config.configureRouting
+import inc.evil.config.configureSerialization
 import io.ktor.server.application.*
-import org.koin.ktor.ext.inject
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
 
-
 fun Application.module() {
 //    install(Resources) // for future maybe
+    DatabaseSingleton.init()
     configureDI()
-
     configureRouting()
     configureSerialization()
-   // configureDatabases()
-
-
 
 
 }

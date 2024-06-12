@@ -7,10 +7,12 @@ Before running any of the following commands, you should create a `.env` file
 in the same directory as `docker-compose.yaml`. The `.env` file should
 contain your password to the database:
 
+
 #### .env
 ```text
 PASSWORD=<your_password>
 ```
+
 
 ### 🔹 Commands
 The following commands should be issued from the root directory of the project.
@@ -56,6 +58,32 @@ class OrderRouteTests {
 }
 ```
 
+
+
 ## Object model
 
 ![Object Model](docs/object_model.png)
+
+
+
+## Problems / TODO
+
+- [ ] Fixing model / how to save object with a reference to other object
+- [ ] Adjusting DAO layer
+- [ ] Fix mappings
+- [ ] Introduce exceptions to service layer
+- [ ] Introduce status pages / exception handling in controller layer
+
+
+
+# TODO new
+
+- [x] Either do it in service and DTO or change a model (I think it'd be better) so a reservation has date, startTime, endTIme
+- [x] GET all classrooms (without description)
+- [x] GET all reservations (without owner), (with type, start, end, classroom)
+- [x] GET all your reservations
+- [x] GET all reservations by date
+- [x] POST new reservation
+- [x] GET /rooms (but Radek says with name... is name and description not the same here?)
+przyszłe danego usera
+na dany dzień

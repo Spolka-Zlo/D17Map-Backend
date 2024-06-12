@@ -1,55 +1,98 @@
 package inc.evil.routes
 
-import inc.evil.dto.ClassroomDetailsDto
-import inc.evil.dto.ClassroomFullDto
+import inc.evil.dto.ClassroomPostDto
 import inc.evil.service.ClassroomService
+import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.util.*
 
-
-val classroom1Details = ClassroomDetailsDto(2, listOf("Laptop", "Gniazdko"))
-val classroom2Details = ClassroomDetailsDto(3, listOf("Komputer", "Rzutnik", "Kamera"))
-val classroom1 = ClassroomFullDto(UUID.randomUUID(), "Sala sieciowa", classroom1Details)
-val classroom2 = ClassroomFullDto(UUID.randomUUID(), "Sala wykladowa", classroom2Details)
-
-val classrooms: List<ClassroomFullDto> = listOf(classroom1, classroom2)
-
 fun Route.classroomRoutes(classroomService: ClassroomService) {
-    route("/classroom") {
-        // list all classrooms
+    route("/classrooms") {
+        /*
+        * [{
+        *    "id": 1234,
+        *    "name": "3.14"
+        *    "capacity": 34
+        *    "equipment":
+        *    [
+        *      "projektor",
+        *      "laptop",
+        *      "tablica"
+        *    ]
+        * }, ...
+        * ]
+        *
+        * */
         get {
-            // TODO create service that gets data from database
-            // TODO add pagination / query parameters
+            val classrooms = classroomService.getAll()
+            // TODO check EmptyList<> serialization (reason may be located in lower layers
             // TODO add validation
-            call.respond(classrooms)
+            if (classrooms.isEmpty()) {
+                call.respond(HttpStatusCode.NoContent)
+            } else {
+                call.respond(classrooms)
+            }
         }
 
-        // get details of selected classroom if you know its id
-        get("/{id}") {
-            call.respondText(call.parameters["id"].toString()) {}
-        }
-
-        // get details of selected classroom if you know its name
-        get("/{name}") {
-            call.respondText(call.parameters["name"].toString()) {}
-        }
-
-        // create new classroom
+        /*
+       * {
+       *    "name": "3.14",
+       *    "description": "Sala Marka Maruchy",
+       *    "capacity": 34,
+       *    "equipment":
+       *    [
+       *      "projektor",
+       *      "laptop",
+       *      "tablica"
+       *    ]
+       * }
+       *
+       *
+       * */
         post {
-            call.respondText(call.parameters["name"].toString()) {}
+            val classroomRequest = call.receive<ClassroomPostDto>()
+            if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
+                call.respond(HttpStatusCode.BadRequest, "Invalid classroom data")
+                return@post
+            }
+            val classroomResponse = classroomService.createClassroom(classroomRequest)
+            call.respond(HttpStatusCode.Created,classroomResponse)
         }
 
-        // send only fields you want to change in json
-        patch("/{id}") {
-            call.respondText(call.parameters["id"].toString()) {}
+        delete("{id}") {
+            val id = call.parameters["id"]?.toLongOrNull() ?: return@delete call.respond(HttpStatusCode.BadRequest, "Invalid ID")
+            classroomService.deleteById(UUID.fromString(id.toString()))
+            call.respond(HttpStatusCode.NoContent)
         }
 
 
-        // to delete you have to know the id for security reasons
-        delete("/{id}") {
-            call.respondText(call.parameters["id"].toString()) {}
+        get("{id}") {
+            val id = call.parameters["id"]?.let { UUID.fromString(it) } ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid ID")
+            val classroom = classroomService.findById(id)
+            if (classroom == null) {
+                call.respond(HttpStatusCode.NotFound, "Classroom not found")
+            } else {
+                call.respond(classroom)
+            }
         }
+
+        put("{id}") {
+            val id = call.parameters["id"]?.let { UUID.fromString(it) } ?: return@put call.respond(HttpStatusCode.BadRequest, "Invalid ID")
+            val classroomRequest = call.receive<ClassroomPostDto>()
+            if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
+                call.respond(HttpStatusCode.BadRequest, "Invalid classroom data")
+                return@put
+            }
+            val updatedClassroom = classroomService.updateClassroom(id, classroomRequest)
+            if (updatedClassroom == null) {
+                call.respond(HttpStatusCode.NotFound, "Classroom not found")
+            } else {
+                call.respond(updatedClassroom)
+            }
+        }
+
     }
 }

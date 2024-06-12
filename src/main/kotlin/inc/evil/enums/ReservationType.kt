@@ -1,5 +1,8 @@
 package inc.evil.enums
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class ReservationType {
     CLASS,
     EXAM,

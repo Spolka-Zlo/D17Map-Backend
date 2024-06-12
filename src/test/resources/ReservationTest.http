@@ -1,0 +1,51 @@
+POST localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "title": "My Reservation",
+  "type": "TEST",
+  "userId": "d2ee69ac-dbae-4d2f-9c56-80108b16436a",
+  "date": "2024-06-22",
+  "startTime": "22:15",
+  "endTime": "23:45",
+  "classroomId": "3963bb64-e7ab-4b7c-a37d-b2fe798b9f4b"
+}
+###
+
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "name": "Another Reservation",
+  "type": "MEETING",
+  "userId": "1a99dc49-382c-4ae2-a38b-3f762882ff8a",
+  "date": "2024-06-23",
+  "startTime": "09:00",
+  "endTime": "10:30",
+  "classroomId": "2b18dc53-e51a-4fd5-b5c2-72ab78eaf40e"
+}
+###
+
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "name": "Third Reservation",
+  "type": "WORKSHOP",
+  "userId": "1a99dc49-382c-4ae2-a38b-3f762882ff8a",
+  "date": "2024-06-24",
+  "startTime": "14:00",
+  "endTime": "17:00",
+  "classroomId": "2b18dc53-e51a-4fd5-b5c2-72ab78eaf40e"
+}
+###
+
+GET http://localhost:8080/reservations?day=2024-06-22
+###
+
+GET http://localhost:8080/reservations?day=2024-06-23
+###
+
+GET http://localhost:8080/reservations?day=2024-06-24
+###
+
