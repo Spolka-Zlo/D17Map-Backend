@@ -13,14 +13,11 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     DatabaseSingleton.init()
+    DatabaseSingleton.drop()
     DatabaseSingleton.create()
     configureDI()
     configureRouting()
     configureSerialization()
-
-    environment.monitor.subscribe(ApplicationStopped) {
-        DatabaseSingleton.drop()
-    }
 
 }
 
