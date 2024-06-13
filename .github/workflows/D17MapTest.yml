@@ -31,7 +31,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Run Tests
-        run: docker-compose exec web ./gradlew test
+        run: docker-compose exec -T web ./gradlew test
 
 
       - name: Upload Test Results
