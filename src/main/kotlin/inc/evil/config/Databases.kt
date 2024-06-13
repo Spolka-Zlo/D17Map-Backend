@@ -14,12 +14,26 @@ object DatabaseSingleton {
         val password = System.getenv("POSTGRES_PASSWORD")
         val database = Database.connect(jdbcURL, driverClassName, user, password)
 
-        transaction(database) {
+
+    }
+
+    fun create()  {
+        transaction {
             SchemaUtils.create(Users)
             SchemaUtils.create(Equipments)
             SchemaUtils.create(Classrooms)
             SchemaUtils.create(Reservations)
             SchemaUtils.create(ClassroomsEquipments)
+        }
+    }
+
+    fun drop() {
+        transaction {
+            SchemaUtils.drop(ClassroomsEquipments)
+            SchemaUtils.drop(Reservations)
+            SchemaUtils.drop(Classrooms)
+            SchemaUtils.drop(Equipments)
+            SchemaUtils.drop(Users)
         }
     }
 }

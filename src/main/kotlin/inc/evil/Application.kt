@@ -12,12 +12,15 @@ fun main(args: Array<String>) {
 
 
 fun Application.module() {
-//    install(Resources) // for future maybe
     DatabaseSingleton.init()
+    DatabaseSingleton.create()
     configureDI()
     configureRouting()
     configureSerialization()
 
+    environment.monitor.subscribe(ApplicationStopped) {
+        DatabaseSingleton.drop()
+    }
 
 }
 
