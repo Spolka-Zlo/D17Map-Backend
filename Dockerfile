@@ -1,19 +1,9 @@
 FROM gradle:7-jdk17 AS build
 
-COPY --chown=gradle:gradle . /home/gradle/src
 
-WORKDIR /home/gradle/src
+ENV APP_HOME=/home/gradle/src
+WORKDIR $APP_HOME
 
-RUN gradle buildFatJar --no-daemon
+COPY --chown=gradle:gradle . $APP_HOME
 
-
-
-FROM openjdk:17
-
-EXPOSE 8080:8080
-
-RUN mkdir /app
-
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/ktor-docker-sample.jar
-
-ENTRYPOINT ["java","-jar","/app/ktor-docker-sample.jar"]
+CMD ["gradle", "run"]
