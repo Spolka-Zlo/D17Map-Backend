@@ -25,7 +25,7 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD -x test
 
       - name: Start Docker containers
         run: docker-compose up -d
