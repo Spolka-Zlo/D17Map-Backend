@@ -6,4 +6,4 @@ WORKDIR $APP_HOME
 
 COPY --chown=gradle:gradle . $APP_HOME
 
-CMD ["gradle", "run"]
+CMD ["gradle","--no-daemon", "run"]

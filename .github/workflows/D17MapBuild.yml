@@ -28,11 +28,11 @@ jobs:
         run: |
           docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD -x test
 
-      - name: Start Docker containers
-        run: docker-compose up -d
-
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2
         with:
           name: ktor-docker-sample.jar
           path: /app/ktor-docker-sample.jar
+
+      - name: Stop Docker Compose services
+        run: docker-compose down -v
