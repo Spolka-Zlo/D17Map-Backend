@@ -15,11 +15,6 @@ Content-Type: application/json
 ###
 
 
-GET localhost:8080/classrooms
-
-####
-
-
 POST localhost:8080/classrooms
 Content-Type: application/json
 
@@ -38,6 +33,7 @@ Content-Type: application/json
 }
 ###
 
+
 POST localhost:8080/classrooms
 Content-Type: application/json
 
@@ -55,3 +51,5 @@ Content-Type: application/json
 ###
 
 
+GET localhost:8080/classrooms
+####

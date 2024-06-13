@@ -6,8 +6,8 @@ Content-Type: application/json
   "password": "I<3Burito",
   "role": "TEACHER"
 }
-
 ###
+
 
 POST localhost:8080/users
 Content-Type: application/json
@@ -17,5 +17,8 @@ Content-Type: application/json
   "password": "MySecretPassword",
   "role": "STUDENT"
 }
-
 ###
+
+GET localhost:8080/users
+###
+
