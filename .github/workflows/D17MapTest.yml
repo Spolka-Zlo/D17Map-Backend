@@ -2,9 +2,9 @@ name: D17Map test
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, development]
   push:
-    branches: [main]
+    branches: [main, development]
 
 jobs:
   test:
@@ -25,13 +25,14 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD -x test
 
       - name: Start Docker containers
         run: docker-compose up -d
 
-      - name: Run Kotlin Tests
-        run: ./gradlew test
+      - name: Run Tests
+        run: docker-compose exec -T web ./gradlew test
+
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v3.1.3
@@ -39,3 +40,6 @@ jobs:
           name: test-results
           path: build/reports/tests
 
+
+      - name: Stop Docker Compose services
+        run: docker-compose down -v
