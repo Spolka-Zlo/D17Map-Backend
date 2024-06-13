@@ -11,21 +11,6 @@ import java.util.*
 
 fun Route.classroomRoutes(classroomService: ClassroomService) {
     route("/classrooms") {
-        /*
-        * [{
-        *    "id": 1234,
-        *    "name": "3.14"
-        *    "capacity": 34
-        *    "equipment":
-        *    [
-        *      "projektor",
-        *      "laptop",
-        *      "tablica"
-        *    ]
-        * }, ...
-        * ]
-        *
-        * */
         get {
             val classrooms = classroomService.getAll()
             // TODO check EmptyList<> serialization (reason may be located in lower layers
@@ -37,21 +22,7 @@ fun Route.classroomRoutes(classroomService: ClassroomService) {
             }
         }
 
-        /*
-       * {
-       *    "name": "3.14",
-       *    "description": "Sala Marka Maruchy",
-       *    "capacity": 34,
-       *    "equipment":
-       *    [
-       *      "projektor",
-       *      "laptop",
-       *      "tablica"
-       *    ]
-       * }
-       *
-       *
-       * */
+
         post {
             val classroomRequest = call.receive<ClassroomPostDto>()
             if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
