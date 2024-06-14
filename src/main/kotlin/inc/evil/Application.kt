@@ -12,10 +12,10 @@ fun Application.module() {
     DatabaseSingleton.init()
     DatabaseSingleton.drop()
     DatabaseSingleton.create()
+    DatabaseSingleton.seedData()
     configureCors()
     configureDI()
     configureRouting()
     configureSerialization()
-    generateTestData()
 }
 
