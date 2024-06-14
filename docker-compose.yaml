@@ -32,7 +32,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=${PASSWORD}
     volumes:
-      - .:/home/gradle/src  # Montowanie katalogu bieżącego do kontenera
+      - .:/app
 
 volumes:
   db-data:
