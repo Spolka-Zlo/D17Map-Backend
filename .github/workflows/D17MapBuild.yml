@@ -2,9 +2,9 @@ name: D17Map build
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, development]
   push:
-    branches: [main]
+    branches: [main, development]
 
 jobs:
   build:
@@ -26,13 +26,13 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-
-      - name: Start Docker containers
-        run: docker-compose up -d
+          docker-compose build --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD -x test
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2
         with:
           name: ktor-docker-sample.jar
           path: /app/ktor-docker-sample.jar
+
+      - name: Stop Docker Compose services
+        run: docker-compose down -v

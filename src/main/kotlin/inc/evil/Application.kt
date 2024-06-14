@@ -1,9 +1,6 @@
 package inc.evil
 
-import inc.evil.config.DatabaseSingleton
-import inc.evil.config.configureDI
-import inc.evil.config.configureRouting
-import inc.evil.config.configureSerialization
+import inc.evil.config.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -12,11 +9,13 @@ fun main(args: Array<String>) {
 
 
 fun Application.module() {
-//    install(Resources) // for future maybe
     DatabaseSingleton.init()
+    DatabaseSingleton.drop()
+    DatabaseSingleton.create()
+    configureCors()
     configureDI()
     configureRouting()
     configureSerialization()
-    generateTestData()
+
 }
 
