@@ -17,7 +17,6 @@ fun Application.module() {
     configureDI()
     configureRouting()
     configureSerialization()
-
-
+    generateTestData()
 }
 
