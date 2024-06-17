@@ -3,6 +3,7 @@ package inc.evil.service
 import inc.evil.dto.ClassroomPostDto
 import inc.evil.dto.ClassroomSummaryDto
 import inc.evil.persistance.entities.Classroom
+import inc.evil.persistance.entities.Classrooms
 import inc.evil.persistance.entities.Equipment
 import inc.evil.persistance.entities.Equipments
 import inc.evil.persistance.repositories.ClassroomRepository
@@ -31,6 +32,10 @@ class ClassroomService(private val classroomRepository: ClassroomRepository) {
         val dbEquipments: List<Equipment> = classroomPostDto.equipment.mapNotNull { eqName ->
             Equipment.find { Equipments.name eq eqName }.firstOrNull()
         }
+
+
+
+
 
         // Tworzymy classroom i dodajemy do niego pobrane equipmenty
         val classroomEntity: Classroom = Classroom.new {
@@ -62,12 +67,18 @@ class ClassroomService(private val classroomRepository: ClassroomRepository) {
 
     fun findById(id: UUID): ClassroomSummaryDto? {
         TODO("not yet implemented")
-
     }
 
     fun deleteById(id: UUID) {
-        TODO("not yet implemented")
+        transaction {
+            Classroom.findById(id)?.delete()
+        }
+    }
 
+    fun deleteByName(name: String) {
+        transaction {
+            Classroom.find { Classrooms.name eq name }.firstOrNull()?.delete()
+        }
     }
 
     fun updateClassroom(id: UUID, classroomPostDto: ClassroomPostDto): ClassroomSummaryDto? {

@@ -68,6 +68,12 @@ fun Route.classroomRoutes(classroomService: ClassroomService) {
             call.respond(HttpStatusCode.NoContent)
         }
 
+        delete("{name}") {
+            val name = call.parameters["name"] ?: return@delete call.respond(HttpStatusCode.BadRequest, "Invalid ID")
+            classroomService.deleteByName(name)
+            call.respond(HttpStatusCode.NoContent)
+        }
+
 
         get("{id}") {
             val id = call.parameters["id"]?.let { UUID.fromString(it) } ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid ID")
