@@ -48,9 +48,9 @@ services:
     restart: unless-stopped
 
     environment:
-      POSTGRES_DB: d17_map
-      POSTGRES_USER: d17_map
       POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DB}
+      POSTGRES_USER: ${USER}
     ports:
       - "5432:5432"
     volumes:
@@ -76,6 +76,9 @@ services:
 
     environment:
       POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DB}
+      POSTGRES_USER: ${USER}
+
 
 volumes:
   db-data: {}

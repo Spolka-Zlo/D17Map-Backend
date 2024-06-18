@@ -13,8 +13,8 @@ import java.time.LocalTime
 object DatabaseSingleton {
     fun init() {
         val driverClassName = "org.postgresql.Driver"
-        val jdbcURL = "jdbc:postgresql://db:5432/d17_map"
-        val user = "d17_map"
+        val jdbcURL = "jdbc:postgresql://db:5432/${System.getenv("POSTGRES_DB")}"
+        val user = System.getenv("POSTGRES_USER")
         val password = System.getenv("POSTGRES_PASSWORD")
         Database.connect(jdbcURL, driverClassName, user, password)
 
@@ -171,6 +171,9 @@ object DatabaseSingleton {
                 }
             )
 
+
+
+
             Reservation.new {
                 title = "Morning Lecture"
                 user = users[0]
@@ -180,6 +183,8 @@ object DatabaseSingleton {
                 endTime = LocalTime.parse("10:00")
                 type = ReservationType.LECTURE
             }
+
+            println(ReservationType.LECTURE)
 
             Reservation.new {
                 title = "Physics Lab"

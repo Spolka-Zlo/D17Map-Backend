@@ -10,6 +10,8 @@ contain your password to the database:
 
 #### .env
 ```text
+DB=<your_postgres_db>
+USER=<your_postgres_user>
 PASSWORD=<your_password>
 ```
 
