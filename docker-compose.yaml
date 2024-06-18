@@ -1,9 +1,52 @@
-version: '3.8'
+#version: '3.8'
+#services:
+#  db:
+#    container_name: postgres
+#    image: postgres:latest
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_DB: d17_map
+#      POSTGRES_USER: d17_map
+#      POSTGRES_PASSWORD: ${PASSWORD}
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - db-data:/var/lib/postgresql/data
+#    networks:
+#      - ktor-postgres
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U d17_map" ]
+#
+#  web:
+#    container_name: ktor
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#    networks:
+#      - ktor-postgres
+#    environment:
+#      - POSTGRES_PASSWORD=${PASSWORD}
+#    volumes:
+#      - .:/home/gradle/src  # Montowanie katalogu bieżącego do kontenera
+#
+#volumes:
+#  db-data:
+#
+#networks:
+#  ktor-postgres:
+
+
 services:
   db:
     container_name: postgres
     image: postgres:latest
     restart: unless-stopped
+
     environment:
       POSTGRES_DB: d17_map
       POSTGRES_USER: d17_map
@@ -12,30 +55,30 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+
     networks:
       - ktor-postgres
+
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U d17_map" ]
 
   web:
     container_name: ktor
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
+
     networks:
       - ktor-postgres
+
     environment:
-      - POSTGRES_PASSWORD=${PASSWORD}
-    volumes:
-      - .:/home/gradle/src  # Montowanie katalogu bieżącego do kontenera
+      POSTGRES_PASSWORD: ${PASSWORD}
 
 volumes:
-  db-data:
+  db-data: {}
 
 networks:
-  ktor-postgres:
+  ktor-postgres: {}
