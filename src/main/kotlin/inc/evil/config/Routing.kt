@@ -6,6 +6,7 @@ import inc.evil.service.EquipmentService
 import inc.evil.service.ReservationService
 import inc.evil.service.UserService
 import io.ktor.server.application.*
+import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -17,6 +18,9 @@ fun Application.configureRouting() {
     val userService : UserService by inject()
 
     routing {
+        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml") {}
+
+
         helloRoute()
         classroomRoutes(classroomService)
         reservationRoutes(reservationService)

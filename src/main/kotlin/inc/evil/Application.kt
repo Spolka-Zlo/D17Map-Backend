@@ -1,9 +1,6 @@
 package inc.evil
 
-import inc.evil.config.DatabaseSingleton
-import inc.evil.config.configureDI
-import inc.evil.config.configureRouting
-import inc.evil.config.configureSerialization
+import inc.evil.config.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -15,9 +12,10 @@ fun Application.module() {
     DatabaseSingleton.init()
     DatabaseSingleton.drop()
     DatabaseSingleton.create()
+    DatabaseSingleton.seedData()
+    configureCors()
     configureDI()
     configureRouting()
     configureSerialization()
-
 }
 
