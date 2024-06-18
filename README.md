@@ -10,6 +10,8 @@ contain your password to the database:
 
 #### .env
 ```text
+DB=<your_postgres_db>
+USER=<your_postgres_user>
 PASSWORD=<your_password>
 ```
 
@@ -19,6 +21,16 @@ The following commands should be issued from the root directory of the project.
 
 1. `docker compose build`
 2. `docker compose up -d`
+
+
+### Auto-reload
+To be able to use auto reload, after running `docker compose up`, the following commands should be issued
+another terminal:
+1. `docker exec -t -i ktor bash`
+2. `./gradlew build -t` or `./gradlew build -t -x test` if you want to skip tests
+
+Now, every time a watched file is changed, (`ctrl + s`), application is rebuilt and after a couple of seconds
+changes are applied.
 
 
 ## 🔷 Cleaning Docker

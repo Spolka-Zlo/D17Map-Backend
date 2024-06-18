@@ -1,0 +1,541 @@
+openapi: "3.0.0"
+info:
+  title: "d17_map_backend API"
+  description: "d17_map_backend API"
+  version: "1.0.0"
+servers:
+- url: "https://d17_map_backend"
+paths:
+  /:
+    get:
+      description: "Hello world"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Hello World!"
+  /classrooms:
+    get:
+      description: "Get all classrooms"
+      responses:
+        "204":
+          description: "No Content"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ClassroomSummaryDto"
+    post:
+      description: "Add new classroom"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassroomPostDto"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Invalid classroom data"
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ClassroomSummaryDto"
+  /classrooms/{id}:
+    delete:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Invalid ID"
+        "204":
+          description: "No Content"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Invalid ID"
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Classroom not found"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ClassroomSummaryDto"
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassroomPostDto"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Invalid classroom data"
+                Example#2:
+                  value: "Invalid ID"
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Classroom not found"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ClassroomSummaryDto"
+  /equipments:
+    get:
+      description: ""
+      responses:
+        "204":
+          description: "No Content"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EquipmentPostDto"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Invalid equipment request"
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EquipmentPostDto"
+  /equipments/batch:
+    post:
+      description: "not sure about this one, ktor says it cannot handle generic Lists,\
+        \ but it actually does"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "string"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Empty equipment list"
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+  /reservations:
+    get:
+      description: "* [{\n        *    \"id\": 1234,\n        *    \"type\": \"TEST\"\
+        ,\n        *    \"startTime\": \"21:15\",\n        *    \"endTime\": \"22:30\"\
+        ,\n        *    \"classroom\":\n        *      {\n        *        \"id\"\
+        : 1345,\n        *        \"name\": \"3.12\"\n        *      }\n        *\
+        \   }, ...\n        * ]\n        *\n        *"
+      parameters:
+      - name: "day"
+        in: "query"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Query parameter 'date' must be specified"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ReservationDayDto"
+    post:
+      description: "Add new reservation. Remember about UUID problem!"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationPostDto"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ReservationPostDto"
+  /users:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserPostDto"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserPostDto"
+  /users/{id}/future-reservations:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Missing or malformed userid"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserReservationDto"
+  /users/{id}/reservations:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Missing or malformed userid"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserReservationDto"
+components:
+  schemas:
+    ClassroomSummaryDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        capacity:
+          type: "integer"
+          format: "int32"
+        equipment:
+          type: "array"
+          items:
+            type: "string"
+      required:
+      - "id"
+      - "name"
+      - "equipment"
+    ClassroomPostDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        capacity:
+          type: "integer"
+          format: "int32"
+        equipment:
+          type: "array"
+          items:
+            type: "string"
+      required:
+      - "name"
+      - "description"
+      - "equipment"
+    EquipmentPostDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+      required:
+      - "name"
+    LocalTime:
+      type: "object"
+      properties: {}
+    ClassroomBasicInfoDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+      required:
+      - "id"
+      - "name"
+    ReservationDayDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        type:
+          type: "string"
+          enum:
+          - "CLASS"
+          - "EXAM"
+          - "TEST"
+          - "CONSULTATIONS"
+          - "CONFERENCE"
+          - "STUDENTS_CLUB_MEETING"
+          - "EVENT"
+        startTime:
+          $ref: "#/components/schemas/LocalTime"
+        endTime:
+          $ref: "#/components/schemas/LocalTime"
+        classroom:
+          $ref: "#/components/schemas/ClassroomBasicInfoDto"
+      required:
+      - "id"
+      - "type"
+      - "startTime"
+      - "endTime"
+      - "classroom"
+    LocalDate:
+      type: "object"
+      properties: {}
+    ReservationPostDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        title:
+          type: "string"
+        type:
+          type: "string"
+          enum:
+          - "CLASS"
+          - "EXAM"
+          - "TEST"
+          - "CONSULTATIONS"
+          - "CONFERENCE"
+          - "STUDENTS_CLUB_MEETING"
+          - "EVENT"
+        userId:
+          type: "string"
+          format: "uuid"
+        date:
+          $ref: "#/components/schemas/LocalDate"
+        startTime:
+          $ref: "#/components/schemas/LocalTime"
+        endTime:
+          $ref: "#/components/schemas/LocalTime"
+        classroomId:
+          type: "string"
+          format: "uuid"
+      required:
+      - "title"
+      - "type"
+      - "userId"
+      - "date"
+      - "startTime"
+      - "endTime"
+      - "classroomId"
+    UserPostDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        role:
+          type: "string"
+          enum:
+          - "ADMIN"
+          - "STUDENT"
+          - "TEACHER"
+          - "STUDENT_COUNCIL_PRESIDENT"
+          - "STUDENTS_CLUB_MEMBER"
+      required:
+      - "email"
+      - "password"
+      - "role"
+    UserReservationDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        title:
+          type: "string"
+        type:
+          type: "string"
+          enum:
+          - "CLASS"
+          - "EXAM"
+          - "TEST"
+          - "CONSULTATIONS"
+          - "CONFERENCE"
+          - "STUDENTS_CLUB_MEETING"
+          - "EVENT"
+        date:
+          $ref: "#/components/schemas/LocalDate"
+        startTime:
+          $ref: "#/components/schemas/LocalTime"
+        endTime:
+          $ref: "#/components/schemas/LocalTime"
+        classroomId:
+          type: "string"
+          format: "uuid"
+      required:
+      - "title"
+      - "type"
+      - "date"
+      - "startTime"
+      - "endTime"
+      - "classroomId"

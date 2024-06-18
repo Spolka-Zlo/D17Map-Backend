@@ -16,7 +16,7 @@ object Reservations : UUIDTable() {
     val date = date("date")
     val startTime = time("start_time")
     val endTime = time("end_time")
-    val type = enumerationByName("type", 10, ReservationType::class)
+    val type = enumerationByName("type", length = 64,  ReservationType::class, )
 }
 
 class Reservation(id: EntityID<UUID>) : UUIDEntity(id) {

@@ -36,6 +36,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-config-yaml:2.3.10")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
 
     // Dependency injection
     implementation("io.insert-koin:koin-ktor:3.5.6")
@@ -49,11 +51,17 @@ dependencies {
     // Postgres
     implementation("org.postgresql:postgresql:$postgresql_driver_version")
 
-    // Exposed to be evicted (just thrown out...) or not?
+    // Exposed
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+
+    // Swagger UI
+    implementation("io.ktor:ktor-server-swagger:$ktor_version")
+
+    // CORS
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
 
     // Tests
     testImplementation("io.ktor:ktor-server-tests-jvm")
