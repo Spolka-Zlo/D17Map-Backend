@@ -28,4 +28,15 @@ class EquipmentService (val equipmentRepository : EquipmentRepository) {
             equipmentRepository.delete(it)
         } ?: throw EntityNotFoundException("Equipment not found with id: $equipmentId")
     }
+
+    fun getAll(): List<EquipmentResponse> {
+        val equipments = equipmentRepository.findAll()
+
+        return equipments.map { equipment ->
+            EquipmentResponse(
+                id = equipment.id ?: throw IllegalStateException("ID should not be null"),
+                name = equipment.name
+            )
+        }
+    }
 }
