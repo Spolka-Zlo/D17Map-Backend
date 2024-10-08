@@ -5,16 +5,15 @@ import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
-@Table(name = "classrooms")
 class Classroom(
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.RANDOM)
-    var id: UUID,
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    val id: UUID? = null,
     var name: String,
     var description: String,
     var capacity: Int,
 
-    @ManyToMany(cascade = [CascadeType.ALL])
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "classrooms_equipments",
         joinColumns = [JoinColumn(name = "classroom_id")],
@@ -22,7 +21,11 @@ class Classroom(
     )
     var equipments: MutableSet<Equipment> = mutableSetOf(),
 
-    @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val reservations: MutableSet<Classroom> = mutableSetOf()
+    @OneToMany(
+        mappedBy = "classroom",
+        cascade = [CascadeType.PERSIST, CascadeType.REMOVE],
+        orphanRemoval = true
+    )
+    val reservations: MutableSet<Reservation> = mutableSetOf()
 ) {
 }

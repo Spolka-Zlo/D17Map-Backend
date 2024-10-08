@@ -9,15 +9,19 @@ import java.util.*
 @Entity
 class User(
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.RANDOM)
-    val id: UUID,
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    val id: UUID? = null,
     var email: String,
     var password: String,
 
-    // change to entity if roles should be editable
     @Enumerated(EnumType.STRING)
     var userType: Role,
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val reservations: MutableList<Reservation> = ArrayList()
+    @OneToMany(
+        mappedBy = "user",
+        cascade = [CascadeType.REMOVE, CascadeType.PERSIST],
+        fetch = FetchType.LAZY,
+        orphanRemoval = true
+    )
+    val reservations: MutableSet<Reservation> = mutableSetOf()
 )
