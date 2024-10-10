@@ -5,13 +5,15 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 
-data class ReservationResponse(
-    val id: UUID,
+data class ReservationDto(
+    val id: UUID? = null,
     val title: String,
     val date: LocalDate,
     val startTime: LocalTime,
     val endTime: LocalTime,
-    val classroom: ClassroomResponse,
+    val classroomId: UUID? = null,
+    val classroom: ClassroomDto? = null,
     val type: ReservationType,
-    val user: UserResponse
+    val userId: UUID? = null,
+    val user: UserDto? = null
 )

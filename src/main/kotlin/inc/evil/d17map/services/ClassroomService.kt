@@ -1,9 +1,8 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.ClassroomRequest
-import inc.evil.d17map.dtos.ClassroomResponse
+import inc.evil.d17map.dtos.ClassroomDto
 import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.mappers.ClassroomMapper
+import inc.evil.d17map.mappers.Mapper
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import jakarta.persistence.EntityNotFoundException
@@ -13,37 +12,36 @@ import java.util.*
 @Service
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
-    private val equipmentRepository: EquipmentRepository
+    private val equipmentRepository: EquipmentRepository,
+    private val mapper: Mapper
 ) {
-    fun getAll(): List<ClassroomResponse> {
+    fun getAll(): List<ClassroomDto> {
         val classrooms = classroomRepository.findAll()
-        return classrooms.map { classroom ->
-            ClassroomMapper.mapToClassroomResponse(classroom)
+        return classrooms.map { classroomDto ->
+            mapper.toClassroomDto(classroomDto)
         }
     }
 
-    fun createClassroom(classroomRequest: ClassroomRequest): ClassroomResponse {
-        val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
+    fun createClassroom(classroomDto: ClassroomDto): ClassroomDto {
+        val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
         val classroom = Classroom(
-            name = classroomRequest.name,
-            description = classroomRequest.description,
-            capacity = classroomRequest.capacity,
+            name = classroomDto.name,
+            description = classroomDto.description,
+            capacity = classroomDto.capacity,
             equipments = equipments.toMutableSet()
         )
-        val savedClassroom = classroomRepository.save(classroom)
-        return ClassroomMapper.mapToClassroomResponse(savedClassroom)
+        val savedClassroomDto = classroomRepository.save(classroom)
+        return mapper.toClassroomDto(savedClassroomDto)
     }
 
-    fun findByName(name: String): ClassroomResponse {
-        val classroom = classroomRepository.findAll().firstOrNull { it.name == name }
-            ?: throw EntityNotFoundException("Classroom with name '$name' not found")
-        return ClassroomMapper.mapToClassroomResponse(classroom)
+    fun findByName(name: String): ClassroomDto {
+        val classroomDto = classroomRepository.findAll().firstOrNull { it.name == name }!!
+        return mapper.toClassroomDto(classroomDto)
     }
 
-    fun findById(id: UUID): ClassroomResponse {
-        val classroom = classroomRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Classroom with id '$id' not found") }
-        return ClassroomMapper.mapToClassroomResponse(classroom)
+    fun findById(id: UUID): ClassroomDto {
+        val classroomDto = classroomRepository.findById(id).get()!!
+        return mapper.toClassroomDto(classroomDto)
     }
 
     fun deleteById(id: UUID) {
@@ -53,19 +51,18 @@ class ClassroomService(
         classroomRepository.deleteById(id)
     }
 
-    fun updateClassroom(id: UUID, classroomRequest: ClassroomRequest): ClassroomResponse {
+    fun updateClassroom(id: UUID, classroomDto: ClassroomDto): ClassroomDto {
         val classroom = classroomRepository.findById(id)
             .orElseThrow { EntityNotFoundException("Classroom with id '$id' not found") }
 
-        val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
+        val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
 
-        classroom.name = classroomRequest.name
-        classroom.description = classroomRequest.description
-        classroom.capacity = classroomRequest.capacity
+        classroom.name = classroomDto.name
+        classroom.description = classroomDto.description
+        classroom.capacity = classroomDto.capacity
         classroom.equipments = equipments.toMutableSet()
 
-        val updatedClassroom = classroomRepository.save(classroom)
-        return ClassroomMapper.mapToClassroomResponse(updatedClassroom)
+        val updatedClassroomDto = classroomRepository.save(classroom)
+        return mapper.toClassroomDto(updatedClassroomDto)
     }
 }
-

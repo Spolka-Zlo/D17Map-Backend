@@ -1,9 +1,8 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.ReservationRequest
-import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.dtos.ReservationDto
 import inc.evil.d17map.entities.Reservation
-import inc.evil.d17map.mappers.ReservationMapper
+import inc.evil.d17map.mappers.Mapper
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
@@ -16,38 +15,41 @@ import java.util.*
 class ReservationService(
     private val reservationRepository: ReservationRepository,
     private val classroomRepository: ClassroomRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val mapper: Mapper
 ) {
-    fun getGivenDayReservations(date: LocalDate): List<ReservationResponse> {
+    fun getGivenDayReservations(date: LocalDate): List<ReservationDto> {
         val reservations = reservationRepository.findAllByDate(date)
-        return reservations.map { ReservationMapper.mapToReservationResponse(it) }
+        return reservations.map { mapper.toReservationDto(it) }
     }
 
-    fun createReservation(reservationRequest: ReservationRequest): ReservationResponse {
-        val classroom = classroomRepository.findById(reservationRequest.classroomId)
-            .orElseThrow { EntityNotFoundException("Classroom with id '${reservationRequest.classroomId}' not found") }
+    fun createReservation(reservationDto: ReservationDto): ReservationDto {
+        val classroom = classroomRepository.findById(reservationDto.classroomId!!)
+            .orElseThrow { EntityNotFoundException("Classroom with id '${reservationDto.classroomId}' not found") }
 
-        val user = userRepository.findById(reservationRequest.userId)
-            .orElseThrow { EntityNotFoundException("User with id '${reservationRequest.userId}' not found") }
+        val user = userRepository.findById(reservationDto.userId!!)
+            .orElseThrow { EntityNotFoundException("User with id '${reservationDto.userId}' not found") }
 
         val reservation = Reservation(
-            title = reservationRequest.title,
-            date = reservationRequest.date,
-            startTime = reservationRequest.startTime,
-            endTime = reservationRequest.endTime,
+            title = reservationDto.title,
+            date = reservationDto.date,
+            startTime = reservationDto.startTime,
+            endTime = reservationDto.endTime,
             classroom = classroom,
-            type = reservationRequest.type,
+            type = reservationDto.type,
             user = user
         )
 
         val savedReservation = reservationRepository.save(reservation)
-        return ReservationMapper.mapToReservationResponse(savedReservation)
+        return mapper.toReservationDto(savedReservation)
     }
 
-    fun getUserReservations(userId: UUID): List<ReservationResponse> {
+
+    fun getUserFutureReservations(userId: UUID): List<ReservationDto> {
         val user = userRepository.findById(userId)
             .orElseThrow { EntityNotFoundException("User with id '$userId' not found") }
 
-        return user.reservations.map { ReservationMapper.mapToReservationResponse(it) }
+        val futureReservations = user.reservations.filter { it.date.isAfter(LocalDate.now()) }
+        return futureReservations.map { mapper.toReservationDto(it) }
     }
 }
