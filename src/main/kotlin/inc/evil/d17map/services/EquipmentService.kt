@@ -4,7 +4,6 @@ import inc.evil.d17map.dtos.EquipmentDto
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.findOne
 import inc.evil.d17map.repositories.EquipmentRepository
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.util.UUID
 

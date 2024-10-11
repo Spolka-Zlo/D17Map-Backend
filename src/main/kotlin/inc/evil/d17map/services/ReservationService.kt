@@ -2,7 +2,7 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ReservationDto
 import inc.evil.d17map.entities.Reservation
-import inc.evil.d17map.mappers.Mapper
+import inc.evil.d17map.mappers.toReservationDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
@@ -15,12 +15,11 @@ import java.util.*
 class ReservationService(
     private val reservationRepository: ReservationRepository,
     private val classroomRepository: ClassroomRepository,
-    private val userRepository: UserRepository,
-    private val mapper: Mapper
+    private val userRepository: UserRepository
 ) {
     fun getGivenDayReservations(date: LocalDate): List<ReservationDto> {
         val reservations = reservationRepository.findAllByDate(date)
-        return reservations.map { mapper.toReservationDto(it) }
+        return reservations.map { toReservationDto(it) }
     }
 
     fun createReservation(reservationDto: ReservationDto): ReservationDto {
@@ -41,7 +40,7 @@ class ReservationService(
         )
 
         val savedReservation = reservationRepository.save(reservation)
-        return mapper.toReservationDto(savedReservation)
+        return toReservationDto(savedReservation)
     }
 
 
@@ -50,6 +49,6 @@ class ReservationService(
             .orElseThrow { EntityNotFoundException("User with id '$userId' not found") }
 
         val futureReservations = user.reservations.filter { it.date.isAfter(LocalDate.now()) }
-        return futureReservations.map { mapper.toReservationDto(it) }
+        return futureReservations.map { toReservationDto(it) }
     }
 }

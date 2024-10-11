@@ -2,7 +2,7 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomDto
 import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.mappers.Mapper
+import inc.evil.d17map.mappers.toClassroomDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import jakarta.persistence.EntityNotFoundException
@@ -12,13 +12,12 @@ import java.util.*
 @Service
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
-    private val equipmentRepository: EquipmentRepository,
-    private val mapper: Mapper
+    private val equipmentRepository: EquipmentRepository
 ) {
     fun getAll(): List<ClassroomDto> {
         val classrooms = classroomRepository.findAll()
         return classrooms.map { classroomDto ->
-            mapper.toClassroomDto(classroomDto)
+            toClassroomDto(classroomDto)
         }
     }
 
@@ -31,17 +30,17 @@ class ClassroomService(
             equipments = equipments.toMutableSet()
         )
         val savedClassroomDto = classroomRepository.save(classroom)
-        return mapper.toClassroomDto(savedClassroomDto)
+        return toClassroomDto(savedClassroomDto)
     }
 
     fun findByName(name: String): ClassroomDto {
         val classroomDto = classroomRepository.findAll().firstOrNull { it.name == name }!!
-        return mapper.toClassroomDto(classroomDto)
+        return toClassroomDto(classroomDto)
     }
 
     fun findById(id: UUID): ClassroomDto {
         val classroomDto = classroomRepository.findById(id).get()!!
-        return mapper.toClassroomDto(classroomDto)
+        return toClassroomDto(classroomDto)
     }
 
     fun deleteById(id: UUID) {
@@ -63,6 +62,6 @@ class ClassroomService(
         classroom.equipments = equipments.toMutableSet()
 
         val updatedClassroomDto = classroomRepository.save(classroom)
-        return mapper.toClassroomDto(updatedClassroomDto)
+        return toClassroomDto(updatedClassroomDto)
     }
 }
