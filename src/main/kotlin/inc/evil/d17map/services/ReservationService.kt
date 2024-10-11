@@ -22,6 +22,12 @@ class ReservationService(
         return reservations.map { toReservationDto(it) }
     }
 
+    fun getReservationById(id: UUID): ReservationDto {
+        val reservation = reservationRepository.findById(id)
+            .orElseThrow { EntityNotFoundException("Reservation with id '$id' not found") }
+        return toReservationDto(reservation)
+    }
+
     fun createReservation(reservationDto: ReservationDto): ReservationDto {
         val classroom = classroomRepository.findById(reservationDto.classroomId!!)
             .orElseThrow { EntityNotFoundException("Classroom with id '${reservationDto.classroomId}' not found") }
@@ -42,7 +48,6 @@ class ReservationService(
         val savedReservation = reservationRepository.save(reservation)
         return toReservationDto(savedReservation)
     }
-
 
     fun getUserFutureReservations(userId: UUID): List<ReservationDto> {
         val user = userRepository.findById(userId)

@@ -25,6 +25,12 @@ class EquipmentService(val equipmentRepository: EquipmentRepository) {
         equipmentRepository.delete(equipment)
     }
 
+    fun createEquipmentBatch(equipmentNames: List<String>): List<UUID> {
+        val equipments = equipmentNames.map { name -> Equipment(name = name) }
+        equipmentRepository.saveAll(equipments)
+        return equipments.map { it.id!! }
+    }
+
     fun getAll(): List<EquipmentDto> {
         val equipments = equipmentRepository.findAll()
 
