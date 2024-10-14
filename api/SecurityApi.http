@@ -1,0 +1,26 @@
+### Register user
+POST http://localhost:8080/register
+Content-Type: application/json
+
+{
+  "username": "{{registered_user}}",
+  "password": "{{registered_user_pass}}"
+}
+
+### Log in to the application
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "{{registered_user}}",
+  "password": "{{registered_user_pass}}"
+}
+
+> {%
+    client.global.set("jwt_token", response.body);
+%}
+
+### Retrieve all registered users as a logged in user
+GET http://localhost:8080/users
+Authorization: Bearer {{jwt_token}}
+
