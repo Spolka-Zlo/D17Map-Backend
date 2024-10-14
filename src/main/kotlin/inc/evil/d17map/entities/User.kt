@@ -7,6 +7,7 @@ import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
+@Table(name = "app_user")
 class User(
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)
