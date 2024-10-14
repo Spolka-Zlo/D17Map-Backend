@@ -14,12 +14,12 @@ class UserController(
 ) {
 
     @PostMapping("/register")
-    fun register(@RequestBody user: User): User {
-        return userAuthService.registerUser(user)
+    fun register(@RequestBody authRequest: AuthRequest): User {
+        return userAuthService.registerUser(authRequest)
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody user: User): String {
-        return userAuthService.verify(user)
+    fun login(@RequestBody authRequest: AuthRequest): String {
+        return userAuthService.verify(authRequest)
     }
 }

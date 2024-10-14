@@ -1,6 +1,7 @@
 package inc.evil.d17map.security.user
 
 import inc.evil.d17map.entities.User
+import inc.evil.d17map.enums.Role
 import inc.evil.d17map.repositories.UserRepository
 import inc.evil.d17map.security.jwt.JWTService
 
@@ -19,20 +20,32 @@ class UserAuthService(
     private val jwtService: JWTService
 ) {
 
-    fun registerUser(user: User): User {
-        user.password = passwordEncoder.encode(user.password)
+    // TODO user reservations during registration seem to be awkward :/
+    fun registerUser(registerRequest: AuthRequest): User {
+        val user = User(
+            email = registerRequest.username,
+            password = passwordEncoder.encode(registerRequest.password),
+            reservations = mutableSetOf(),
+            userType = Role.STUDENT,
+        )
         return userRepository.save(user)
     }
 
-    fun verify(user: User): String {
+    fun verify(loginRequest: AuthRequest): String {
         val authentication: Authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(user.email, user.password)
+            UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
 
         return if (authentication.isAuthenticated) {
-            jwtService.generateToken(user.email)
+            jwtService.generateToken(loginRequest.username)
         } else {
-            "Fail"
+            "Fail" // TODO throw exception xD
         }
     }
 }
+
+data class AuthRequest(
+    val username: String,
+    val password: String,
+)
+
