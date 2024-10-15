@@ -1,31 +1,44 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.EquipmentRequest
-import inc.evil.d17map.dtos.EquipmentResponse
+import inc.evil.d17map.dtos.EquipmentDto
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.findOne
 import inc.evil.d17map.repositories.EquipmentRepository
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 
 @Service
-class EquipmentService (val equipmentRepository : EquipmentRepository) {
-    fun createEquipment(equipmentRequest: EquipmentRequest): EquipmentResponse {
-        val equipment = Equipment(name = equipmentRequest.name)
+class EquipmentService(val equipmentRepository: EquipmentRepository) {
+    fun createEquipment(equipmentDto: EquipmentDto): EquipmentDto {
+        val equipment = Equipment(name = equipmentDto.name)
         val createdEquipment = equipmentRepository.save(equipment)
 
-        val equipmentResponse = EquipmentResponse(
-            id = createdEquipment.id ?: throw IllegalStateException("ID should not be null after save"),
+        return EquipmentDto(
+            id = createdEquipment.id!!,
             name = createdEquipment.name
         )
-        return equipmentResponse
     }
 
     fun removeEquipment(equipmentId: UUID) {
-        equipmentRepository.findOne(equipmentId)?.let {
-            equipmentRepository.delete(it)
-        } ?: throw EntityNotFoundException("Equipment not found with id: $equipmentId")
+        val equipment = equipmentRepository.findOne(equipmentId)!!
+        equipmentRepository.delete(equipment)
+    }
+
+    fun createEquipmentBatch(equipmentNames: List<String>): List<UUID> {
+        val equipments = equipmentNames.map { name -> Equipment(name = name) }
+        equipmentRepository.saveAll(equipments)
+        return equipments.map { it.id!! }
+    }
+
+    fun getAll(): List<EquipmentDto> {
+        val equipments = equipmentRepository.findAll()
+
+        return equipments.map { equipment ->
+            EquipmentDto(
+                id = equipment.id!!,
+                name = equipment.name
+            )
+        }
     }
 }

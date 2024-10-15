@@ -1,0 +1,40 @@
+### ID of the User
+@userId = 123
+
+### Day of existing reservation
+@day = 2024-10-10
+
+### GET request to retrieve reservations by day (with valid date)
+GET http://localhost:8080/reservations?day=@day
+Accept: application/json
+
+### GET request to retrieve reservations by day (without specifying the day parameter)
+GET http://localhost:8080/reservations
+Accept: application/json
+
+### POST request to create a new reservation
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "classroomId": "{{classroomId}}",
+  "date": "2024-10-10",
+  "startTime": "09:00",
+  "endTime": "10:30",
+  "title": "Example Reservation for test",
+  "type": "CLASS"}
+
+### Store the ID of the created reservation
+@reservationId = {{last.response.body.id}}
+
+### GET request to retrieve future reservations for a user by user ID
+GET http://localhost:8080/reservations/{{userId}}/future-reservations
+Accept: application/json
+
+### GET request to retrieve reservation by ID
+GET http://localhost:8080/reservations/{{reservationId}}
+Accept: application/json
+
+###
+

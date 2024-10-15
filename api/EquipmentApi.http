@@ -1,0 +1,26 @@
+### GET request to retrieve all equipments
+GET http://localhost:8080/equipments
+Accept: application/json
+
+### POST request to create a new equipment
+POST http://localhost:8080/equipments
+Content-Type: application/json
+
+{
+  "name": "Projector",
+  "description": "4K Projector with 3D capabilities"
+}
+
+
+### POST request to create equipments in batch
+POST http://localhost:8080/equipments/batch
+Content-Type: application/json
+
+[
+  "Whiteboard",
+  "Speaker",
+  "Microphone"
+]
+
+###
+
