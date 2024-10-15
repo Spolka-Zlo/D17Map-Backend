@@ -1,8 +1,0 @@
-.git
-.gradle
-build
-*.log
-README.md
-docs
-Dockerfile
-docker-compose.yaml
