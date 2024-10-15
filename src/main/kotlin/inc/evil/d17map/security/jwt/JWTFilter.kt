@@ -31,16 +31,20 @@ class JWTFilter(
         var token: String? = null
         var username: String? = null
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7)
-            username = jwtService.extractUsername(token)
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization header missing or invalid")
+            return
         }
 
-        if (username != null && SecurityContextHolder.getContext().authentication == null) {
+        token = authHeader.substring(7)
+        username = jwtService.extractUsername(token)
+
+
+        if (SecurityContextHolder.getContext().authentication == null) {
             val userDetails: UserDetails =
                 applicationContext.getBean(BasicUserDetailsService::class.java).loadUserByUsername(username)
 
-            if (token != null && jwtService.validateToken(token, userDetails)) {
+            if (jwtService.validateToken(token, userDetails)) {
                 val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.authorities
                 )
@@ -51,3 +55,4 @@ class JWTFilter(
         filterChain.doFilter(request, response)
     }
 }
+
