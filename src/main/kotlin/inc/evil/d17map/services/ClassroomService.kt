@@ -2,6 +2,7 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomDto
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
@@ -33,13 +34,8 @@ class ClassroomService(
         return toClassroomDto(savedClassroomDto)
     }
 
-    fun findByName(name: String): ClassroomDto {
-        val classroomDto = classroomRepository.findAll().firstOrNull { it.name == name }!!
-        return toClassroomDto(classroomDto)
-    }
-
     fun findById(id: UUID): ClassroomDto {
-        val classroomDto = classroomRepository.findById(id).get()!!
+        val classroomDto = classroomRepository.findOne(id)
         return toClassroomDto(classroomDto)
     }
 
@@ -51,17 +47,15 @@ class ClassroomService(
     }
 
     fun updateClassroom(id: UUID, classroomDto: ClassroomDto): ClassroomDto {
-        val classroom = classroomRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Classroom with id '$id' not found") }
-
+        val classroom = classroomRepository.findOne(id)
         val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
 
-        classroom.name = classroomDto.name
-        classroom.description = classroomDto.description
-        classroom.capacity = classroomDto.capacity
-        classroom.equipments = equipments.toMutableSet()
+        classroom?.name = classroomDto.name
+        classroom?.description = classroomDto.description
+        classroom?.capacity = classroomDto.capacity
+        classroom?.equipments = equipments.toMutableSet()
 
-        val updatedClassroomDto = classroomRepository.save(classroom)
+        val updatedClassroomDto = classroom?.let { classroomRepository.save(it) }
         return toClassroomDto(updatedClassroomDto)
     }
 }

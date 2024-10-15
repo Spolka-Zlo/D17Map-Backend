@@ -13,18 +13,12 @@ import java.util.*
 @RequestMapping("/reservations")
 class ReservationController(private val reservationService: ReservationService) {
     @GetMapping
-    fun getReservationsByDay(@RequestParam("day") day: String?): ResponseEntity<Any> {
+    fun getReservationsByDay(@RequestParam("day") day: LocalDate?): ResponseEntity<Any> {
         if (day == null) {
             return ResponseEntity("Query parameter 'day' must be specified", HttpStatus.BAD_REQUEST)
         }
 
-        val parsedDate = try {
-            LocalDate.parse(day)
-        } catch (ex: Exception) {
-            return ResponseEntity("Invalid date format. Expected YYYY-MM-DD", HttpStatus.BAD_REQUEST)
-        }
-
-        val reservations = reservationService.getGivenDayReservations(parsedDate)
+        val reservations = reservationService.getGivenDayReservations(day)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
@@ -42,5 +36,15 @@ class ReservationController(private val reservationService: ReservationService) 
     fun createReservation(@RequestBody reservationRequest: ReservationDto): ResponseEntity<ReservationDto> {
         val createdReservation = reservationService.createReservation(reservationRequest)
         return ResponseEntity(createdReservation, HttpStatus.CREATED)
+    }
+
+    @GetMapping("/{id}/future-reservations")
+    fun getUserFutureReservations(@PathVariable("id") id: UUID): ResponseEntity<Any> {
+        return try {
+            val futureReservations = reservationService.getUserFutureReservations(id)
+            ResponseEntity(futureReservations, HttpStatus.OK)
+        } catch (e: Exception) {
+            ResponseEntity("User not found or invalid ID", HttpStatus.NOT_FOUND)
+        }
     }
 }

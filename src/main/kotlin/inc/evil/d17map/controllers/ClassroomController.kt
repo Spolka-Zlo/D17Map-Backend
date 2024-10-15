@@ -14,11 +14,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
     @GetMapping
     fun getAllClassrooms(): ResponseEntity<List<ClassroomDto>> {
         val classrooms = classroomService.getAll()
-        return if (classrooms.isEmpty()) {
-            ResponseEntity(HttpStatus.NO_CONTENT)
-        } else {
-            ResponseEntity(classrooms, HttpStatus.OK)
-        }
+        return ResponseEntity(classrooms, HttpStatus.OK)
     }
 
     @GetMapping("/{id}")

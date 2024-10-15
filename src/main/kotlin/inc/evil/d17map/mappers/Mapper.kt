@@ -7,13 +7,13 @@ import inc.evil.d17map.dtos.UserDto
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.entities.Reservation
 
-fun toClassroomDto(classroom: Classroom): ClassroomDto {
-    val equipmentResponses = classroom.equipments.map { equipment ->
+fun toClassroomDto(classroom: Classroom?): ClassroomDto {
+    val equipmentResponses = classroom?.equipments?.map { equipment ->
         EquipmentDto(id = equipment.id!!, name = equipment.name)
-    }.toSet()
+    }?.toSet()
 
     return ClassroomDto(
-        id = classroom.id!!,
+        id = classroom?.id!!,
         name = classroom.name,
         description = classroom.description,
         capacity = classroom.capacity,

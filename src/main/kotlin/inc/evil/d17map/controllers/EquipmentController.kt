@@ -12,11 +12,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
     @GetMapping
     fun getAllEquipments(): ResponseEntity<List<EquipmentDto>> {
         val equipments = equipmentService.getAll()
-        return if (equipments.isEmpty()) {
-            ResponseEntity(HttpStatus.NO_CONTENT)
-        } else {
-            ResponseEntity(equipments, HttpStatus.OK)
-        }
+        return ResponseEntity(equipments, HttpStatus.OK)
     }
 
     @PostMapping
