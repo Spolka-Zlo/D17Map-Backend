@@ -23,14 +23,32 @@ class SecurityConfig(
     private val jwtFilter: JWTFilter
 ) {
 
+    private companion object {
+        private val SWAGGER_ENDPOINTS = arrayOf(
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/webjars/**"
+        )
+    }
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/auth/register", "/auth/login")
+                it.requestMatchers(
+                    "/auth/**",
+                    *SWAGGER_ENDPOINTS
+                )
                     .permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

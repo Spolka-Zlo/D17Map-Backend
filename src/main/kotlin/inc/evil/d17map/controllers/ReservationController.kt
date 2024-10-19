@@ -2,6 +2,7 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ReservationDto
 import inc.evil.d17map.services.ReservationService
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,6 +12,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/reservations")
+@Tag(name = "Reservations")
 class ReservationController(private val reservationService: ReservationService) {
     @GetMapping
     fun getReservationsByDay(@RequestParam("day") day: LocalDate?): ResponseEntity<Any> {

@@ -2,12 +2,14 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.EquipmentDto
 import inc.evil.d17map.services.EquipmentService
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/equipments")
+@Tag(name = "Equipment")
 class EquipmentController(private val equipmentService: EquipmentService) {
     @GetMapping
     fun getAllEquipments(): ResponseEntity<List<EquipmentDto>> {

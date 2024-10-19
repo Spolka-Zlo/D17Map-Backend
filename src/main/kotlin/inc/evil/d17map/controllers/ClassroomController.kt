@@ -2,6 +2,7 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ClassroomDto
 import inc.evil.d17map.services.ClassroomService
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,6 +10,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/classrooms")
+@Tag(name = "Classrooms")
 class ClassroomController(private val classroomService: ClassroomService) {
 
     @GetMapping
