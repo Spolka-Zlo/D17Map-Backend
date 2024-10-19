@@ -11,6 +11,8 @@ import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.DayOfWeek
+import java.time.temporal.TemporalAdjusters.previousOrSame
 import java.util.*
 
 @Service
@@ -66,7 +68,7 @@ class ReservationService(
         val user = userRepository.findByEmail(loggedUserEmail ?: return emptyList())
 
         val today = LocalDate.now()
-        val monday = today.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+        val monday = today.with(previousOrSame(DayOfWeek.MONDAY))
         val endOfWeek = monday.plusDays(6)
 
         val weekReservations = user?.let { reservationRepository.findAllByUserAndDateBetween(it, monday, endOfWeek) }
