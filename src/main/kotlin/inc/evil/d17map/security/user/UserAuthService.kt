@@ -22,6 +22,9 @@ class UserAuthService(
 
     // TODO user reservations during registration seem to be awkward :/
     fun registerUser(registerRequest: AuthRequest): User {
+
+        if(userRepository.existsByEmail(registerRequest.username)) throw Exception("User with email ${registerRequest.username} already exists")
+
         val user = User(
             email = registerRequest.username,
             password = passwordEncoder.encode(registerRequest.password),
