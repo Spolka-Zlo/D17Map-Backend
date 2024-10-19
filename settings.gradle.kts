@@ -1,1 +1,1 @@
-rootProject.name = "d17_map-backend"
+rootProject.name = "d17-map"
