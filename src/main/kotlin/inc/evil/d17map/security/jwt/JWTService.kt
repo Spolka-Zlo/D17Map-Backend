@@ -27,7 +27,7 @@ class JWTService(private val securityProperties: SecurityProperties) {
             .add(claims)
             .subject(username)
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(System.currentTimeMillis() + securityProperties.jwt.ttlInSeconds))
+            .expiration(Date(System.currentTimeMillis() + securityProperties.jwt.ttlInSeconds * 1000))
             .and()
             .signWith(secretKey)
             .compact()
