@@ -9,4 +9,5 @@ import java.util.UUID
 @Repository
 interface ReservationRepository : JpaRepository<Reservation, UUID> {
     fun findAllByDate(date: LocalDate): List<Reservation>
+    fun findAllByDateBetween(startDate: LocalDate, endDate: LocalDate): List<Reservation>
 }

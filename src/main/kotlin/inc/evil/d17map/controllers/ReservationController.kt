@@ -47,4 +47,19 @@ class ReservationController(private val reservationService: ReservationService) 
             ResponseEntity("User not found or invalid ID", HttpStatus.NOT_FOUND)
         }
     }
+
+    @GetMapping("/week")
+    fun getReservationsForWeek(@RequestParam("monday") monday: LocalDate?): ResponseEntity<Any> {
+        if (monday == null) {
+            return ResponseEntity("Query parameter 'monday' must be specified", HttpStatus.BAD_REQUEST)
+        }
+        val reservations = reservationService.getReservationsForWeek(monday)
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
+
+    @GetMapping("/my-week-reservations")
+    fun getMyWeekReservations(): ResponseEntity<List<ReservationDto>> {
+        val reservations = reservationService.getUserWeekReservations()
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
 }
