@@ -69,7 +69,7 @@ class ReservationService(
         val monday = today.with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
         val endOfWeek = monday.plusDays(6)
 
-        val futureReservations = user?.reservations?.filter { it.date.isAfter(monday.minusDays(1)) && it.date.isBefore(endOfWeek.plusDays(1)) }
-        return futureReservations?.map { toReservationDto(it) } ?: emptyList()
+        val weekReservations = user?.let { reservationRepository.findAllByUserAndDateBetween(it, monday, endOfWeek) }
+        return weekReservations?.map { toReservationDto(it) } ?: emptyList()
     }
 }
