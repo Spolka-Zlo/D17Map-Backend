@@ -38,9 +38,13 @@ class JWTService(private val securityProperties: SecurityProperties) {
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
-        val username = extractUsername(token)
-        return (username == userDetails.username && !isTokenExpired(token))
+        if (isTokenExpired(token)) return false
+
+        return extractUsername(token).let { username ->
+            username == userDetails.username
+        }
     }
+
 
     private fun extractExpiration(token: String): Date {
         return extractClaim(token) { it.expiration }
