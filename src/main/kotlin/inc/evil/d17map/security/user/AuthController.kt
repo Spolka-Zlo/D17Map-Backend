@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/auth")
-class UserController(
+class AuthController(
     private val userAuthService: UserAuthService
 ) {
 
