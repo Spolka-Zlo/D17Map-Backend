@@ -5,7 +5,7 @@ import inc.evil.d17map.entities.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
-import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,11 +23,11 @@ class AuthController(
 
     @Operation(
         summary = "Create a new user",
-        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
-            content = [Content(
-                examples = [ExampleObject(value = """{"username": "radek", "password": "123456"}""")]
-            )]
-        )
+        responses = [
+            ApiResponse(responseCode = "201", description = "Successfully created a new user."),
+            ApiResponse(responseCode = "400", description = "Invalid user data provided."),
+            ApiResponse(responseCode = "409", description = "User already exists with the given username."),
+        ]
     )
     @PostMapping("/register")
     fun register(@RequestBody authRequest: AuthRequest): User {
@@ -36,11 +36,10 @@ class AuthController(
 
     @Operation(
         summary = "Authenticate a user and return JWT",
-        requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
-            content = [Content(
-                examples = [ExampleObject(value = """{"username": "radek", "password": "123456"}""")]
-            )]
-        )
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully authenticated user and returned JWT."),
+            ApiResponse(responseCode = "401", description = "Invalid username or password."),
+        ]
     )
     @PostMapping("/login")
     fun login(@RequestBody authRequest: AuthRequest): String {
