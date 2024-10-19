@@ -1,11 +1,13 @@
 package inc.evil.d17map.controllers
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import inc.evil.d17map.dtos.ReservationDto
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.persistence.EntityNotFoundException
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -31,7 +33,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping
-    fun getReservationsByDay(@RequestParam("day") day: LocalDate?): ResponseEntity<Any> {
+    fun getReservationsByDay(@RequestParam(value="day", required = true) @DateTimeFormat(pattern = "dd-MM-yyyy") day: LocalDate?): ResponseEntity<Any> {
         if (day == null) {
             return ResponseEntity("Query parameter 'day' must be specified", HttpStatus.BAD_REQUEST)
         }
