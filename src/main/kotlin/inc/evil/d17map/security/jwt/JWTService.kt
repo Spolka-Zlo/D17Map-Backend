@@ -1,6 +1,7 @@
 package inc.evil.d17map.security.jwt
 
 
+import inc.evil.d17map.security.config.SecurityProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,10 +12,9 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
 @Service
-class JWTService {
-
-    private val sec: SecretKey = try {
-        val keyGenerator = KeyGenerator.getInstance("HmacSHA256")
+class JWTService(private val securityProperties: SecurityProperties) {
+    private val secretKey: SecretKey = try {
+        val keyGenerator = KeyGenerator.getInstance(securityProperties.jwt.keyGenerator)
         keyGenerator.generateKey()
     } catch (e: NoSuchAlgorithmException) {
         throw RuntimeException(e)
@@ -27,9 +27,9 @@ class JWTService {
             .add(claims)
             .subject(username)
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24-hour expiration
+            .expiration(Date(System.currentTimeMillis() + securityProperties.jwt.ttlInSeconds))
             .and()
-            .signWith(sec)
+            .signWith(secretKey)
             .compact()
     }
 
@@ -57,7 +57,7 @@ class JWTService {
 
     private fun extractAllClaims(token: String): Claims {
         return Jwts.parser()
-            .verifyWith(sec)
+            .verifyWith(secretKey)
             .build()
             .parseSignedClaims(token)
             .payload
