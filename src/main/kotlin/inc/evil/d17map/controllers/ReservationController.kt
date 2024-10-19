@@ -99,4 +99,40 @@ class ReservationController(private val reservationService: ReservationService) 
         }
     }
 
+    @Operation(
+        summary = "Get all reservations for a week",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "404", description = "Reservations for given week not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/week")
+    fun getReservationsForWeek(@RequestParam("monday") monday: LocalDate?): ResponseEntity<Any> {
+        if (monday == null) {
+            return ResponseEntity("Query parameter 'monday' must be specified", HttpStatus.BAD_REQUEST)
+        }
+        val reservations = reservationService.getReservationsForWeek(monday)
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Get all reservations for a week for given user",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "404", description = "User reservations for given week not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/my-week-reservations")
+    fun getMyWeekReservations(): ResponseEntity<List<ReservationDto>> {
+        val reservations = reservationService.getUserWeekReservations()
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
 }

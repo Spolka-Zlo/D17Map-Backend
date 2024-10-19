@@ -8,9 +8,11 @@ import inc.evil.d17map.mappers.toReservationDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
-import jakarta.persistence.EntityNotFoundException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.DayOfWeek
+import java.time.temporal.TemporalAdjusters.previousOrSame
 import java.util.*
 
 @Service
@@ -53,5 +55,23 @@ class ReservationService(
         val user: User? = userRepository.findOne(userId)
         val futureReservations = user?.reservations?.filter { it.date.isAfter(LocalDate.now()) }
         return futureReservations?.map { toReservationDto(it) }
+    }
+
+    fun getReservationsForWeek(monday: LocalDate): List<ReservationDto> {
+        val endOfWeek = monday.plusDays(6)
+        val reservations = reservationRepository.findAllByDateBetween(monday, endOfWeek)
+        return reservations.map { toReservationDto(it) }
+    }
+
+    fun getUserWeekReservations(): List<ReservationDto> {
+        val loggedUserEmail = SecurityContextHolder.getContext().authentication?.name
+        val user = userRepository.findByEmail(loggedUserEmail ?: return emptyList())
+
+        val today = LocalDate.now()
+        val monday = today.with(previousOrSame(DayOfWeek.MONDAY))
+        val endOfWeek = monday.plusDays(6)
+
+        val weekReservations = user?.let { reservationRepository.findAllByUserAndDateBetween(it, monday, endOfWeek) }
+        return weekReservations?.map { toReservationDto(it) } ?: emptyList()
     }
 }
