@@ -1,5 +1,6 @@
 package inc.evil.d17map.controllers
 
+import inc.evil.d17map.InvalidEquipmentDataException
 import inc.evil.d17map.dtos.EquipmentDto
 import inc.evil.d17map.services.EquipmentService
 import io.swagger.v3.oas.annotations.Hidden
@@ -45,7 +46,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
     @PostMapping
     fun createEquipment(@RequestBody equipmentRequest: EquipmentDto): ResponseEntity<Any> {
         if (equipmentRequest.name.isBlank()) {
-            return ResponseEntity("Invalid equipment request", HttpStatus.BAD_REQUEST)
+            throw InvalidEquipmentDataException.blankName()
         }
         val createdEquipment = equipmentService.createEquipment(equipmentRequest)
         return ResponseEntity(createdEquipment, HttpStatus.CREATED)
@@ -55,7 +56,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
     @PostMapping("/batch")
     fun createEquipmentsBatch(@RequestBody equipmentRequest: List<String>): ResponseEntity<Any> {
         if (equipmentRequest.isEmpty()) {
-            return ResponseEntity("Empty equipment list", HttpStatus.BAD_REQUEST)
+            throw InvalidEquipmentDataException.emptyEquipmentList()
         }
         val createdEquipmentIds = equipmentService.createEquipmentBatch(equipmentRequest)
         return ResponseEntity(createdEquipmentIds, HttpStatus.CREATED)

@@ -1,5 +1,8 @@
 package inc.evil.d17map.controllers
 
+import inc.evil.d17map.MissingParameterException
+import inc.evil.d17map.ReservationNotFoundException
+import inc.evil.d17map.UserNotFoundException
 import inc.evil.d17map.dtos.ReservationDto
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
@@ -33,7 +36,7 @@ class ReservationController(private val reservationService: ReservationService) 
     @GetMapping
     fun getReservationsByDay(@RequestParam("day") day: LocalDate?): ResponseEntity<Any> {
         if (day == null) {
-            return ResponseEntity("Query parameter 'day' must be specified", HttpStatus.BAD_REQUEST)
+            throw MissingParameterException("day")
         }
 
         val reservations = reservationService.getGivenDayReservations(day)
@@ -57,7 +60,7 @@ class ReservationController(private val reservationService: ReservationService) 
             val reservation = reservationService.getReservationById(id)
             ResponseEntity(reservation, HttpStatus.OK)
         } catch (e: EntityNotFoundException) {
-            ResponseEntity("Reservation with id '$id' not found", HttpStatus.NOT_FOUND)
+            throw ReservationNotFoundException(id)
         }
     }
 
@@ -95,7 +98,7 @@ class ReservationController(private val reservationService: ReservationService) 
             val futureReservations = reservationService.getUserFutureReservations(id)
             ResponseEntity(futureReservations, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity("User not found or invalid ID", HttpStatus.NOT_FOUND)
+            throw UserNotFoundException(id)
         }
     }
 
@@ -111,9 +114,9 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/week")
-    fun getReservationsForWeek(@RequestParam("monday") monday: LocalDate?): ResponseEntity<Any> {
+    fun getReservationsForWeek(@RequestParam("startOfTheWeek") monday: LocalDate?): ResponseEntity<Any> {
         if (monday == null) {
-            return ResponseEntity("Query parameter 'monday' must be specified", HttpStatus.BAD_REQUEST)
+            throw MissingParameterException("startOfTheWeek")
         }
         val reservations = reservationService.getReservationsForWeek(monday)
         return ResponseEntity(reservations, HttpStatus.OK)
