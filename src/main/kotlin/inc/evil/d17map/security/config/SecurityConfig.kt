@@ -48,7 +48,7 @@ class SecurityConfig(
                     *SWAGGER_ENDPOINTS
                 )
                     .permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
