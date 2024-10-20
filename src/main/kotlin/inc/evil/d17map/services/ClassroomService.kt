@@ -1,5 +1,6 @@
 package inc.evil.d17map.services
 
+import inc.evil.d17map.ClassroomNotFoundException
 import inc.evil.d17map.dtos.ClassroomDto
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.entities.Classroom
@@ -7,7 +8,6 @@ import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -36,19 +36,26 @@ class ClassroomService(
     }
 
     fun findById(id: UUID): ClassroomDto {
+        if (!classroomRepository.existsById(id)) {
+            throw ClassroomNotFoundException(id)
+        }
         val classroomDto = classroomRepository.findOne(id)
         return toClassroomDto(classroomDto)
     }
 
     fun deleteById(id: UUID) {
         if (!classroomRepository.existsById(id)) {
-            throw EntityNotFoundException("Classroom with id '$id' not found")
+            throw ClassroomNotFoundException(id)
         }
         classroomRepository.deleteById(id)
     }
 
     fun updateClassroom(id: UUID, classroomDto: ClassroomDto): ClassroomDto {
+        if (!classroomRepository.existsById(id)) {
+            throw ClassroomNotFoundException(id)
+        }
         val classroom = classroomRepository.findOne(id)
+
         val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
 
         classroom?.name = classroomDto.name

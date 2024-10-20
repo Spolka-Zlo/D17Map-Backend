@@ -1,18 +1,18 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.*
 import inc.evil.d17map.dtos.ReservationRequest
+import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.entities.Reservation
 import inc.evil.d17map.entities.User
-import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toReservationDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters.previousOrSame
 import java.util.*
 
@@ -28,6 +28,9 @@ class ReservationService(
     }
 
     fun getReservationById(id: UUID): ReservationResponse? {
+        if (!reservationRepository.existsById(id)) {
+            throw ReservationNotFoundException(id)
+        }
         val reservation = reservationRepository.findOne(id)
         return reservation?.let { toReservationDto(it) }
     }
@@ -53,6 +56,9 @@ class ReservationService(
     }
 
     fun getUserFutureReservations(userId: UUID): List<ReservationResponse>? {
+        if (!userRepository.existsById(userId)) {
+            throw UserNotFoundException(userId)
+        }
         val user: User? = userRepository.findOne(userId)
         val futureReservations = user?.reservations?.filter { it.date.isAfter(LocalDate.now()) }
         return futureReservations?.map { toReservationDto(it) }
@@ -66,7 +72,8 @@ class ReservationService(
 
     fun getUserWeekReservations(): List<ReservationResponse> {
         val loggedUserEmail = SecurityContextHolder.getContext().authentication?.name
-        val user = userRepository.findByEmail(loggedUserEmail ?: return emptyList())
+        val user =
+            userRepository.findByEmail(loggedUserEmail ?: throw UserNotFoundException(loggedUserEmail.toString()))
 
         val today = LocalDate.now()
         val monday = today.with(previousOrSame(DayOfWeek.MONDAY))
