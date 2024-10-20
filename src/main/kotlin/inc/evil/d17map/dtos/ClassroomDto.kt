@@ -9,5 +9,4 @@ data class ClassroomDto(
     val equipmentIds: Set<UUID>? = null,
     val id: UUID? = null,
     val equipments: Set<EquipmentDto>? = null
-
 )

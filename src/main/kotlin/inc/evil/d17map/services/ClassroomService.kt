@@ -23,12 +23,12 @@ class ClassroomService(
     }
 
     fun createClassroom(classroomDto: ClassroomDto): ClassroomDto {
-        val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
+        val equipments = classroomDto.equipmentIds?.let { equipmentRepository.findAllById(it) }
         val classroom = Classroom(
             name = classroomDto.name,
             description = classroomDto.description,
             capacity = classroomDto.capacity,
-            equipments = equipments.toMutableSet()
+            equipments = equipments?.toMutableSet() ?: mutableSetOf()
         )
         val savedClassroomDto = classroomRepository.save(classroom)
         return toClassroomDto(savedClassroomDto)

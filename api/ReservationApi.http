@@ -1,20 +1,19 @@
 ### ID of the User
-@userId = 123e4567-e89b-12d3-a456-426614174000
-
+@userId = 7f000001-92aa-1241-8192-aab2512a0000
 ### Day of existing reservation
 @day = 2024-10-10
 
 ### Reservation id of existing reservation
-@reservationId = 321e4567-e89b-432d-b654-426614174111
+@reservationId = 7f000001-92aa-1241-8192-aab55a8c0001
 
 ### Classroom id of existing classroom
-@classroomId = 123e4567-e89b-12d3-a456-426614174000
+@classroomId = 7f000001-92aa-1241-8192-aab62dc80002
 
 ### Monday date
 @monday = 2024-10-14
 
 ### GET request to retrieve reservations by day (with valid date)
-GET http://localhost:8080/reservations?day={{day}}
+GET http://localhost:8080/reservations?day=2024-10-10
 Accept: application/json
 
 ### POST request to create a new reservation
@@ -24,7 +23,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "classroomId": "{{classroomId}}",
-  "date": "2024-10-10",
+  "date": "2024-10-16",
   "startTime": "09:00",
   "endTime": "10:30",
   "title": "Example Reservation for test",

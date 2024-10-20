@@ -9,7 +9,8 @@ Content-Type: application/json
 {
   "name": "Classroom A",
   "capacity": 30,
-  "description": "Description for classroom A"
+  "description": "Description for classroom A",
+  "equipments": []
 }
 
 ### Retrieve classroomId from the POST response
