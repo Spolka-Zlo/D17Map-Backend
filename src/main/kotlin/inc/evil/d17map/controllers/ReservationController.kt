@@ -133,9 +133,9 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/my-week-reservations")
-    fun getMyWeekReservations(): ResponseEntity<List<ReservationDto>> {
-        val reservations = reservationService.getUserWeekReservations()
+    @GetMapping("/{id}/week")
+    fun getMyWeekReservations(@PathVariable("id") userId: UUID): ResponseEntity<List<ReservationDto>> {
+        val reservations = reservationService.getUserWeekReservations(userId)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 }

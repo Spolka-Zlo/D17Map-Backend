@@ -71,15 +71,20 @@ class ReservationService(
         return reservations.map { toReservationDto(it) }
     }
 
-    fun getUserWeekReservations(): List<ReservationDto> {
-        val loggedUserEmail = SecurityContextHolder.getContext().authentication?.name
-        val user = userRepository.findByEmail(loggedUserEmail ?: throw UserNotFoundException(loggedUserEmail.toString()))
+    fun getUserWeekReservations(userId: UUID): List<ReservationDto> {
+        if (!userRepository.existsById(userId)) {
+            throw UserNotFoundException(userId)
+        }
+
+        val user = userRepository.findById(userId).orElseThrow { UserNotFoundException(userId) }
 
         val today = LocalDate.now()
         val monday = today.with(previousOrSame(DayOfWeek.MONDAY))
         val endOfWeek = monday.plusDays(6)
 
-        val weekReservations = user?.let { reservationRepository.findAllByUserAndDateBetween(it, monday, endOfWeek) }
-        return weekReservations?.map { toReservationDto(it) } ?: emptyList()
+        val weekReservations = reservationRepository.findAllByUserAndDateBetween(user, monday, endOfWeek)
+
+        return weekReservations.map { toReservationDto(it) }
     }
+
 }
