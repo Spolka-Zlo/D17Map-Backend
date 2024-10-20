@@ -1,5 +1,5 @@
 ### ID of the User
-@userId = 7f000001-92aa-1241-8192-aab2512a0000
+@userId = 7f000001-92aa-1644-8192-aac6b18c0000
 ### Day of existing reservation
 @day = 2024-10-10
 
@@ -7,7 +7,7 @@
 @reservationId = 7f000001-92aa-1241-8192-aab55a8c0001
 
 ### Classroom id of existing classroom
-@classroomId = 7f000001-92aa-1241-8192-aab62dc80002
+@classroomId = 7f000001-92aa-1644-8192-aac6f6780001
 
 ### Monday date
 @monday = 2024-10-14
@@ -23,7 +23,7 @@ Content-Type: application/json
 {
   "userId": "{{userId}}",
   "classroomId": "{{classroomId}}",
-  "date": "2024-10-16",
+  "date": "2024-10-15",
   "startTime": "09:00",
   "endTime": "10:30",
   "title": "Example Reservation for test",
