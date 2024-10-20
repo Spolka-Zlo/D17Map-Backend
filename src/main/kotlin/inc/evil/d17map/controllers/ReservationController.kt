@@ -114,9 +114,9 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/week")
-    fun getReservationsForWeek(@RequestParam("monday") monday: LocalDate?): ResponseEntity<Any> {
+    fun getReservationsForWeek(@RequestParam("startOfTheWeek") monday: LocalDate?): ResponseEntity<Any> {
         if (monday == null) {
-            throw MissingParameterException("monday")
+            throw MissingParameterException("startOfTheWeek")
         }
         val reservations = reservationService.getReservationsForWeek(monday)
         return ResponseEntity(reservations, HttpStatus.OK)
