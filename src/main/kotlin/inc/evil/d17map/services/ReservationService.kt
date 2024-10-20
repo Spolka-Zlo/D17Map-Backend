@@ -9,8 +9,6 @@ import inc.evil.d17map.mappers.toReservationDto
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -73,11 +71,8 @@ class ReservationService(
         return reservations.map { toReservationDto(it) }
     }
 
-    private val logger: Logger = LoggerFactory.getLogger(ClassroomController::class.java)
-
     fun getUserWeekReservations(): List<ReservationDto> {
         val loggedUserEmail = SecurityContextHolder.getContext().authentication?.name
-        logger.info("Logged user email: ${loggedUserEmail}")
         val user = userRepository.findByEmail(loggedUserEmail ?: throw UserNotFoundException(loggedUserEmail.toString()))
 
         val today = LocalDate.now()
