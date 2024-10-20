@@ -1,5 +1,6 @@
 package inc.evil.d17map.services
 
+import inc.evil.d17map.EquipmentNotFoundException
 import inc.evil.d17map.dtos.EquipmentDto
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.findOne
@@ -21,6 +22,9 @@ class EquipmentService(val equipmentRepository: EquipmentRepository) {
     }
 
     fun removeEquipment(equipmentId: UUID) {
+        if (!equipmentRepository.existsById(equipmentId)) {
+            throw EquipmentNotFoundException(equipmentId)
+        }
         val equipment = equipmentRepository.findOne(equipmentId)!!
         equipmentRepository.delete(equipment)
     }
