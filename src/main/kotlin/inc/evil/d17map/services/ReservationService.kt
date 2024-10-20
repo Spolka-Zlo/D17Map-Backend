@@ -43,7 +43,8 @@ class ReservationService(
                     endTime = reservationDto.endTime,
                     classroom = it,
                     type = reservationDto.type,
-                    user = it1
+                    user = it1,
+                    numberOfParticipants = reservationDto.numberOfParticipants
                 )
             }
         }

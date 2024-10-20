@@ -46,6 +46,7 @@ fun toReservationDto(reservation: Reservation): ReservationDto {
         endTime = reservation.endTime,
         classroom = classroomResponse,
         type = reservation.type,
-        user = userResponse
+        user = userResponse,
+        numberOfParticipants = reservation.numberOfParticipants
     )
 }

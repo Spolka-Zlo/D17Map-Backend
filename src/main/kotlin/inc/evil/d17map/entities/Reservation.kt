@@ -36,7 +36,7 @@ class Reservation(
         fetch = FetchType.LAZY,
     )
     @JoinColumn(name = "user_id")
-    var user: User
-) {
+    var user: User,
 
-}
+    var numberOfParticipants: Int = 0
+)

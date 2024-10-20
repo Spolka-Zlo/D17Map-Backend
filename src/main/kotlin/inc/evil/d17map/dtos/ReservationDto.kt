@@ -15,5 +15,6 @@ data class ReservationDto(
     val classroom: ClassroomDto? = null,
     val type: ReservationType,
     val userId: UUID? = null,
-    val user: UserDto? = null
+    val user: UserDto? = null,
+    val numberOfParticipants: Int = 0
 )
