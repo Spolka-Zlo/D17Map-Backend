@@ -1,6 +1,7 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.dtos.EquipmentDto
+import inc.evil.d17map.dtos.EquipmentRequest
+import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.services.EquipmentService
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.Operation
@@ -26,7 +27,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @GetMapping
-    fun getAllEquipments(): ResponseEntity<List<EquipmentDto>> {
+    fun getAllEquipments(): ResponseEntity<List<EquipmentResponse>> {
         val equipments = equipmentService.getAll()
         return ResponseEntity(equipments, HttpStatus.OK)
     }
@@ -43,7 +44,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @PostMapping
-    fun createEquipment(@RequestBody equipmentRequest: EquipmentDto): ResponseEntity<Any> {
+    fun createEquipment(@RequestBody equipmentRequest: EquipmentRequest): ResponseEntity<Any> {
         if (equipmentRequest.name.isBlank()) {
             return ResponseEntity("Invalid equipment request", HttpStatus.BAD_REQUEST)
         }
@@ -51,6 +52,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         return ResponseEntity(createdEquipment, HttpStatus.CREATED)
     }
 
+    @Deprecated(message = "Will be replaced by single method")
     @Hidden
     @PostMapping("/batch")
     fun createEquipmentsBatch(@RequestBody equipmentRequest: List<String>): ResponseEntity<Any> {

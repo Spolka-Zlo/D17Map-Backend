@@ -1,6 +1,7 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.EquipmentDto
+import inc.evil.d17map.dtos.EquipmentRequest
+import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.findOne
 import inc.evil.d17map.repositories.EquipmentRepository
@@ -10,11 +11,11 @@ import java.util.UUID
 
 @Service
 class EquipmentService(val equipmentRepository: EquipmentRepository) {
-    fun createEquipment(equipmentDto: EquipmentDto): EquipmentDto {
+    fun createEquipment(equipmentDto: EquipmentRequest): EquipmentResponse {
         val equipment = Equipment(name = equipmentDto.name)
         val createdEquipment = equipmentRepository.save(equipment)
 
-        return EquipmentDto(
+        return EquipmentResponse(
             id = createdEquipment.id!!,
             name = createdEquipment.name
         )
@@ -31,11 +32,11 @@ class EquipmentService(val equipmentRepository: EquipmentRepository) {
         return equipments.map { it.id!! }
     }
 
-    fun getAll(): List<EquipmentDto> {
+    fun getAll(): List<EquipmentResponse> {
         val equipments = equipmentRepository.findAll()
 
         return equipments.map { equipment ->
-            EquipmentDto(
+            EquipmentResponse(
                 id = equipment.id!!,
                 name = equipment.name
             )

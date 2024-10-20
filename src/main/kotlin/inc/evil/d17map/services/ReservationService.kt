@@ -1,6 +1,7 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.ReservationDto
+import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.entities.Reservation
 import inc.evil.d17map.entities.User
 import inc.evil.d17map.findOne
@@ -21,19 +22,19 @@ class ReservationService(
     private val classroomRepository: ClassroomRepository,
     private val userRepository: UserRepository
 ) {
-    fun getGivenDayReservations(date: LocalDate): List<ReservationDto> {
+    fun getGivenDayReservations(date: LocalDate): List<ReservationResponse> {
         val reservations = reservationRepository.findAllByDate(date)
         return reservations.map { toReservationDto(it) }
     }
 
-    fun getReservationById(id: UUID): ReservationDto? {
+    fun getReservationById(id: UUID): ReservationResponse? {
         val reservation = reservationRepository.findOne(id)
         return reservation?.let { toReservationDto(it) }
     }
 
-    fun createReservation(reservationDto: ReservationDto): ReservationDto? {
-        val classroom = classroomRepository.findOne(reservationDto.classroomId!!)
-        val user = userRepository.findOne(reservationDto.userId!!)
+    fun createReservation(reservationDto: ReservationRequest): ReservationResponse? {
+        val classroom = classroomRepository.findOne(reservationDto.classroomId)
+        val user = userRepository.findOne(reservationDto.userId)
         val reservation = classroom?.let {
             user?.let { it1 ->
                 Reservation(
@@ -51,19 +52,19 @@ class ReservationService(
         return savedReservation?.let { toReservationDto(it) }
     }
 
-    fun getUserFutureReservations(userId: UUID): List<ReservationDto>? {
+    fun getUserFutureReservations(userId: UUID): List<ReservationResponse>? {
         val user: User? = userRepository.findOne(userId)
         val futureReservations = user?.reservations?.filter { it.date.isAfter(LocalDate.now()) }
         return futureReservations?.map { toReservationDto(it) }
     }
 
-    fun getReservationsForWeek(monday: LocalDate): List<ReservationDto> {
+    fun getReservationsForWeek(monday: LocalDate): List<ReservationResponse> {
         val endOfWeek = monday.plusDays(6)
         val reservations = reservationRepository.findAllByDateBetween(monday, endOfWeek)
         return reservations.map { toReservationDto(it) }
     }
 
-    fun getUserWeekReservations(): List<ReservationDto> {
+    fun getUserWeekReservations(): List<ReservationResponse> {
         val loggedUserEmail = SecurityContextHolder.getContext().authentication?.name
         val user = userRepository.findByEmail(loggedUserEmail ?: return emptyList())
 

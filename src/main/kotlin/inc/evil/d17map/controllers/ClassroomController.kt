@@ -1,6 +1,7 @@
 package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ClassroomDto
+import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.services.ClassroomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -60,7 +61,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @PostMapping
-    fun createClassroom(@RequestBody classroomRequest: ClassroomDto): ResponseEntity<Any> {
+    fun createClassroom(@RequestBody classroomRequest: ClassroomRequest): ResponseEntity<Any> {
         if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
             return ResponseEntity("Invalid classroom data", HttpStatus.BAD_REQUEST)
         }

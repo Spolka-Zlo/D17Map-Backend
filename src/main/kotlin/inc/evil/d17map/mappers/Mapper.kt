@@ -1,15 +1,15 @@
 package inc.evil.d17map.mappers
 
 import inc.evil.d17map.dtos.ClassroomDto
-import inc.evil.d17map.dtos.EquipmentDto
-import inc.evil.d17map.dtos.ReservationDto
+import inc.evil.d17map.dtos.EquipmentResponse
+import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.dtos.UserDto
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.entities.Reservation
 
 fun toClassroomDto(classroom: Classroom?): ClassroomDto {
     val equipmentResponses = classroom?.equipments?.map { equipment ->
-        EquipmentDto(id = equipment.id!!, name = equipment.name)
+        EquipmentResponse(id = equipment.id!!, name = equipment.name)
     }?.toSet()
 
     return ClassroomDto(
@@ -21,14 +21,14 @@ fun toClassroomDto(classroom: Classroom?): ClassroomDto {
     )
 }
 
-fun toReservationDto(reservation: Reservation): ReservationDto {
+fun toReservationDto(reservation: Reservation): ReservationResponse {
     val classroomResponse = ClassroomDto(
         id = reservation.classroom.id!!,
         name = reservation.classroom.name,
         description = reservation.classroom.description,
         capacity = reservation.classroom.capacity,
         equipments = reservation.classroom.equipments.map { equipment ->
-            EquipmentDto(id = equipment.id!!, name = equipment.name)
+            EquipmentResponse(id = equipment.id!!, name = equipment.name)
         }.toSet()
     )
 
@@ -38,7 +38,7 @@ fun toReservationDto(reservation: Reservation): ReservationDto {
         userType = reservation.user.userType
     )
 
-    return ReservationDto(
+    return ReservationResponse(
         id = reservation.id!!,
         title = reservation.title,
         date = reservation.date,

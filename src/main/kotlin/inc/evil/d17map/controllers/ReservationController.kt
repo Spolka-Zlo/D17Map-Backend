@@ -1,6 +1,7 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.dtos.ReservationDto
+import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -79,7 +80,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @PostMapping
-    fun createReservation(@RequestBody reservationRequest: ReservationDto): ResponseEntity<ReservationDto> {
+    fun createReservation(@RequestBody reservationRequest: ReservationRequest): ResponseEntity<ReservationResponse> {
         val createdReservation = reservationService.createReservation(reservationRequest)
         return ResponseEntity(createdReservation, HttpStatus.CREATED)
     }
@@ -137,7 +138,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/my-week-reservations")
-    fun getMyWeekReservations(): ResponseEntity<List<ReservationDto>> {
+    fun getMyWeekReservations(): ResponseEntity<List<ReservationResponse>> {
         val reservations = reservationService.getUserWeekReservations()
         return ResponseEntity(reservations, HttpStatus.OK)
     }

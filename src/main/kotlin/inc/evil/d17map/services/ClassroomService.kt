@@ -1,6 +1,7 @@
 package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomDto
+import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomDto
@@ -22,8 +23,8 @@ class ClassroomService(
         }
     }
 
-    fun createClassroom(classroomDto: ClassroomDto): ClassroomDto {
-        val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
+    fun createClassroom(classroomDto: ClassroomRequest): ClassroomDto {
+        val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!) // TODO WTF
         val classroom = Classroom(
             name = classroomDto.name,
             description = classroomDto.description,
