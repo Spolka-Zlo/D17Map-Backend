@@ -1,7 +1,7 @@
 package inc.evil.d17map.services
 
 import inc.evil.d17map.ClassroomNotFoundException
-import inc.evil.d17map.dtos.ClassroomDto
+import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.findOne
@@ -16,14 +16,14 @@ class ClassroomService(
     private val classroomRepository: ClassroomRepository,
     private val equipmentRepository: EquipmentRepository
 ) {
-    fun getAll(): List<ClassroomDto> {
+    fun getAll(): List<ClassroomResponse> {
         val classrooms = classroomRepository.findAll()
         return classrooms.map { classroomDto ->
             toClassroomDto(classroomDto)
         }
     }
 
-    fun createClassroom(classroomDto: ClassroomRequest): ClassroomDto {
+    fun createClassroom(classroomDto: ClassroomRequest): ClassroomResponse {
         val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!) // TODO WTF
         val classroom = Classroom(
             name = classroomDto.name,
@@ -35,7 +35,7 @@ class ClassroomService(
         return toClassroomDto(savedClassroomDto)
     }
 
-    fun findById(id: UUID): ClassroomDto {
+    fun findById(id: UUID): ClassroomResponse {
         if (!classroomRepository.existsById(id)) {
             throw ClassroomNotFoundException(id)
         }
@@ -50,17 +50,17 @@ class ClassroomService(
         classroomRepository.deleteById(id)
     }
 
-    fun updateClassroom(id: UUID, classroomDto: ClassroomDto): ClassroomDto {
+    fun updateClassroom(id: UUID, classroomResponse: ClassroomResponse): ClassroomResponse {
         if (!classroomRepository.existsById(id)) {
             throw ClassroomNotFoundException(id)
         }
         val classroom = classroomRepository.findOne(id)
 
-        val equipments = equipmentRepository.findAllById(classroomDto.equipmentIds!!)
+        val equipments = equipmentRepository.findAllById(classroomResponse.equipmentIds!!)
 
-        classroom?.name = classroomDto.name
-        classroom?.description = classroomDto.description
-        classroom?.capacity = classroomDto.capacity
+        classroom?.name = classroomResponse.name
+        classroom?.description = classroomResponse.description
+        classroom?.capacity = classroomResponse.capacity
         classroom?.equipments = equipments.toMutableSet()
 
         val updatedClassroomDto = classroom?.let { classroomRepository.save(it) }

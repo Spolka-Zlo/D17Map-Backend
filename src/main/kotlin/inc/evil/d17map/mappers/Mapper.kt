@@ -1,18 +1,18 @@
 package inc.evil.d17map.mappers
 
-import inc.evil.d17map.dtos.ClassroomDto
+import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.dtos.UserDto
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.entities.Reservation
 
-fun toClassroomDto(classroom: Classroom?): ClassroomDto {
+fun toClassroomDto(classroom: Classroom?): ClassroomResponse {
     val equipmentResponses = classroom?.equipments?.map { equipment ->
         EquipmentResponse(id = equipment.id!!, name = equipment.name)
     }?.toSet()
 
-    return ClassroomDto(
+    return ClassroomResponse(
         id = classroom?.id!!,
         name = classroom.name,
         description = classroom.description,
@@ -22,7 +22,7 @@ fun toClassroomDto(classroom: Classroom?): ClassroomDto {
 }
 
 fun toReservationDto(reservation: Reservation): ReservationResponse {
-    val classroomResponse = ClassroomDto(
+    val classroomResponse = ClassroomResponse(
         id = reservation.classroom.id!!,
         name = reservation.classroom.name,
         description = reservation.classroom.description,
