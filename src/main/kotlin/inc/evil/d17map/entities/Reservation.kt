@@ -13,6 +13,7 @@ class Reservation(
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     val id: UUID? = null,
     var title: String,
+    var description: String,
 
     @Temporal(TemporalType.DATE)
     var date: LocalDate,
@@ -36,7 +37,7 @@ class Reservation(
         fetch = FetchType.LAZY,
     )
     @JoinColumn(name = "user_id")
-    var user: User
-) {
+    var user: User,
 
-}
+    var numberOfParticipants: Int
+)

@@ -81,7 +81,7 @@ class ReservationController(private val reservationService: ReservationService) 
         @RequestParam(
             name = "startDay",
             required = true
-        ) monday: LocalDate?
+        ) @DateTimeFormat(pattern = "dd-MM-yyyy") monday: LocalDate?
     ): ResponseEntity<List<ReservationResponse>> {
         if (monday == null) {
             throw MissingParameterException("startDay")
@@ -106,9 +106,9 @@ class ReservationController(private val reservationService: ReservationService) 
         @RequestParam(
             name = "startDay",
             required = true
-        ) monday: LocalDate?
+        ) @DateTimeFormat(pattern = "dd-MM-yyyy") monday: LocalDate
     ): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getUserWeekReservations()
+        val reservations = reservationService.getUserWeekReservations(monday)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 }

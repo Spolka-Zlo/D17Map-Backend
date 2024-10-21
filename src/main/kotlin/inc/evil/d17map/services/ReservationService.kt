@@ -1,20 +1,18 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.*
+import inc.evil.d17map.ClassroomNotFoundException
+import inc.evil.d17map.UserNotFoundException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.entities.Reservation
-import inc.evil.d17map.entities.User
-import inc.evil.d17map.mappers.toReservationDto
+import inc.evil.d17map.findOne
+import inc.evil.d17map.mappers.toReservationResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
-import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.temporal.TemporalAdjusters.previousOrSame
-import java.util.*
 
 @Service
 class ReservationService(
@@ -24,62 +22,65 @@ class ReservationService(
 ) {
     fun getGivenDayReservations(date: LocalDate): List<ReservationResponse> {
         val reservations = reservationRepository.findAllByDate(date)
-        return reservations.map { toReservationDto(it) }
+        return reservations.map { toReservationResponse(it) }
     }
+//    TODO uncomment and adjust when needed
+//    fun getReservationById(id: UUID): ReservationResponse? {
+//        if (!reservationRepository.existsById(id)) {
+//            throw ReservationNotFoundException(id)
+//        }
+//        val reservation = reservationRepository.findOne(id)
+//        return reservation?.let { toReservationResponse(it) }
+//    }
 
-    fun getReservationById(id: UUID): ReservationResponse? {
-        if (!reservationRepository.existsById(id)) {
-            throw ReservationNotFoundException(id)
-        }
-        val reservation = reservationRepository.findOne(id)
-        return reservation?.let { toReservationDto(it) }
-    }
+    fun createReservation(reservationRequest: ReservationRequest): ReservationResponse {
+        val classroom = classroomRepository.findOne(reservationRequest.classroomId) ?: throw ClassroomNotFoundException(
+            reservationRequest.classroomId
+        )
+        val username = SecurityContextHolder.getContext().authentication.name
 
-    fun createReservation(reservationDto: ReservationRequest): ReservationResponse? {
-        val classroom = classroomRepository.findOne(reservationDto.classroomId)
-        val user = userRepository.findOne(reservationDto.userId)
-        val reservation = classroom?.let {
-            user?.let { it1 ->
-                Reservation(
-                    title = reservationDto.title,
-                    date = reservationDto.date,
-                    startTime = reservationDto.startTime,
-                    endTime = reservationDto.endTime,
-                    classroom = it,
-                    type = reservationDto.type,
-                    user = it1
-                )
-            }
-        }
-        val savedReservation = reservation?.let { reservationRepository.save(it) }
-        return savedReservation?.let { toReservationDto(it) }
-    }
+        val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
-    fun getUserFutureReservations(userId: UUID): List<ReservationResponse>? {
-        if (!userRepository.existsById(userId)) {
-            throw UserNotFoundException(userId)
-        }
-        val user: User? = userRepository.findOne(userId)
-        val futureReservations = user?.reservations?.filter { it.date.isAfter(LocalDate.now()) }
-        return futureReservations?.map { toReservationDto(it) }
+        val reservation = Reservation(
+            id = classroom.id,
+            title = reservationRequest.title,
+            description = reservationRequest.description,
+            date = reservationRequest.date,
+            startTime = reservationRequest.startTime,
+            endTime = reservationRequest.endTime,
+            classroom = classroom,
+            type = reservationRequest.type,
+            user = user,
+            numberOfParticipants = reservationRequest.numberOfParticipants
+        )
+
+        val savedReservation = reservationRepository.save(reservation)
+        return toReservationResponse(savedReservation)
     }
 
     fun getReservationsForWeek(monday: LocalDate): List<ReservationResponse> {
         val endOfWeek = monday.plusDays(6)
         val reservations = reservationRepository.findAllByDateBetween(monday, endOfWeek)
-        return reservations.map { toReservationDto(it) }
+        return reservations.map { toReservationResponse(it) }
     }
+//    TODO uncomment and adjust when necessary
+//    fun getUserFutureReservations(userId: UUID): List<ReservationResponse>? {
+//        if (!userRepository.existsById(userId)) {
+//            throw UserNotFoundException(userId)
+//        }
+//        val user: User? = userRepository.findOne(userId)
+//        val futureReservations = user?.reservations?.filter { it.date.isAfter(LocalDate.now()) }
+//        return futureReservations?.map { toReservationResponse(it) }
+//    }
 
-    fun getUserWeekReservations(): List<ReservationResponse> {
-        val loggedUserEmail = SecurityContextHolder.getContext().authentication?.name
-        val user =
-            userRepository.findByEmail(loggedUserEmail ?: throw UserNotFoundException(loggedUserEmail.toString()))
 
-        val today = LocalDate.now()
-        val monday = today.with(previousOrSame(DayOfWeek.MONDAY))
+    fun getUserWeekReservations(monday: LocalDate): List<ReservationResponse> {
+        val username = SecurityContextHolder.getContext().authentication.name
+        val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
+
         val endOfWeek = monday.plusDays(6)
 
-        val weekReservations = user?.let { reservationRepository.findAllByUserAndDateBetween(it, monday, endOfWeek) }
-        return weekReservations?.map { toReservationDto(it) } ?: emptyList()
+        val reservations = reservationRepository.findAllByUserAndDateBetween(user, monday, endOfWeek)
+        return reservations.map { toReservationResponse(it) }
     }
 }
