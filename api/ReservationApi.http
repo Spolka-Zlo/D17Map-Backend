@@ -43,7 +43,7 @@ GET http://localhost:8080/reservations/{{reservationId}}
 Accept: application/json
 
 ### GET request to retrieve all reservations for given week
-GET http://localhost:8080/reservations/week?startOfTheWeek={{monday}}
+GET http://localhost:8080/reservations/week?startDay={{monday}}
 Accept: application/json
 
 ### GET request to retrieve reservations for the currently logged-in user for the week

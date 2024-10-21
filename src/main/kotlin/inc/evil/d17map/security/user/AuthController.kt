@@ -1,17 +1,12 @@
 package inc.evil.d17map.security.user
 
 
-import inc.evil.d17map.entities.User
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirements
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
@@ -30,9 +25,8 @@ class AuthController(
         ]
     )
     @PostMapping("/register")
-    fun register(@RequestBody authRequest: AuthRequest): User {
-        return userAuthService.registerUser(authRequest)
-    }
+    @ResponseStatus(HttpStatus.CREATED)
+    fun register(@RequestBody authRequest: AuthRequest) = userAuthService.registerUser(authRequest)
 
     @Operation(
         summary = "Authenticate a user and return JWT",
@@ -42,7 +36,7 @@ class AuthController(
         ]
     )
     @PostMapping("/login")
-    fun login(@RequestBody authRequest: AuthRequest): String {
-        return userAuthService.verify(authRequest)
+    fun login(@RequestBody authRequest: AuthRequest): LoginResponse {
+        return userAuthService.verifyUser(authRequest)
     }
 }
