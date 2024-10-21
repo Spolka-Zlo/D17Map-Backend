@@ -1,9 +1,9 @@
 package inc.evil.d17map.controllers
 
 import inc.evil.d17map.InvalidEquipmentDataException
-import inc.evil.d17map.dtos.EquipmentDto
+import inc.evil.d17map.dtos.EquipmentRequest
+import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.services.EquipmentService
-import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -27,7 +27,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @GetMapping
-    fun getAllEquipments(): ResponseEntity<List<EquipmentDto>> {
+    fun getAllEquipments(): ResponseEntity<List<EquipmentResponse>> {
         val equipments = equipmentService.getAll()
         return ResponseEntity(equipments, HttpStatus.OK)
     }
@@ -44,7 +44,8 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @PostMapping
-    fun createEquipment(@RequestBody equipmentRequest: EquipmentDto): ResponseEntity<Any> {
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createEquipment(@RequestBody equipmentRequest: EquipmentRequest): ResponseEntity<EquipmentResponse> {
         if (equipmentRequest.name.isBlank()) {
             throw InvalidEquipmentDataException.blankName()
         }
@@ -52,13 +53,4 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         return ResponseEntity(createdEquipment, HttpStatus.CREATED)
     }
 
-    @Hidden
-    @PostMapping("/batch")
-    fun createEquipmentsBatch(@RequestBody equipmentRequest: List<String>): ResponseEntity<Any> {
-        if (equipmentRequest.isEmpty()) {
-            throw InvalidEquipmentDataException.emptyEquipmentList()
-        }
-        val createdEquipmentIds = equipmentService.createEquipmentBatch(equipmentRequest)
-        return ResponseEntity(createdEquipmentIds, HttpStatus.CREATED)
-    }
 }

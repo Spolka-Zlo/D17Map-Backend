@@ -25,4 +25,11 @@ class User(
         orphanRemoval = true
     )
     val reservations: MutableSet<Reservation> = mutableSetOf()
-)
+) {
+    constructor(
+        id: UUID? = null,
+        email: String,
+        password: String,
+        userType: Role
+    ) : this(id, email, password, userType, mutableSetOf())
+}

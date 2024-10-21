@@ -2,7 +2,7 @@ package inc.evil.d17map.dtos
 
 import java.util.*
 
-data class EquipmentDto(
-    val id: UUID? = null,
+data class EquipmentResponse(
+    val id: UUID,
     val name: String
 )

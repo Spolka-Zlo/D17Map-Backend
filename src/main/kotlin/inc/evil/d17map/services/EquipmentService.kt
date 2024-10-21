@@ -1,24 +1,23 @@
 package inc.evil.d17map.services
 
 import inc.evil.d17map.EquipmentNotFoundException
-import inc.evil.d17map.dtos.EquipmentDto
+import inc.evil.d17map.dtos.EquipmentRequest
+import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.findOne
+import inc.evil.d17map.mappers.toEquipmentResponse
 import inc.evil.d17map.repositories.EquipmentRepository
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 
 @Service
 class EquipmentService(val equipmentRepository: EquipmentRepository) {
-    fun createEquipment(equipmentDto: EquipmentDto): EquipmentDto {
-        val equipment = Equipment(name = equipmentDto.name)
+    fun createEquipment(equipmentRequest: EquipmentRequest): EquipmentResponse {
+        val equipment = Equipment(name = equipmentRequest.name)
         val createdEquipment = equipmentRepository.save(equipment)
 
-        return EquipmentDto(
-            id = createdEquipment.id!!,
-            name = createdEquipment.name
-        )
+        return toEquipmentResponse(createdEquipment)
     }
 
     fun removeEquipment(equipmentId: UUID) {
@@ -29,20 +28,11 @@ class EquipmentService(val equipmentRepository: EquipmentRepository) {
         equipmentRepository.delete(equipment)
     }
 
-    fun createEquipmentBatch(equipmentNames: List<String>): List<UUID> {
-        val equipments = equipmentNames.map { name -> Equipment(name = name) }
-        equipmentRepository.saveAll(equipments)
-        return equipments.map { it.id!! }
-    }
-
-    fun getAll(): List<EquipmentDto> {
+    fun getAll(): List<EquipmentResponse> {
         val equipments = equipmentRepository.findAll()
 
-        return equipments.map { equipment ->
-            EquipmentDto(
-                id = equipment.id!!,
-                name = equipment.name
-            )
+        return equipments.map {
+            toEquipmentResponse(it)
         }
     }
 }

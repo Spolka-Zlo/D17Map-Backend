@@ -20,30 +20,28 @@ class UserAuthService(
     private val jwtService: JWTService
 ) {
 
-    // TODO user reservations during registration seem to be awkward :/
-    fun registerUser(registerRequest: AuthRequest): User {
+    fun registerUser(registerRequest: AuthRequest) {
 
+        // TODO when adding new exceptions - change Exception to custom one. Then while catching it reply with 409 status
         if(userRepository.existsByEmail(registerRequest.username)) throw Exception("User with email ${registerRequest.username} already exists")
 
         val user = User(
             email = registerRequest.username,
             password = passwordEncoder.encode(registerRequest.password),
-            reservations = mutableSetOf(),
             userType = Role.STUDENT,
         )
-        return userRepository.save(user)
+        userRepository.save(user)
     }
 
-    fun verify(loginRequest: AuthRequest): String {
-        val authentication: Authentication = authenticationManager.authenticate(
+    fun verifyUser(loginRequest: AuthRequest): LoginResponse {
+        authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
 
-        return if (authentication.isAuthenticated) {
-            jwtService.generateToken(loginRequest.username)
-        } else {
-            "Fail" // TODO throw exception xD
-        }
+        return LoginResponse(
+            token = jwtService.generateToken(loginRequest.username),
+            role = Role.STUDENT,
+        )
     }
 }
 

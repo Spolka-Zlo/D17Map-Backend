@@ -1,20 +1,17 @@
 package inc.evil.d17map.controllers
 
 import inc.evil.d17map.MissingParameterException
-import inc.evil.d17map.ReservationNotFoundException
-import inc.evil.d17map.UserNotFoundException
-import inc.evil.d17map.dtos.ReservationDto
+import inc.evil.d17map.dtos.ReservationRequest
+import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
-import java.util.*
 
 @RestController
 @RequestMapping("/reservations")
@@ -40,34 +37,13 @@ class ReservationController(private val reservationService: ReservationService) 
             value = "day",
             required = true
         ) @DateTimeFormat(pattern = "dd-MM-yyyy") day: LocalDate?
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<List<ReservationResponse>> {
         if (day == null) {
             throw MissingParameterException("day")
         }
 
         val reservations = reservationService.getGivenDayReservations(day)
         return ResponseEntity(reservations, HttpStatus.OK)
-    }
-
-    @Operation(
-        summary = "Get reservation by ID",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved reservation."),
-            ApiResponse(responseCode = "404", description = "Reservation not found."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            )
-        ]
-    )
-    @GetMapping("/{id}")
-    fun getReservationById(@PathVariable("id") id: UUID): ResponseEntity<Any> {
-        return try {
-            val reservation = reservationService.getReservationById(id)
-            ResponseEntity(reservation, HttpStatus.OK)
-        } catch (e: EntityNotFoundException) {
-            throw ReservationNotFoundException(id)
-        }
     }
 
     @Operation(
@@ -82,31 +58,12 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @PostMapping
-    fun createReservation(@RequestBody reservationRequest: ReservationDto): ResponseEntity<ReservationDto> {
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createReservation(@RequestBody reservationRequest: ReservationRequest): ResponseEntity<ReservationResponse> {
         val createdReservation = reservationService.createReservation(reservationRequest)
         return ResponseEntity(createdReservation, HttpStatus.CREATED)
     }
 
-    @Operation(
-        summary = "Get future reservations for a user",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved future reservations."),
-            ApiResponse(responseCode = "404", description = "User not found or invalid ID."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            )
-        ]
-    )
-    @GetMapping("/{id}/future-reservations")
-    fun getUserFutureReservations(@PathVariable("id") id: UUID): ResponseEntity<Any> {
-        return try {
-            val futureReservations = reservationService.getUserFutureReservations(id)
-            ResponseEntity(futureReservations, HttpStatus.OK)
-        } catch (e: Exception) {
-            throw UserNotFoundException(id)
-        }
-    }
 
     @Operation(
         summary = "Get all reservations for a week",
@@ -120,9 +77,14 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/week")
-    fun getReservationsForWeek(@RequestParam("startOfTheWeek") monday: LocalDate?): ResponseEntity<Any> {
+    fun getReservationsForWeek(
+        @RequestParam(
+            name = "startDay",
+            required = true
+        ) @DateTimeFormat(pattern = "dd-MM-yyyy") monday: LocalDate?
+    ): ResponseEntity<List<ReservationResponse>> {
         if (monday == null) {
-            throw MissingParameterException("startOfTheWeek")
+            throw MissingParameterException("startDay")
         }
         val reservations = reservationService.getReservationsForWeek(monday)
         return ResponseEntity(reservations, HttpStatus.OK)
@@ -139,9 +101,14 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/my-week-reservations")
-    fun getMyWeekReservations(): ResponseEntity<List<ReservationDto>> {
-        val reservations = reservationService.getUserWeekReservations()
+    @GetMapping("/user/week")
+    fun getMyWeekReservations(
+        @RequestParam(
+            name = "startDay",
+            required = true
+        ) @DateTimeFormat(pattern = "dd-MM-yyyy") monday: LocalDate
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getUserWeekReservations(monday)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 }
