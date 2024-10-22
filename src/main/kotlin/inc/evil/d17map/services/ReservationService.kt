@@ -15,6 +15,8 @@ import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
 
 @Service
@@ -63,15 +65,15 @@ class ReservationService(
         val reservations = reservationRepository.findAllByDateBetween(monday, endOfWeek)
         return reservations.map { toReservationResponse(it) }
     }
-//    TODO uncomment and adjust when necessary
-//    fun getUserFutureReservations(userId: UUID): List<ReservationResponse>? {
-//        if (!userRepository.existsById(userId)) {
-//            throw UserNotFoundException(userId)
-//        }
-//        val user: User? = userRepository.findOne(userId)
-//        val futureReservations = user?.reservations?.filter { it.date.isAfter(LocalDate.now()) }
-//        return futureReservations?.map { toReservationResponse(it) }
-//    }
+
+    fun getUserFutureReservations(): List<ReservationResponse>? {
+        val username = SecurityContextHolder.getContext().authentication.name
+        val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
+
+
+        val futureReservations = reservationRepository.findAllByUserAndDateGreaterThanEqualAndEndTimeGreaterThanEqual(user, LocalDate.now(), LocalTime.now())
+        return futureReservations.map { toReservationResponse(it) }
+    }
 
 
     fun getUserWeekReservations(monday: LocalDate): List<ReservationResponse> {

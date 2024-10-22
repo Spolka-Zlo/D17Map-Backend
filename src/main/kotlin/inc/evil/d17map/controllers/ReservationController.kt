@@ -153,4 +153,21 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity(reservationService.getReservationTypes(), HttpStatus.OK)
     }
 
+    @Operation(
+        summary = "Get current user's future reservations",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "404", description = "User reservations for given week not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/user/future")
+    fun getFutureReservations(): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getUserFutureReservations()
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
+
 }
