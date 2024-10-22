@@ -1,6 +1,7 @@
 package inc.evil.d17map.services
 
 import inc.evil.d17map.ClassroomNotFoundException
+import inc.evil.d17map.ReservationNotFoundException
 import inc.evil.d17map.UserNotFoundException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
@@ -13,6 +14,7 @@ import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.util.*
 
 @Service
 class ReservationService(
@@ -24,14 +26,11 @@ class ReservationService(
         val reservations = reservationRepository.findAllByDate(date)
         return reservations.map { toReservationResponse(it) }
     }
-//    TODO uncomment and adjust when needed
-//    fun getReservationById(id: UUID): ReservationResponse? {
-//        if (!reservationRepository.existsById(id)) {
-//            throw ReservationNotFoundException(id)
-//        }
-//        val reservation = reservationRepository.findOne(id)
-//        return reservation?.let { toReservationResponse(it) }
-//    }
+
+    fun getReservationById(id: UUID): ReservationResponse {
+        val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
+        return toReservationResponse(reservation)
+    }
 
     fun createReservation(reservationRequest: ReservationRequest): ReservationResponse {
         val classroom = classroomRepository.findOne(reservationRequest.classroomId) ?: throw ClassroomNotFoundException(

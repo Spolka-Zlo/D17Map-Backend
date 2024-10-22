@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.util.UUID
 
 @RestController
 @RequestMapping("/reservations")
@@ -109,6 +110,29 @@ class ReservationController(private val reservationService: ReservationService) 
         ) @DateTimeFormat(pattern = "dd-MM-yyyy") monday: LocalDate
     ): ResponseEntity<List<ReservationResponse>> {
         val reservations = reservationService.getUserWeekReservations(monday)
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
+
+
+    @Operation(
+        summary = "Get reservation by id",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "404", description = "User reservations for given week not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/{id}")
+    fun getReservationById(
+        @PathVariable(
+            required = true,
+            name = "id"
+        ) id: UUID
+    ): ResponseEntity<ReservationResponse> {
+        val reservations = reservationService.getReservationById(id)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 }
