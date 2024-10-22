@@ -15,7 +15,6 @@ import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
@@ -71,7 +70,11 @@ class ReservationService(
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
 
-        val futureReservations = reservationRepository.findAllByUserAndDateGreaterThanEqualAndEndTimeGreaterThanEqual(user, LocalDate.now(), LocalTime.now())
+        val futureReservations = reservationRepository.findAllByUserAndDateGreaterThanEqualAndEndTimeGreaterThanEqual(
+            user,
+            LocalDate.now(),
+            LocalTime.now()
+        )
         return futureReservations.map { toReservationResponse(it) }
     }
 
@@ -89,4 +92,8 @@ class ReservationService(
     fun getReservationTypes(): List<ReservationType> {
         return ReservationType.entries
     }
+
+    fun removeReservation(id: UUID) =
+        if (reservationRepository.existsById(id)) reservationRepository.deleteById(id)
+        else throw ReservationNotFoundException(id)
 }

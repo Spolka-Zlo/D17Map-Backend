@@ -170,4 +170,25 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
+    @Operation(
+        summary = "Remove reservation by id",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully removed reservation."),
+            ApiResponse(responseCode = "404", description = "User reservations for given week not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeReservation(
+        @PathVariable(
+            required = true,
+            name = "id"
+        ) id: UUID
+    ) = reservationService.removeReservation(id)
+
+
 }
