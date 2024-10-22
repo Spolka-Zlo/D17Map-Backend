@@ -6,6 +6,7 @@ import inc.evil.d17map.UserNotFoundException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.entities.Reservation
+import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toReservationResponse
 import inc.evil.d17map.repositories.ClassroomRepository
@@ -81,5 +82,9 @@ class ReservationService(
 
         val reservations = reservationRepository.findAllByUserAndDateBetween(user, monday, endOfWeek)
         return reservations.map { toReservationResponse(it) }
+    }
+
+    fun getReservationTypes(): List<ReservationType> {
+        return ReservationType.entries
     }
 }

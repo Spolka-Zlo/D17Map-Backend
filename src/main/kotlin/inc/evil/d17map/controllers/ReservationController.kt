@@ -3,6 +3,7 @@ package inc.evil.d17map.controllers
 import inc.evil.d17map.MissingParameterException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -135,4 +136,21 @@ class ReservationController(private val reservationService: ReservationService) 
         val reservations = reservationService.getReservationById(id)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
+
+    @Operation(
+        summary = "Get reservation types",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "404", description = "User reservations for given week not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/types")
+    fun getReservationTypes(): ResponseEntity<List<ReservationType>> {
+        return ResponseEntity(reservationService.getReservationTypes(), HttpStatus.OK)
+    }
+
 }
