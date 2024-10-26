@@ -3,6 +3,7 @@ package inc.evil.d17map.controllers
 import inc.evil.d17map.MissingParameterException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.dtos.ReservationUpdateRequest
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.util.*
 
 @RestController
 @RequestMapping("/reservations")
@@ -111,4 +113,27 @@ class ReservationController(private val reservationService: ReservationService) 
         val reservations = reservationService.getUserWeekReservations(monday)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
+
+
+    @Operation(
+        summary = "Update an existing reservation",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated reservation."),
+            ApiResponse(responseCode = "400", description = "Invalid reservation data."),
+            ApiResponse(responseCode = "404", description = "Reservation not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @PatchMapping("/{id}")
+    fun updateReservation(
+        @PathVariable id: UUID,
+        @RequestBody updateRequest: ReservationUpdateRequest
+    ): ResponseEntity<ReservationResponse> {
+        val updatedReservation = reservationService.updateReservation(id, updateRequest)
+        return ResponseEntity(updatedReservation, HttpStatus.OK)
+    }
+
 }

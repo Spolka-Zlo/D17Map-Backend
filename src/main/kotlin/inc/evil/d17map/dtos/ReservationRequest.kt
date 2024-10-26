@@ -27,3 +27,9 @@ data class ReservationRequest(
     val type: ReservationType,
     val numberOfParticipants: Int
 )
+
+data class ReservationUpdateRequest(
+    val title: String,
+    val description: String,
+    val type: ReservationType
+)
