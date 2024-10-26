@@ -43,7 +43,7 @@ class ReservationService(
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
         val reservation = Reservation(
-            id = classroom.id,
+            id = classroom.id!!,
             title = reservationRequest.title,
             description = reservationRequest.description,
             date = reservationRequest.date,
@@ -70,8 +70,8 @@ class ReservationService(
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
 
-        val futureReservations = reservationRepository.findAllByUserAndDateGreaterThanEqualAndEndTimeGreaterThanEqual(
-            user,
+        val futureReservations = reservationRepository.findAllFuture(
+            user.id!!,
             LocalDate.now(),
             LocalTime.now()
         )
@@ -85,7 +85,7 @@ class ReservationService(
 
         val endOfWeek = monday.plusDays(6)
 
-        val reservations = reservationRepository.findAllByUserAndDateBetween(user, monday, endOfWeek)
+        val reservations = reservationRepository.findAllByUserAndDateBetween(user.id!!, monday, endOfWeek)
         return reservations.map { toReservationResponse(it) }
     }
 
