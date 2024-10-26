@@ -27,5 +27,4 @@ class Classroom(
         orphanRemoval = true
     )
     val reservations: MutableSet<Reservation> = mutableSetOf()
-) {
-}
+)

@@ -11,8 +11,8 @@ data class ReservationRequest(
     val title: String,
     val description: String,
 
-    @Schema(type = "string", example = "24-12-2024")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Schema(type = "string", format = "date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     val date: LocalDate,
 
     @Schema(type = "string", format = "time", example = "11:30")
