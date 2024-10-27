@@ -32,12 +32,11 @@ class ClassroomService(
         return toClassroomResponse(savedClassroomDto)
     }
 
-    fun findAvailableClassrooms(date: String, timeRange: String, peopleCount: Int): List<ClassroomResponse> {
-        val parsedDate = LocalDate.parse(date)
+    fun findAvailableClassrooms(date: LocalDate, timeRange: String, peopleCount: Int): List<ClassroomResponse> {
         val (start, end) = timeRange.split("-")
         val (startTime, endTime) = Pair(LocalTime.parse(start), LocalTime.parse(end))
 
-        val classrooms = classroomRepository.findAvailableClassrooms(parsedDate, startTime, endTime, peopleCount)
+        val classrooms = classroomRepository.findAvailableClassrooms(date, startTime, endTime, peopleCount)
         return classrooms.map { toClassroomResponse(it) }
     }
 

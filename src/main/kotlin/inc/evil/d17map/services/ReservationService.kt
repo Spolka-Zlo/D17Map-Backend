@@ -89,13 +89,13 @@ class ReservationService(
 
 
     fun updateReservation(id: UUID, updateRequest: ReservationUpdateRequest): ReservationResponse {
-        val reservation = reservationRepository.findById(id).orElseThrow {
-            ReservationNotFoundException(id)
-        }
+        val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
 
-        reservation.title = updateRequest.title
-        reservation.description = updateRequest.description
-        reservation.type = updateRequest.type
+        reservation.run {
+            this.title = updateRequest.title
+            this.description = updateRequest.description
+            this.type = updateRequest.type
+        }
 
         val updatedReservation = reservationRepository.save(reservation)
         return toReservationResponse(updatedReservation)
