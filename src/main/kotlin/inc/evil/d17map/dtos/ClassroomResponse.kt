@@ -8,5 +8,4 @@ data class ClassroomResponse(
     val capacity: Int,
     val equipmentIds: Set<UUID>,
     val id: UUID,
-    val equipments: Set<EquipmentResponse>
 )
