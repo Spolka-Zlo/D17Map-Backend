@@ -1,19 +1,34 @@
 package inc.evil.d17map.security.user
 
-import inc.evil.d17map.entities.User
 import inc.evil.d17map.repositories.UserRepository
-import org.springframework.security.core.userdetails.UserDetails
+import inc.evil.d17map.security.roles.Role
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 
 @Service
-class BasicUserDetailsService(private val userRepository: UserRepository) : UserDetailsService {
+class BasicUserDetailsService(
+    private val userRepository: UserRepository
+) : UserDetailsService {
 
-    override fun loadUserByUsername(username: String): UserDetails {
-        val user: User = userRepository.findByEmail(username)
-            ?: throw UsernameNotFoundException(username)
-        return UserPrincipal(user.id!!, user.email, user.password)
-    }
+    @Throws(UsernameNotFoundException::class)
+    override fun loadUserByUsername(username: String) =
+        userRepository.findByEmail(username)?.let {
+            UserPrincipal(
+                it.id!!,
+                it.email,
+                it.password,
+                it.roles.toGrantedAuthorities()
+            )
+        } ?: throw UsernameNotFoundException(username)
 }
+
+private fun Collection<Role>.toGrantedAuthorities(): Collection<GrantedAuthority> =
+    flatMap { it.permissions.map { privilege -> privilege.name } + it.name }
+        .map { SimpleGrantedAuthority(it) }
+
+
+

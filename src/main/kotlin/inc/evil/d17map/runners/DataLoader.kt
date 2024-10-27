@@ -5,11 +5,14 @@ import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.entities.Reservation
 import inc.evil.d17map.entities.User
 import inc.evil.d17map.enums.ReservationType
-import inc.evil.d17map.enums.Role
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
+import inc.evil.d17map.security.permissions.Permission
+import inc.evil.d17map.security.permissions.PermissionRepository
+import inc.evil.d17map.security.roles.Role
+import inc.evil.d17map.security.roles.RoleRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -21,11 +24,32 @@ class DataLoader(
     private val equipmentRepository: EquipmentRepository,
     private val classroomRepository: ClassroomRepository,
     private val userRepository: UserRepository,
+    private val permissionRepository: PermissionRepository,
+    private val roleRepository: RoleRepository,
     private val reservationRepository: ReservationRepository,
     private val passwordEncoder: PasswordEncoder
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
+        val permissions = listOf(
+            Permission(name = "VIEW_RES"),
+            Permission(name = "RES_1_Floor"),
+            Permission(name = "RES_2_Floor"),
+            Permission(name = "RES_3_Floor"),
+        )
+
+        permissionRepository.saveAll(permissions)
+
+
+
+        val roles = listOf(
+            Role(name = "ROLE_STUDENT", permissions = mutableSetOf(permissions[0])),
+            Role(name = "ROLE_TEACHER", permissions = mutableSetOf(permissions[1], permissions[2]))
+        )
+
+        roleRepository.saveAll(roles)
+
+
         val equipments = listOf(
             Equipment(name="COMPUTERS"),
             Equipment(name="ROUTERS"),
@@ -65,7 +89,7 @@ class DataLoader(
         val user = User(
             email = "example@student.agh.edu.pl",
             password = passwordEncoder.encode("example@password1234"),
-            userType = Role.STUDENT,
+            roles = mutableSetOf(roles[0]),
         )
         userRepository.save(user)
 

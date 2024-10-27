@@ -1,13 +1,12 @@
 package inc.evil.d17map.entities
 
-import inc.evil.d17map.enums.Role
+import inc.evil.d17map.security.roles.Role
 import jakarta.persistence.*
-
 import org.hibernate.annotations.UuidGenerator
 import java.util.*
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "users")
 class User(
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)
@@ -15,8 +14,13 @@ class User(
     var email: String,
     var password: String,
 
-    @Enumerated(EnumType.STRING)
-    var userType: Role,
+    @ManyToMany
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
+    )
+    val roles: MutableSet<Role> = mutableSetOf(),
 
     @OneToMany(
         mappedBy = "user",
@@ -30,6 +34,6 @@ class User(
         id: UUID? = null,
         email: String,
         password: String,
-        userType: Role
+        userType: MutableSet<Role>
     ) : this(id, email, password, userType, mutableSetOf())
 }
