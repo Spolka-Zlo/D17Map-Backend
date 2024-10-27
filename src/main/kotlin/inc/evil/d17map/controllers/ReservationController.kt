@@ -127,7 +127,7 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     fun updateReservation(
         @PathVariable id: UUID,
         @RequestBody updateRequest: ReservationUpdateRequest
