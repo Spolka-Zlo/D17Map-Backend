@@ -32,4 +32,8 @@ Content-Type: application/json
 ### DELETE request to delete a classroom by ID
 DELETE http://localhost:8080/classrooms/{{classroomId}}
 
+### GET request to retrieve available classrooms for a specific date, time range, and people count
+GET http://localhost:8080/classrooms/available?date=2023-10-10&timeRange=09:00-11:00&peopleCount=20
+Accept: application/json
+
 ###
