@@ -36,7 +36,6 @@ class AuthController(
         ]
     )
     @PostMapping("/login")
-    fun login(@RequestBody authRequest: AuthRequest): LoginResponse {
-        return userAuthService.verifyUser(authRequest)
-    }
+    fun login(@RequestBody authRequest: AuthRequest) = userAuthService.verifyUser(authRequest)
+
 }

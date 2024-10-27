@@ -77,10 +77,7 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
             "",
             "",
             authorities
-        ) // TODO not sure how it should be here...
-
-
-
+        )
         return UsernamePasswordAuthenticationToken(userPrincipal, null, authorities)
     }
 }

@@ -21,15 +21,17 @@ class JWTFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        extractToken(request)?.takeIf(tokenProvider::validateToken)?.let { token ->
-            SecurityContextHolder.getContext().authentication = tokenProvider.getAuthentication(token)
-        }
+        extractToken(request)
+            ?.takeIf(tokenProvider::validateToken)
+            ?.let { SecurityContextHolder.getContext().authentication = tokenProvider.getAuthentication(it) }
 
         filterChain.doFilter(request, response)
     }
 
     fun extractToken(request: HttpServletRequest) =
-        request.getHeader("Authorization")?.takeIf { it.startsWith("Bearer ") }?.substring(7)
+        request.getHeader("Authorization")
+            ?.takeIf { it.startsWith("Bearer ") }
+            ?.substring(7)
 
 
 }
