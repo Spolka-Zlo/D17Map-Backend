@@ -3,6 +3,7 @@ package inc.evil.d17map.controllers
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.enums.ReservationType
+import inc.evil.d17map.dtos.ReservationUpdateRequest
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -177,5 +178,28 @@ class ReservationController(private val reservationService: ReservationService) 
         ) id: UUID
     ) = reservationService.removeReservation(id)
 
+
+
+
+    @Operation(
+        summary = "Update an existing reservation",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated reservation."),
+            ApiResponse(responseCode = "400", description = "Invalid reservation data."),
+            ApiResponse(responseCode = "404", description = "Reservation not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @PutMapping("/{id}")
+    fun updateReservation(
+        @PathVariable id: UUID,
+        @RequestBody updateRequest: ReservationUpdateRequest
+    ): ResponseEntity<ReservationResponse> {
+        val updatedReservation = reservationService.updateReservation(id, updateRequest)
+        return ResponseEntity(updatedReservation, HttpStatus.OK)
+    }
 
 }

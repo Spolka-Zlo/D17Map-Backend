@@ -5,6 +5,7 @@ import inc.evil.d17map.ReservationNotFoundException
 import inc.evil.d17map.UserNotFoundException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.dtos.ReservationUpdateRequest
 import inc.evil.d17map.entities.Reservation
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.findOne
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
 import java.util.*
 
 @Service
@@ -96,4 +98,19 @@ class ReservationService(
     fun removeReservation(id: UUID) =
         if (reservationRepository.existsById(id)) reservationRepository.deleteById(id)
         else throw ReservationNotFoundException(id)
+
+
+    fun updateReservation(id: UUID, updateRequest: ReservationUpdateRequest): ReservationResponse {
+        val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
+
+        reservation.run {
+            this.title = updateRequest.title
+            this.description = updateRequest.description
+            this.type = updateRequest.type
+        }
+
+        val updatedReservation = reservationRepository.save(reservation)
+        return toReservationResponse(updatedReservation)
+    }
+
 }

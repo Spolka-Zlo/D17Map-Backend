@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/classrooms")
@@ -53,4 +54,20 @@ class ClassroomController(private val classroomService: ClassroomService) {
         return ResponseEntity(createdClassroom, HttpStatus.CREATED)
     }
 
+    @Operation(
+        summary = "Get available classrooms by date, time range, and people count",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved available classrooms."),
+            ApiResponse(responseCode = "400", description = "Invalid criteria data provided.")
+        ]
+    )
+    @GetMapping("/available")
+    fun getAvailableClassrooms(
+        @RequestParam date: LocalDate,
+        @RequestParam timeRange: String,
+        @RequestParam peopleCount: Int
+    ): ResponseEntity<List<ClassroomResponse>> {
+        val classrooms = classroomService.findAvailableClassrooms(date, timeRange, peopleCount)
+        return ResponseEntity(classrooms, HttpStatus.OK)
+    }
 }
