@@ -24,9 +24,6 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         capacity = classroom.capacity,
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
-        equipments = classroom.equipments.map {
-            toEquipmentResponse(it)
-        }.toSet()
     )
 }
 
