@@ -1,6 +1,6 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.InvalidEquipmentDataException
+import inc.evil.d17map.exceptions.InvalidEquipmentDataException
 import inc.evil.d17map.dtos.EquipmentRequest
 import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.services.EquipmentService

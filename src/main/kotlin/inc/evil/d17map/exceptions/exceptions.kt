@@ -1,6 +1,8 @@
-package inc.evil.d17map
+package inc.evil.d17map.exceptions
 
 import java.util.*
+import java.lang.RuntimeException
+
 
 // NOT FOUND
 

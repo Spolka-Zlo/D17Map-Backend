@@ -1,6 +1,6 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.EquipmentNotFoundException
+import inc.evil.d17map.exceptions.EquipmentNotFoundException
 import inc.evil.d17map.dtos.EquipmentRequest
 import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.entities.Equipment

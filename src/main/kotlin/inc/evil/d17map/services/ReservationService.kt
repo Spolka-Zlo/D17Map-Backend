@@ -1,8 +1,8 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.ClassroomNotFoundException
-import inc.evil.d17map.ReservationNotFoundException
-import inc.evil.d17map.UserNotFoundException
+import inc.evil.d17map.exceptions.ClassroomNotFoundException
+import inc.evil.d17map.exceptions.ReservationNotFoundException
+import inc.evil.d17map.exceptions.UserNotFoundException
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.dtos.ReservationUpdateRequest
@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.*
 import java.util.*
 
 @Service

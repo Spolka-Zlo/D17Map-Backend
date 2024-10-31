@@ -1,6 +1,6 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.InvalidClassroomDataException
+import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.services.ClassroomService
