@@ -6,8 +6,7 @@ import jakarta.validation.constraints.Size
 import java.util.*
 
 data class ClassroomRequest(
-    @field:NotBlank(message = "Name must not be blank.")
-    @field:Size(max = 100, message = "Name must not exceed 100 characters.")
+    @field:Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters long.")
     val name: String,
 
     @field:NotBlank(message = "Description must not be blank.")
