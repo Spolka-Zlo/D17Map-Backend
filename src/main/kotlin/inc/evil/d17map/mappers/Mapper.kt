@@ -1,9 +1,6 @@
 package inc.evil.d17map.mappers
 
-import inc.evil.d17map.dtos.ClassroomResponse
-import inc.evil.d17map.dtos.ClassroomSummary
-import inc.evil.d17map.dtos.EquipmentResponse
-import inc.evil.d17map.dtos.ReservationResponse
+import inc.evil.d17map.dtos.*
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.entities.Reservation
@@ -51,3 +48,6 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         numberOfParticipants = reservation.numberOfParticipants
     )
 
+
+fun toModel3dResponse(filePath: String): Model3dResponse =
+    Model3dResponse(filePath = filePath)

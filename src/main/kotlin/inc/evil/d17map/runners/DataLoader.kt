@@ -1,15 +1,9 @@
 package inc.evil.d17map.runners
 
-import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Equipment
-import inc.evil.d17map.entities.Reservation
-import inc.evil.d17map.entities.User
+import inc.evil.d17map.entities.*
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.enums.Role
-import inc.evil.d17map.repositories.ClassroomRepository
-import inc.evil.d17map.repositories.EquipmentRepository
-import inc.evil.d17map.repositories.ReservationRepository
-import inc.evil.d17map.repositories.UserRepository
+import inc.evil.d17map.repositories.*
 import org.springframework.boot.CommandLineRunner
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -22,7 +16,8 @@ class DataLoader(
     private val classroomRepository: ClassroomRepository,
     private val userRepository: UserRepository,
     private val reservationRepository: ReservationRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val model3dRepository: Model3dRepository
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
@@ -127,5 +122,15 @@ class DataLoader(
             )
         )
         reservationRepository.saveAll(reservations)
+
+        val models3D = listOf(
+            Model3d(building = "BuildingA", floor = 1, filePath = "/models/building_a_floor_1.obj"),
+            Model3d(building = "BuildingA", floor = 2, filePath = "/models/building_a_floor_2.obj"),
+            Model3d(building = "BuildingB", floor = 1, filePath = "/models/building_b_floor_1.obj"),
+            Model3d(building = "BuildingB", floor = 3, filePath = "/models/building_b_floor_3.obj"),
+            Model3d(building = "BuildingC", floor = 1, filePath = "/models/building_c_floor_1.obj"),
+            Model3d(building = "BuildingC", floor = 2, filePath = "/models/building_c_floor_2.obj")
+        )
+        model3dRepository.saveAll(models3D)
     }
 }
