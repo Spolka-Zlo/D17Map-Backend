@@ -24,6 +24,10 @@ data class ReservationRequest(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     val startTime: LocalTime,
 
+    @Schema(type = "string", format = "time", example = "11:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    val endTime: LocalTime,
+
     @Schema(type = "string", format = "time", example = "13:00")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     val classroomId: UUID,
