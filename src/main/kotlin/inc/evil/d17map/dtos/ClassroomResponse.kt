@@ -5,7 +5,7 @@ import java.util.*
 data class ClassroomResponse(
     val name: String,
     val description: String,
-    val key: String,
+    val modelKey: String,
     val capacity: Int,
     val equipmentIds: Set<UUID>,
     val id: UUID,
