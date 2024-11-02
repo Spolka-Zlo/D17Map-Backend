@@ -12,6 +12,7 @@ class Classroom(
     var name: String,
     var description: String,
     var capacity: Int,
+    var key: String,
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

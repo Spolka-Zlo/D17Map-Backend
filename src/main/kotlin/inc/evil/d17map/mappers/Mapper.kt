@@ -19,6 +19,7 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         name = classroom.name,
         description = classroom.description,
         capacity = classroom.capacity,
+        key = classroom.key,
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
     )

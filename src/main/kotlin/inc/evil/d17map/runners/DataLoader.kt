@@ -34,24 +34,28 @@ class DataLoader(
                 name = "2.41",
                 description = "fajna sala na egzaminy, dużo się tu dzieje",
                 capacity = 100,
+                key = "key1",
                 equipments = mutableSetOf(equipments[2])
             ),
             Classroom(
                 name = "4.27",
                 description = "sieci sieci sieci i inne takie fajne",
                 capacity = 115,
+                key = "key2",
                 equipments = mutableSetOf(equipments[1])
             ),
             Classroom(
                 name = "3.31",
                 description = "obiektowe zwierzaki ewoluują w tej sali",
                 capacity = 120,
+                key = "key3",
                 equipments = mutableSetOf(equipments[0])
             ),
             Classroom(
                 name = "1.38",
                 description = "tutaj stało się wszystko",
                 capacity = 120,
+                key = "key4",
                 equipments = mutableSetOf(equipments[2], equipments[3])
             )
         )
