@@ -5,6 +5,7 @@ import java.util.*
 data class ClassroomRequest(
     val name: String,
     val description: String,
+    val modelKey: String,
     val capacity: Int,
     val equipmentIds: Set<UUID>
 )
