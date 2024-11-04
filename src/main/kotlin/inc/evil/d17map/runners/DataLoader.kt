@@ -40,36 +40,42 @@ class DataLoader(
                 name = "1.4",
                 description = "Dziekanat",
                 capacity = 2,
+                modelKey = "14",
                 equipments = mutableSetOf(equipments[0], equipments[1])
             ),
             Classroom(
                 name = "1.19",
                 description = "sala 1.19 Lorem Ipsum",
                 capacity = 30,
+                modelKey = "119",
                 equipments = mutableSetOf(equipments[2], equipments[3])
             ),
             Classroom(
                 name = "1.20",
                 description = "sala 1.20 dolor sit amet consectetur",
                 capacity = 40,
+                modelKey = "120",
                 equipments = mutableSetOf(equipments[0], equipments[3])
             ),
             Classroom(
                 name = "1.23",
                 description = "pokój Dziakana Pro Marka",
                 capacity = 50,
+                modelKey = "123",
                 equipments = mutableSetOf(equipments[1], equipments[2])
             ),
             Classroom(
                 name = "1.36",
                 description = "sala obok bufetu, nie wiem po co to komu",
                 capacity = 40,
+                modelKey = "136",
                 equipments = mutableSetOf(equipments[0], equipments[3])
             ),
             Classroom(
                 name = "1.38",
                 description = "sala z dużym projektorze, fajne miejsce na prezentacje",
                 capacity = 120,
+                modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3])
             ),
             // 2 floor
@@ -77,33 +83,29 @@ class DataLoader(
                 name = "2.41",
                 description = "fajna sala na egzaminy, dużo się tu dzieje",
                 capacity = 100,
+                modelKey = "241",
                 equipments = mutableSetOf(equipments[2], equipments[3])
             ),
-
             Classroom(
                 name = "4.27",
                 description = "sieci sieci sieci i inne takie fajne",
                 capacity = 115,
+                modelKey = "427",
                 equipments = mutableSetOf(equipments[1])
             ),
             Classroom(
                 name = "3.31",
                 description = "obiektowe zwierzaki ewoluują w tej sali",
                 capacity = 120,
+                modelKey = "331",
                 equipments = mutableSetOf(equipments[0])
-            ),
-            Classroom(
-                name = "1.38",
-                description = "tutaj stało się wszystko",
-                capacity = 120,
-                equipments = mutableSetOf(equipments[2], equipments[3])
             )
         )
         classroomRepository.saveAll(classrooms)
 
         val user = User(
-            email = "admin",
-            password = passwordEncoder.encode("admin"),
+            email = "example@student.agh.edu.pl",
+            password = passwordEncoder.encode("example@password1234"),
             userType = Role.STUDENT,
         )
         userRepository.save(user)
