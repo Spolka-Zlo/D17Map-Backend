@@ -53,14 +53,14 @@ class DataLoader(
             Classroom(
                 name = "1.20",
                 description = "sala 1.20 dolor sit amet consectetur",
-                capacity = 40,
+                capacity = 30,
                 modelKey = "120",
                 equipments = mutableSetOf(equipments[0], equipments[3])
             ),
             Classroom(
                 name = "1.23",
                 description = "pokój Dziakana Pro Marka",
-                capacity = 50,
+                capacity = 2,
                 modelKey = "123",
                 equipments = mutableSetOf(equipments[1], equipments[2])
             ),
@@ -86,6 +86,56 @@ class DataLoader(
                 modelKey = "241",
                 equipments = mutableSetOf(equipments[2], equipments[3])
             ),
+            // 3 floor
+            Classroom(
+                name = "3.22",
+                description = "Pracownia elektroniczna",
+                capacity = 12,
+                modelKey = "322",
+                equipments = mutableSetOf(equipments[0], equipments[1])
+            ),
+            Classroom(
+                name = "3.23",
+                description = "Pracownia elektroniczna v2",
+                capacity = 12,
+                modelKey = "323",
+                equipments = mutableSetOf(equipments[0], equipments[1])
+            ),
+            Classroom(
+                name = "3.27a",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327a",
+                equipments = mutableSetOf(equipments[2], equipments[3])
+            ),
+            Classroom(
+                name = "3.27b",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327b",
+                equipments = mutableSetOf(equipments[2], equipments[3])
+            ),
+            Classroom(
+                name = "3.27c",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327c",
+                equipments = mutableSetOf(equipments[2], equipments[3])
+            ),
+            Classroom(
+                name = "3.27d",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327d",
+                equipments = mutableSetOf(equipments[2], equipments[3])
+            ),
+            Classroom(
+                name = "3.27e",
+                description = "Sala z komputerami",
+                capacity = 12,
+                modelKey = "327e",
+                equipments = mutableSetOf(equipments[0], equipments[2], equipments[3])
+            ),
             Classroom(
                 name = "4.27",
                 description = "sieci sieci sieci i inne takie fajne",
@@ -93,13 +143,6 @@ class DataLoader(
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[1])
             ),
-            Classroom(
-                name = "3.31",
-                description = "obiektowe zwierzaki ewoluują w tej sali",
-                capacity = 120,
-                modelKey = "331",
-                equipments = mutableSetOf(equipments[0])
-            )
         )
         classroomRepository.saveAll(classrooms)
 
