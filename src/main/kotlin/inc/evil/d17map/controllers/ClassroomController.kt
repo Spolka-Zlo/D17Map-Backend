@@ -8,9 +8,12 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.io.File
 import java.time.LocalDate
+import java.util.*
 
 @RestController
 @RequestMapping("/classrooms")
@@ -69,5 +72,28 @@ class ClassroomController(private val classroomService: ClassroomService) {
     ): ResponseEntity<List<ClassroomResponse>> {
         val classrooms = classroomService.findAvailableClassrooms(date, timeRange, peopleCount)
         return ResponseEntity(classrooms, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Get classroom photo by id",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved classroom."),
+            ApiResponse(responseCode = "404", description = "Classroom not found.")
+        ]
+    )
+    @GetMapping("/{id}/photo.jpg")
+    fun getClassroomPhoto(@PathVariable id: String): ResponseEntity<ByteArray> {
+        val imagePath = "src/main/resources/120.jpg"
+
+        val file = File(imagePath)
+
+        return if (file.exists()) {
+            val imageBytes = file.readBytes()
+            ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageBytes)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+        }
     }
 }
