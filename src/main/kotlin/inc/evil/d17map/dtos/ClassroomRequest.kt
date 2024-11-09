@@ -1,6 +1,5 @@
 package inc.evil.d17map.dtos
 
-import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
 import java.util.*
