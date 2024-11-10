@@ -1,12 +1,13 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.InvalidClassroomDataException
+import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.services.ClassroomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -46,7 +47,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createClassroom(@RequestBody classroomRequest: ClassroomRequest): ResponseEntity<ClassroomResponse> {
+    fun createClassroom(@RequestBody @Valid classroomRequest: ClassroomRequest): ResponseEntity<ClassroomResponse> {
         if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
             throw InvalidClassroomDataException()
         }

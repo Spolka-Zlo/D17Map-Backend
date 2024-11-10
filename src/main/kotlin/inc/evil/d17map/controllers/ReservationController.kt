@@ -8,6 +8,7 @@ import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -56,7 +57,7 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createReservation(@RequestBody reservationRequest: ReservationRequest): ResponseEntity<ReservationResponse> {
+    fun createReservation(@RequestBody @Valid reservationRequest: ReservationRequest): ResponseEntity<ReservationResponse> {
         val createdReservation = reservationService.createReservation(reservationRequest)
         return ResponseEntity(createdReservation, HttpStatus.CREATED)
     }
@@ -196,7 +197,7 @@ class ReservationController(private val reservationService: ReservationService) 
     @PutMapping("/{id}")
     fun updateReservation(
         @PathVariable id: UUID,
-        @RequestBody updateRequest: ReservationUpdateRequest
+        @RequestBody @Valid updateRequest: ReservationUpdateRequest
     ): ResponseEntity<ReservationResponse> {
         val updatedReservation = reservationService.updateReservation(id, updateRequest)
         return ResponseEntity(updatedReservation, HttpStatus.OK)
