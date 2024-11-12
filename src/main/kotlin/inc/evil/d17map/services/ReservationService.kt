@@ -114,4 +114,9 @@ class ReservationService(
         return toReservationResponse(updatedReservation)
     }
 
+    fun getCurrentOrFutureEvents(currentDate: LocalDate, currentTime: LocalTime): List<ReservationResponse> {
+        val reservations = reservationRepository.findAllCurrentOrFutureEvents(currentDate, currentTime)
+        return  reservations.map { toReservationResponse(it) }
+    }
+
 }

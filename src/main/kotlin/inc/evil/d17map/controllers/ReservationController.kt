@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.*
 
 @RestController
@@ -180,8 +181,6 @@ class ReservationController(private val reservationService: ReservationService) 
     ) = reservationService.removeReservation(id)
 
 
-
-
     @Operation(
         summary = "Update an existing reservation",
         responses = [
@@ -201,6 +200,27 @@ class ReservationController(private val reservationService: ReservationService) 
     ): ResponseEntity<ReservationResponse> {
         val updatedReservation = reservationService.updateReservation(id, updateRequest)
         return ResponseEntity(updatedReservation, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Get all future and current events",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved events."),
+            ApiResponse(responseCode = "400", description = "Invalid data."),
+            ApiResponse(responseCode = "404", description = "Events not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/events")
+    fun getEvents(
+        @PathVariable(required = true, name = "currentTime") currentTime: LocalTime,
+        @PathVariable(required = true, name = "currentDate") currentDate: LocalDate
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getCurrentOrFutureEvents(currentDate, currentTime)
+        return ResponseEntity(reservations, HttpStatus.OK)
     }
 
 }
