@@ -16,6 +16,7 @@ import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
@@ -114,9 +115,11 @@ class ReservationService(
         return toReservationResponse(updatedReservation)
     }
 
-    fun getCurrentOrFutureEvents(currentDate: LocalDate, currentTime: LocalTime): List<ReservationResponse> {
-        val reservations = reservationRepository.findAllCurrentOrFutureEvents(currentDate, currentTime)
-        return  reservations.map { toReservationResponse(it) }
-    }
+    fun getCurrentOrFutureEvents(currentDateTime: LocalDateTime): List<ReservationResponse> {
+        val currentDate = currentDateTime.toLocalDate()
+        val currentTime = currentDateTime.toLocalTime()
 
+        val reservations = reservationRepository.findAllCurrentOrFutureEvents(currentDate, currentTime)
+        return reservations.map { toReservationResponse(it) }
+    }
 }
