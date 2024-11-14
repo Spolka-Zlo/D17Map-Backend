@@ -217,8 +217,8 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     @GetMapping("/events")
     fun getEvents(
-        @RequestParam currentDateTime: LocalDateTime
     ): ResponseEntity<List<ReservationResponse>> {
+        val currentDateTime = LocalDateTime.now()
         val reservations = reservationService.getCurrentOrFutureEvents(currentDateTime)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
