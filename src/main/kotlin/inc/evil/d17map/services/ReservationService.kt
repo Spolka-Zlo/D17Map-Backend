@@ -112,4 +112,23 @@ class ReservationService(
         return toReservationResponse(updatedReservation)
     }
 
+    fun updateReservationAdmin(id: UUID, adminUpdateRequest: ReservationRequest): ReservationResponse {
+        val reservation = reservationRepository.findById(id)
+            .orElseThrow { ReservationNotFoundException(id) }
+
+        reservation.title = adminUpdateRequest.title
+        reservation.description = adminUpdateRequest.description
+        reservation.date = adminUpdateRequest.date
+        reservation.startTime = adminUpdateRequest.startTime
+        reservation.endTime = adminUpdateRequest.endTime
+        reservation.classroom = classroomRepository.findById(adminUpdateRequest.classroomId)
+            .orElseThrow { ReservationNotFoundException(id) }
+        reservation.type = adminUpdateRequest.type
+        reservation.numberOfParticipants = adminUpdateRequest.numberOfParticipants
+
+        val updatedReservation = reservationRepository.save(reservation)
+        return toReservationResponse(updatedReservation)
+    }
+
+
 }

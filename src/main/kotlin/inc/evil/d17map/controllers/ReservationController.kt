@@ -203,4 +203,28 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity(updatedReservation, HttpStatus.OK)
     }
 
+    @Operation(
+        summary = "Update an existing reservation by admin",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated reservation."),
+            ApiResponse(responseCode = "400", description = "Invalid reservation data."),
+            ApiResponse(responseCode = "404", description = "Reservation not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden access. The user does not have the necessary permissions."
+            )
+        ]
+    )
+    @PutMapping("/admin/{id}")
+    fun updateReservationAdmin(
+        @PathVariable id: UUID,
+        @RequestBody @Valid adminUpdateRequest: ReservationRequest
+    ): ResponseEntity<ReservationResponse> {
+        val updatedReservation = reservationService.updateReservationAdmin(id, adminUpdateRequest)
+        return ResponseEntity(updatedReservation, HttpStatus.OK)
+    }
 }

@@ -11,6 +11,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/equipments")
@@ -54,4 +55,41 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         return ResponseEntity(createdEquipment, HttpStatus.CREATED)
     }
 
+    @Operation(
+        summary = "Update an existing equipment",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated equipment."),
+            ApiResponse(responseCode = "400", description = "Invalid equipment request."),
+            ApiResponse(responseCode = "404", description = "Equipment with the given ID not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @PutMapping("/admin/{id}")
+    fun updateEquipmentAdmin(
+        @PathVariable id: UUID,
+        @RequestBody @Valid equipmentRequest: EquipmentRequest
+    ): ResponseEntity<EquipmentResponse> {
+        val updatedEquipment = equipmentService.updateEquipment(id, equipmentRequest)
+        return ResponseEntity(updatedEquipment, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Delete an equipment by ID",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully deleted the equipment."),
+            ApiResponse(responseCode = "404", description = "Equipment with the given ID not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeEquipment(@PathVariable id: UUID) {
+        equipmentService.removeEquipment(id)
+    }
 }
