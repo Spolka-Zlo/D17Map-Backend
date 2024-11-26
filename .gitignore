@@ -40,4 +40,4 @@ out/
 .kotlin
 
 ### Local Environemnt Variables ###
-*.env
+*.env*
