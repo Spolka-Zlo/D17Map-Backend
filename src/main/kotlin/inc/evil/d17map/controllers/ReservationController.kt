@@ -180,8 +180,6 @@ class ReservationController(private val reservationService: ReservationService) 
     ) = reservationService.removeReservation(id)
 
 
-
-
     @Operation(
         summary = "Update an existing reservation",
         responses = [
@@ -226,5 +224,17 @@ class ReservationController(private val reservationService: ReservationService) 
     ): ResponseEntity<ReservationResponse> {
         val updatedReservation = reservationService.updateReservationAdmin(id, adminUpdateRequest)
         return ResponseEntity(updatedReservation, HttpStatus.OK)
+    }
+
+
+    @GetMapping("/{userId}")
+    fun getUserReservationsForAdmin(
+        @PathVariable userId: UUID
+    ): ResponseEntity<List<ReservationResponse>> {
+//        if (!isAdmin()) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
+//        }
+        val reservations = reservationService.getReservationsForUser(userId)
+        return ResponseEntity(reservations, HttpStatus.OK)
     }
 }

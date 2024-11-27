@@ -130,5 +130,12 @@ class ReservationService(
         return toReservationResponse(updatedReservation)
     }
 
+    fun getReservationsForUser(userId: UUID): List<ReservationResponse> {
+        val user = userRepository.findById(userId)
+            .orElseThrow { UserNotFoundException(userId.toString()) }
+
+        val reservations = reservationRepository.findAllByUserId(user.id!!)
+        return reservations.map { toReservationResponse(it) }
+    }
 
 }
