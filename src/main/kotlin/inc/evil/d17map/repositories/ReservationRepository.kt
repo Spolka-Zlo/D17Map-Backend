@@ -49,4 +49,18 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
         @Param("currentDate") currentDate: LocalDate,
         @Param("currentTime") currentTime: LocalTime,
     ): List<Reservation>
+
+    @Query(
+        "SELECT r " +
+                "FROM Reservation r " +
+                "WHERE (r.date > :currentDate " +
+                "OR (r.date = :currentDate AND r.endTime >= :currentTime)) " +
+                "AND r.type = 'EVENT' " +
+                "ORDER BY r.date, r.startTime"
+    )
+    fun findAllCurrentOrFutureEvents(
+        @Param("currentDate") currentDate: LocalDate,
+        @Param("currentTime") currentTime: LocalTime
+    ): List<Reservation>
+
 }
