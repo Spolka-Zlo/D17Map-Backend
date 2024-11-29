@@ -63,9 +63,3 @@ Other useful commands may be found [here](https://contabo.com/blog/how-to-remove
 2. Click on the green arrow in Intellij to start :)
 
 > NOTE: Remember to leave 'spring.profiles.active=dev' in application.properties file
-
-## Running locally with Postgresql PROD database located in Azure
-
-1. `./gradlew clean bootJar`
-2. `docker build -t <your_container_name> .`
-3. 

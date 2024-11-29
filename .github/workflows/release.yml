@@ -23,28 +23,22 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-
       - name: Run Gradle release
         run: |
           ./gradlew release \
             -Prelease.releaseVersion=${{ github.event.inputs.releaseVersion }} \
             -Prelease.newVersion=${{ github.event.inputs.nextVersion }}
 
-
       - name: Push changes back to Git
         run: |
           git push origin main --follow-tags
 
-
-
       - name: Build JAR
         run: ./gradlew bootJar
-
 
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/${{ github.repository }}:${{ github.event.inputs.releaseVersion }} .
-
 
       - name: Push Docker image
         run: |
