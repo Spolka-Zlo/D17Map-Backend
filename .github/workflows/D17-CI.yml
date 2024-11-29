@@ -1,13 +1,9 @@
-name: Kotlin Spring Boot CI
+name: Build and Test on Push to EVIL-* branches
 
 on:
   push:
     branches:
-      - main
       - 'EVIL-*'
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build-and-test:
@@ -23,6 +19,5 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build and run tests with profile 'dev'
-        run: ./gradlew build -Dspring.profiles.active=dev
-
+      - name: Build and run tests
+        run: ./gradlew build
