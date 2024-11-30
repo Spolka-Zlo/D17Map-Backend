@@ -8,7 +8,6 @@ plugins {
 }
 
 group = "inc.evil"
-version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
@@ -69,11 +68,17 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+
+
 release {
     failOnCommitNeeded = true
     failOnPublishNeeded = true
     failOnSnapshotDependencies = true
-    preCommitText = "[RELEASE]"
     tagTemplate = "v${version}"
-    versionPropertyFile = "build.gradle.kts"
+    versionPropertyFile = "gradle.properties"
+
+    git {
+        requireBranch.set("main")
+        pushToRemote.set("origin")
+    }
 }
