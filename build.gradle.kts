@@ -76,6 +76,7 @@ release {
     failOnSnapshotDependencies = true
     tagTemplate = "v${version}"
     versionPropertyFile = "gradle.properties"
+
     git {
         requireBranch.set("main")
         pushToRemote.set("origin")
