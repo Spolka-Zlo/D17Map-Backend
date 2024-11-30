@@ -23,17 +23,17 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Config git identity
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
       - name: Run Gradle release
         run: |
           ./gradlew release \
             -Prelease.releaseVersion=${{ github.event.inputs.releaseVersion }} \
             -Prelease.newVersion=${{ github.event.inputs.nextVersion }} \
             -Prelease.useAutomaticVersion=true
-
-
-      - name: Push changes back to Git
-        run: |
-          git push origin main --follow-tags
 
       - name: Build JAR
         run: ./gradlew bootJar
