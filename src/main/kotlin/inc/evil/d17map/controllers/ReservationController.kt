@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.util.*
@@ -226,14 +227,10 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity(updatedReservation, HttpStatus.OK)
     }
 
-
     @GetMapping("/{userId}")
     fun getUserReservationsForAdmin(
         @PathVariable userId: UUID
     ): ResponseEntity<List<ReservationResponse>> {
-//        if (!isAdmin()) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
-//        }
         val reservations = reservationService.getReservationsForUser(userId)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
