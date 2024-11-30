@@ -136,7 +136,7 @@ class DataLoader(
                 endTime = LocalTime.of(15, 0),
                 classroom = classrooms[0],
                 user = user,
-                type = ReservationType.CONFERENCE,
+                type = ReservationType.EVENT,
                 numberOfParticipants = 80
             )
         )

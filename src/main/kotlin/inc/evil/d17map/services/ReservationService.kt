@@ -16,6 +16,7 @@ import inc.evil.d17map.repositories.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
@@ -101,17 +102,26 @@ class ReservationService(
 
     fun updateReservation(id: UUID, updateRequest: ReservationUpdateRequest): ReservationResponse {
         val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
+        val classroom = classroomRepository.findOne(updateRequest.classroomId) ?: throw ClassroomNotFoundException(updateRequest.classroomId)
 
         reservation.run {
             this.title = updateRequest.title
             this.description = updateRequest.description
             this.type = updateRequest.type
+            this.classroom = classroom
         }
 
         val updatedReservation = reservationRepository.save(reservation)
         return toReservationResponse(updatedReservation)
     }
 
+    fun getCurrentOrFutureEvents(currentDateTime: LocalDateTime): List<ReservationResponse> {
+        val currentDate = currentDateTime.toLocalDate()
+        val currentTime = currentDateTime.toLocalTime()
+
+        val reservations = reservationRepository.findAllCurrentOrFutureEvents(currentDate, currentTime)
+        return reservations.map { toReservationResponse(it) }
+    }
     fun updateReservationAdmin(id: UUID, adminUpdateRequest: ReservationRequest): ReservationResponse {
         val reservation = reservationRepository.findById(id)
             .orElseThrow { ReservationNotFoundException(id) }

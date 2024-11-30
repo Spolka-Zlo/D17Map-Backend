@@ -44,5 +44,6 @@ data class ReservationUpdateRequest(
     @field:Size(min = 1, max = 100, message = "Reservation description must be between 1 and 100 characters long.")
     val description: String,
 
-    val type: ReservationType
+    val type: ReservationType,
+    val classroomId: UUID
 )
