@@ -27,7 +27,9 @@ jobs:
         run: |
           ./gradlew release \
             -Prelease.releaseVersion=${{ github.event.inputs.releaseVersion }} \
-            -Prelease.newVersion=${{ github.event.inputs.nextVersion }}
+            -Prelease.newVersion=${{ github.event.inputs.nextVersion }} \
+            -Prelease.useAutomaticVersion=true
+
 
       - name: Push changes back to Git
         run: |
