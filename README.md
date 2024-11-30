@@ -48,11 +48,8 @@ Other useful commands may be found [here](https://contabo.com/blog/how-to-remove
 
 ## Object model
 
-> Note: This is the old one!
-
-![Object Model](docs/object_model.png)
-
-
+Komisja: Wait there is no model?
+Adam: Never has been!
 
 
 # IMPORTANT FOR BACKEND DEVS
