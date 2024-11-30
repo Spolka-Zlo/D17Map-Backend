@@ -1,14 +1,12 @@
 package inc.evil.d17map.security.user
 
+
 import inc.evil.d17map.entities.User
 import inc.evil.d17map.enums.Role
 import inc.evil.d17map.repositories.UserRepository
 import inc.evil.d17map.security.jwt.JWTService
-
-
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
