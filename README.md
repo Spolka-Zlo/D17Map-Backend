@@ -52,3 +52,14 @@ Other useful commands may be found [here](https://contabo.com/blog/how-to-remove
 
 ![Object Model](docs/object_model.png)
 
+
+
+
+# IMPORTANT FOR BACKEND DEVS
+
+## Running locally with H2 DEV database
+
+1. `./gradlew clean build`
+2. Click on the green arrow in Intellij to start :)
+
+> NOTE: Remember to leave 'spring.profiles.active=dev' in application.properties file

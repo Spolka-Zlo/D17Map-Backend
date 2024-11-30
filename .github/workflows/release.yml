@@ -1,0 +1,46 @@
+name: Build and Push Docker Image on PR Merge
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release version (e.g., 1.0.2)'
+        required: true
+      newVersion:
+        description: 'Next development version (e.g., 1.0.3-SNAPSHOT)'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run Gradle release
+        run: |
+          ./gradlew release \
+            -Prelease.releaseVersion=${{ github.event.inputs.releaseVersion }} \
+            -Prelease.newVersion=${{ github.event.inputs.nextVersion }}
+
+      - name: Push changes back to Git
+        run: |
+          git push origin main --follow-tags
+
+      - name: Build JAR
+        run: ./gradlew bootJar
+
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:${{ github.event.inputs.releaseVersion }} .
+
+      - name: Push Docker image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          docker push ghcr.io/${{ github.repository }}:${{ github.event.inputs.releaseVersion }}
