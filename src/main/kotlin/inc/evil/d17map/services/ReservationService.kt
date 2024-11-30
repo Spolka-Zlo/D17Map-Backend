@@ -138,4 +138,8 @@ class ReservationService(
         return reservations.map { toReservationResponse(it) }
     }
 
+    fun getAllReservations(): List<ReservationResponse> {
+        val reservations = reservationRepository.findAll()
+        return reservations.map { toReservationResponse(it) }
+    }
 }

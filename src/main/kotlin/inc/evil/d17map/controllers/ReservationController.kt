@@ -227,11 +227,36 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity(updatedReservation, HttpStatus.OK)
     }
 
-    @GetMapping("/{userId}")
+    @Operation(
+        summary = "Get all user's reservations (admin only)",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations."),
+            ApiResponse(responseCode = "400", description = "Invalid user data."),
+            ApiResponse(responseCode = "404", description = "Reservations not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden access. The user does not have the necessary permissions."
+            )
+        ]
+    )
+    @GetMapping("/admin/allReservations/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getUserReservationsForAdmin(
         @PathVariable userId: UUID
     ): ResponseEntity<List<ReservationResponse>> {
         val reservations = reservationService.getReservationsForUser(userId)
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
+
+    @GetMapping("/admin/allReservations")
+    @PreAuthorize("hasRole('ADMIN')")
+    fun getAllReservationsForAdmin(
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getAllReservations()
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 }
