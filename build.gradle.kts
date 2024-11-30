@@ -1,9 +1,9 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.spring") version "2.1.0"
-    id("org.springframework.boot") version "3.4.0"
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
+    id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
-    kotlin("plugin.jpa") version "2.1.0"
+    kotlin("plugin.jpa") version "1.9.25"
     id("net.researchgate.release") version "3.0.2"
 }
 
