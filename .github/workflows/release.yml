@@ -10,6 +10,7 @@ on:
         description: 'Next development version (e.g., 1.0.3-SNAPSHOT)'
         required: true
 
+
 jobs:
   release:
     runs-on: ubuntu-latest
