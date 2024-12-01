@@ -14,8 +14,23 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+
+      - name: Generate Github App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Config Git User
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -23,24 +38,24 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Run Gradle release
+      - name: Run Maven release:prepare
         run: |
-          ./gradlew release \
-            -Prelease.releaseVersion=${{ github.event.inputs.releaseVersion }} \
-            -Prelease.newVersion=${{ github.event.inputs.nextVersion }}
+          mvn release:prepare \
+            -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
+            -DdevelopmentVersion=${{ github.event.inputs.newVersion }} 
 
-      - name: Push changes back to Git
+      - name: Run Maven release:perform
         run: |
-          git push origin main --follow-tags
+          mvn release:perform
 
       - name: Build JAR
-        run: ./gradlew bootJar
+        run: mvn clean install
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}:${{ github.event.inputs.releaseVersion }} .
+          docker build -t ghcr.io/${{ github.repository | toLowerCase }}:${{ github.event.inputs.releaseVersion }} .
 
       - name: Push Docker image
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          docker push ghcr.io/${{ github.repository }}:${{ github.event.inputs.releaseVersion }}
+          docker push ghcr.io/${{ github.repository | toLowerCase }}:${{ github.event.inputs.releaseVersion }}
