@@ -53,9 +53,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository | toLowerCase }}:${{ github.event.inputs.releaseVersion }} .
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/${ REPO_NAME }:${{ github.event.inputs.releaseVersion }} .
 
       - name: Push Docker image
         run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          docker push ghcr.io/${{ github.repository | toLowerCase }}:${{ github.event.inputs.releaseVersion }}
+          docker push ghcr.io/${ REPO_NAME }:${{ github.event.inputs.releaseVersion }}
