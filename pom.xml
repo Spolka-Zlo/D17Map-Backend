@@ -11,7 +11,7 @@
 
     <groupId>inc.evil</groupId>
     <artifactId>d17-map-backend</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <name>d17-map-backend</name>
     <url />
     <licenses>
@@ -38,7 +38,7 @@
     <scm>
         <connection>scm:git:https://github.com/Spolka-Zlo/D17Map-Backend.git</connection>
         <developerConnection>scm:git:https://github.com/Spolka-Zlo/D17Map-Backend.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>1.0.3</tag>
         <url>https://github.com/Spolka-Zlo/D17Map-Backend</url>
     </scm>
 
