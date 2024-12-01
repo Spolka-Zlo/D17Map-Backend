@@ -36,11 +36,12 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git@github.com:Spolka-Zlo/D17Map-Backend.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:Spolka-Zlo/D17Map-Backend.git</developerConnection>
+        <connection>scm:git:https://github.com/Spolka-Zlo/D17Map-Backend.git</connection>
+        <developerConnection>scm:git:https://github.com/Spolka-Zlo/D17Map-Backend.git</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/your-repo-url</url>
+        <url>https://github.com/Spolka-Zlo/D17Map-Backend</url>
     </scm>
+
 
     <properties>
         <java.version>21</java.version>

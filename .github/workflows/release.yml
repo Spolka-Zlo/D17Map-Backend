@@ -42,7 +42,9 @@ jobs:
         run: |
           mvn release:prepare \
             -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
-            -DdevelopmentVersion=${{ github.event.inputs.newVersion }} 
+            -DdevelopmentVersion=${{ github.event.inputs.newVersion }} \
+            -Dtag=${{ github.event.inputs.releaseVersion }}
+
 
       - name: Run Maven release:perform
         run: |
