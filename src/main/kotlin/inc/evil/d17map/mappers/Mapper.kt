@@ -22,11 +22,9 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         name = classroom.name,
         description = classroom.description,
         capacity = classroom.capacity,
+        modelKey = classroom.modelKey,
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
-        equipments = classroom.equipments.map {
-            toEquipmentResponse(it)
-        }.toSet()
     )
 }
 
@@ -34,6 +32,7 @@ fun toClassroomSummary(classroom: Classroom): ClassroomSummary =
     ClassroomSummary(
         id = classroom.id!!,
         name = classroom.name,
+        modelKey = classroom.modelKey,
         capacity = classroom.capacity
     )
 

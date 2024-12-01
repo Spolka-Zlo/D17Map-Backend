@@ -1,15 +1,14 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.ClassroomNotFoundException
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import org.springframework.stereotype.Service
-import java.util.*
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Service
 class ClassroomService(
@@ -27,10 +26,19 @@ class ClassroomService(
             name = classroomRequest.name,
             description = classroomRequest.description,
             capacity = classroomRequest.capacity,
+            modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet()
         )
         val savedClassroomDto = classroomRepository.save(classroom)
         return toClassroomResponse(savedClassroomDto)
+    }
+
+    fun findAvailableClassrooms(date: LocalDate, timeRange: String, peopleCount: Int): List<ClassroomResponse> {
+        val (start, end) = timeRange.split("-")
+        val (startTime, endTime) = Pair(LocalTime.parse(start), LocalTime.parse(end))
+
+        val classrooms = classroomRepository.findAvailableClassrooms(date, startTime, endTime, peopleCount)
+        return classrooms.map { toClassroomResponse(it) }
     }
 
 // TODO uncomment and adjust when needed
