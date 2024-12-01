@@ -23,6 +23,9 @@ class UserNotFoundException : RuntimeException {
     constructor(email: String) : super("User with email '$email' not found")
 }
 
+class RoleNotFoundException(roleName: String) : RuntimeException("Role with name '$roleName' not found")
+
+
 // INVALID DATA
 
 class InvalidClassroomDataException
@@ -45,3 +48,5 @@ class InvalidEquipmentDataException(message: String) : RuntimeException(message)
 
 class MissingParameterException(parameterName: String)
     : RuntimeException("Query parameter '$parameterName' must be specified")
+
+class UserAlreadyExistsException(email: String) : RuntimeException("User with email '$email' already exists")

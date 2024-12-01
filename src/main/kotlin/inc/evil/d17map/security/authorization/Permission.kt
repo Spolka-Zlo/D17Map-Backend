@@ -1,6 +1,5 @@
-package inc.evil.d17map.security.permissions
+package inc.evil.d17map.security.authorization
 
-import inc.evil.d17map.security.roles.Role
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
@@ -17,5 +16,4 @@ class Permission(
 
     @ManyToMany
     val roles: MutableSet<Role> = mutableSetOf()
-
 )

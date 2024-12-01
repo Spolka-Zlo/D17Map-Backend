@@ -1,4 +1,4 @@
-package inc.evil.d17map.security.roles
+package inc.evil.d17map.security.authorization
 
 
 import org.springframework.data.jpa.repository.JpaRepository

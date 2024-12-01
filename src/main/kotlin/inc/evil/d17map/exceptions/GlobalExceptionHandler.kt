@@ -72,4 +72,9 @@ class GlobalExceptionHandler {
     fun handleUserNotFound(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
         return ResponseEntity(ErrorResponse(ex.message ?: "User not found"), HttpStatus.NOT_FOUND)
     }
+
+    @ExceptionHandler(UserAlreadyExistsException::class)
+    fun handleUserAlreadyExistsException(ex: UserAlreadyExistsException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity(ErrorResponse(ex.message ?: "User already exists"), HttpStatus.CONFLICT)
+    }
 }

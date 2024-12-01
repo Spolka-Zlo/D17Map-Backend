@@ -1,6 +1,6 @@
 package inc.evil.d17map.security.config
 
-import inc.evil.d17map.security.jwt.JWTFilter
+import inc.evil.d17map.security.authentication.jwt.JWTFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager

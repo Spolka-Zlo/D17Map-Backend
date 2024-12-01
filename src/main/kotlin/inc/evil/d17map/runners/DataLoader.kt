@@ -9,10 +9,10 @@ import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import inc.evil.d17map.repositories.ReservationRepository
 import inc.evil.d17map.repositories.UserRepository
-import inc.evil.d17map.security.permissions.Permission
-import inc.evil.d17map.security.permissions.PermissionRepository
-import inc.evil.d17map.security.roles.Role
-import inc.evil.d17map.security.roles.RoleRepository
+import inc.evil.d17map.security.authorization.Permission
+import inc.evil.d17map.security.authorization.PermissionRepository
+import inc.evil.d17map.security.authorization.Role
+import inc.evil.d17map.security.authorization.RoleRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component

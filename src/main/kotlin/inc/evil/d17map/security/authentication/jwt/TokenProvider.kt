@@ -1,8 +1,8 @@
-package inc.evil.d17map.security.jwt
+package inc.evil.d17map.security.authentication.jwt
 
 
 import inc.evil.d17map.security.config.SecurityProperties
-import inc.evil.d17map.security.user.UserPrincipal
+import inc.evil.d17map.security.UserPrincipal
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 import java.security.NoSuchAlgorithmException
 import java.time.ZonedDateTime
 import java.util.*
-import java.util.stream.Collectors
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 

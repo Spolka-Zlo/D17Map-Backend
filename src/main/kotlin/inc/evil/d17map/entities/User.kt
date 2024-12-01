@@ -1,6 +1,6 @@
 package inc.evil.d17map.entities
 
-import inc.evil.d17map.security.roles.Role
+import inc.evil.d17map.security.authorization.Role
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import java.util.*

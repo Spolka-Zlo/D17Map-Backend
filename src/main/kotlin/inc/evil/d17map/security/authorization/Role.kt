@@ -1,7 +1,6 @@
-package inc.evil.d17map.security.roles
+package inc.evil.d17map.security.authorization
 
 import inc.evil.d17map.entities.User
-import inc.evil.d17map.security.permissions.Permission
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import java.util.*
@@ -25,7 +24,5 @@ class Role(
             name = "privilege_id", referencedColumnName = "id"
         )]
     )
-    val permissions: MutableSet<Permission> = mutableSetOf(),
-
-
-    )
+    val permissions: MutableSet<Permission> = mutableSetOf()
+)

@@ -1,7 +1,8 @@
-package inc.evil.d17map.security.user
+package inc.evil.d17map.security.authentication
 
 import inc.evil.d17map.repositories.UserRepository
-import inc.evil.d17map.security.roles.Role
+import inc.evil.d17map.security.authorization.Role
+import inc.evil.d17map.security.UserPrincipal
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
