@@ -63,3 +63,4 @@ jobs:
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
           docker push ghcr.io/${REPO_NAME}:${{ github.event.inputs.releaseVersion }}
+          docker push ghcr.io/${REPO_NAME}:latest
