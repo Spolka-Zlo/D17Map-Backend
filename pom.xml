@@ -11,7 +11,7 @@
 
     <groupId>inc.evil</groupId>
     <artifactId>d17-map-backend</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>d17-map-backend</name>
     <url />
     <licenses>
