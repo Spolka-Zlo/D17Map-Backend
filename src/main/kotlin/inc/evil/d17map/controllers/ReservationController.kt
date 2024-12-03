@@ -2,8 +2,8 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
-import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.dtos.ReservationUpdateRequest
+import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -265,7 +264,6 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/admin/allReservations/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     fun getUserReservationsForAdmin(
         @PathVariable userId: UUID
     ): ResponseEntity<List<ReservationResponse>> {
@@ -274,7 +272,6 @@ class ReservationController(private val reservationService: ReservationService) 
     }
 
     @GetMapping("/admin/allReservations")
-    @PreAuthorize("hasRole('ADMIN')")
     fun getAllReservationsForAdmin(
     ): ResponseEntity<List<ReservationResponse>> {
         val reservations = reservationService.getAllReservations()
