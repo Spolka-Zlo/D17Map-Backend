@@ -1,0 +1,66 @@
+name: Build and Push Docker Image on PR Merge
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release version (e.g., 1.0.2)'
+        required: true
+      newVersion:
+        description: 'Next development version (e.g., 1.0.3-SNAPSHOT)'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Generate Github App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Config Git User
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run Maven release:prepare
+        run: |
+          mvn release:prepare \
+            -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
+            -DdevelopmentVersion=${{ github.event.inputs.newVersion }} \
+            -Dtag=${{ github.event.inputs.releaseVersion }}
+
+
+      - name: Run Maven release:perform
+        run: |
+          mvn release:perform
+
+      - name: Build JAR
+        run: mvn clean install
+
+      - name: Build Docker image
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/${REPO_NAME}:${{ github.event.inputs.releaseVersion }} -t ghcr.io/${REPO_NAME}:latest .
+
+      - name: Push Docker image
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          docker push ghcr.io/${REPO_NAME}:${{ github.event.inputs.releaseVersion }}
+          docker push ghcr.io/${REPO_NAME}:latest

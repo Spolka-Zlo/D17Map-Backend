@@ -11,7 +11,7 @@ import java.util.*
 class Reservation(
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)
-    val id: UUID = UUID(0, 0),
+    val id: UUID? = null,
     var title: String,
     var description: String,
 
