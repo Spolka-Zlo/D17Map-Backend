@@ -39,36 +39,40 @@ class DataLoader(
                 name = "2.41",
                 description = "fajna sala na egzaminy, dużo się tu dzieje",
                 capacity = 100,
-                modelKey = "key1",
-                equipments = mutableSetOf(equipments[2])
+                modelKey = "241",
+                equipments = mutableSetOf(equipments[2]),
+                floor = 2
             ),
             Classroom(
                 name = "4.27",
                 description = "sieci sieci sieci i inne takie fajne",
                 capacity = 115,
-                modelKey = "key2",
-                equipments = mutableSetOf(equipments[1])
+                modelKey = "427",
+                equipments = mutableSetOf(equipments[1]),
+                floor = 4
             ),
             Classroom(
                 name = "3.31",
                 description = "obiektowe zwierzaki ewoluują w tej sali",
                 capacity = 120,
-                modelKey = "key3",
-                equipments = mutableSetOf(equipments[0])
+                modelKey = "331",
+                equipments = mutableSetOf(equipments[0]),
+                floor = 3
             ),
             Classroom(
                 name = "1.38",
                 description = "tutaj stało się wszystko",
                 capacity = 120,
-                modelKey = "key4",
-                equipments = mutableSetOf(equipments[2], equipments[3])
+                modelKey = "138",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = 1
             )
         )
         classroomRepository.saveAll(classrooms)
 
         val user = User(
-            email = "example@student.agh.edu.pl",
-            password = passwordEncoder.encode("example@password1234"),
+            email = "admin",
+            password = passwordEncoder.encode("admin"),
             userType = Role.STUDENT,
         )
         userRepository.save(user)

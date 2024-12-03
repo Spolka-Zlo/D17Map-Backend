@@ -13,6 +13,7 @@ class Classroom(
     var description: String,
     var capacity: Int,
     val modelKey: String,
+    val floor: Int,
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
