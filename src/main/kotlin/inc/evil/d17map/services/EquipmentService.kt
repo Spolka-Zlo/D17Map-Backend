@@ -35,4 +35,15 @@ class EquipmentService(val equipmentRepository: EquipmentRepository) {
             toEquipmentResponse(it)
         }
     }
+
+    fun updateEquipment(id: UUID, equipmentRequest: EquipmentRequest): EquipmentResponse {
+        val equipment = equipmentRepository.findById(id)
+            .orElseThrow { EquipmentNotFoundException(id) }
+
+        equipment.name = equipmentRequest.name
+        val updatedEquipment = equipmentRepository.save(equipment)
+
+        return toEquipmentResponse(updatedEquipment)
+    }
+
 }

@@ -2,8 +2,8 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
-import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.dtos.ReservationUpdateRequest
+import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -222,4 +222,59 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
+    @Operation(
+        summary = "Update an existing reservation by admin",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated reservation."),
+            ApiResponse(responseCode = "400", description = "Invalid reservation data."),
+            ApiResponse(responseCode = "404", description = "Reservation not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden access. The user does not have the necessary permissions."
+            )
+        ]
+    )
+    @PutMapping("/admin/{id}")
+    fun updateReservationAdmin(
+        @PathVariable id: UUID,
+        @RequestBody @Valid adminUpdateRequest: ReservationRequest
+    ): ResponseEntity<ReservationResponse> {
+        val updatedReservation = reservationService.updateReservationAdmin(id, adminUpdateRequest)
+        return ResponseEntity(updatedReservation, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Get all user's reservations (admin only)",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations."),
+            ApiResponse(responseCode = "400", description = "Invalid user data."),
+            ApiResponse(responseCode = "404", description = "Reservations not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Forbidden access. The user does not have the necessary permissions."
+            )
+        ]
+    )
+    @GetMapping("/admin/allReservations/{userId}")
+    fun getUserReservationsForAdmin(
+        @PathVariable userId: UUID
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getReservationsForUser(userId)
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
+
+    @GetMapping("/admin/allReservations")
+    fun getAllReservationsForAdmin(
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getAllReservations()
+        return ResponseEntity(reservations, HttpStatus.OK)
+    }
 }

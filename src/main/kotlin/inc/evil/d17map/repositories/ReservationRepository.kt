@@ -16,6 +16,8 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
     @Query("SELECT r FROM Reservation r WHERE r.date = :date ORDER BY r.date, r.startTime")
     fun findAllByDate(@Param("date") date: LocalDate): List<Reservation>
 
+    fun findAllByUserId(userId: UUID): List<Reservation>
+
 
     @Query("SELECT r FROM Reservation r WHERE r.date BETWEEN :startDate AND :endDate ORDER BY r.date, r.startTime")
     fun findAllByDateBetween(
