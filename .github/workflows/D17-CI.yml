@@ -19,4 +19,4 @@ jobs:
           java-version: '21'
 
       - name: Build and run tests
-        run: ./gradlew build
+        run: ./mvn clean test
