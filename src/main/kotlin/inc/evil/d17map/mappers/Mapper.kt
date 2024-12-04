@@ -25,7 +25,7 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         modelKey = classroom.modelKey,
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
-        floor = classroom.floor
+        floorId = classroom.floorId
     )
 }
 

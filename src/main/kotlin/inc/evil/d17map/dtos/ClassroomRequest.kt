@@ -11,7 +11,7 @@ data class ClassroomRequest(
     @field:Size(min = 1, max = 255, message = "Description must be between 1 and 255 characters long.")
     val description: String,
     val modelKey: String,
-    val floor: Int,
+    val floorId: UUID,
 
     @field:Positive(message = "Capacity must be a positive number.")
     val capacity: Int,

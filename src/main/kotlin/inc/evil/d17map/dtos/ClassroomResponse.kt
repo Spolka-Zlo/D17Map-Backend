@@ -9,5 +9,5 @@ data class ClassroomResponse(
     val capacity: Int,
     val equipmentIds: Set<UUID>,
     val id: UUID,
-    val floor: Int
+    val floorId: UUID
 )

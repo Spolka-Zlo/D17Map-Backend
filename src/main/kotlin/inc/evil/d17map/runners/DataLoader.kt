@@ -1,15 +1,9 @@
 package inc.evil.d17map.runners
 
-import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Equipment
-import inc.evil.d17map.entities.Reservation
-import inc.evil.d17map.entities.User
+import inc.evil.d17map.entities.*
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.enums.Role
-import inc.evil.d17map.repositories.ClassroomRepository
-import inc.evil.d17map.repositories.EquipmentRepository
-import inc.evil.d17map.repositories.ReservationRepository
-import inc.evil.d17map.repositories.UserRepository
+import inc.evil.d17map.repositories.*
 import org.springframework.boot.CommandLineRunner
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -22,15 +16,31 @@ class DataLoader(
     private val classroomRepository: ClassroomRepository,
     private val userRepository: UserRepository,
     private val reservationRepository: ReservationRepository,
+    private val buildingRepository: BuildingRepository,
+    private val floorRepository: FloorRepository,
+    private val extraRoomRepository: ExtraRoomRepository,
     private val passwordEncoder: PasswordEncoder
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
+        val building = Building(
+            name = "D17"
+        )
+        buildingRepository.save(building)
+
+        val floors = listOf(
+            Floor(name = "Ground Floor", buildingId = building.id!!),
+            Floor(name = "First Floor", buildingId = building.id!!),
+            Floor(name = "Second Floor", buildingId = building.id!!),
+            Floor(name = "Third Floor", buildingId = building.id!!)
+        )
+        floorRepository.saveAll(floors)
+
         val equipments = listOf(
-            Equipment(name="COMPUTERS"),
-            Equipment(name="ROUTERS"),
-            Equipment(name="PROJECTOR"),
-            Equipment(name="BOARD")
+            Equipment(name = "COMPUTERS"),
+            Equipment(name = "ROUTERS"),
+            Equipment(name = "PROJECTOR"),
+            Equipment(name = "BOARD")
         )
         equipmentRepository.saveAll(equipments)
 
@@ -41,7 +51,7 @@ class DataLoader(
                 capacity = 100,
                 modelKey = "241",
                 equipments = mutableSetOf(equipments[2]),
-                floor = 2
+                floorId = floors[2].id!!
             ),
             Classroom(
                 name = "4.27",
@@ -49,7 +59,7 @@ class DataLoader(
                 capacity = 115,
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[1]),
-                floor = 4
+                floorId = floors[3].id!!
             ),
             Classroom(
                 name = "3.31",
@@ -57,7 +67,7 @@ class DataLoader(
                 capacity = 120,
                 modelKey = "331",
                 equipments = mutableSetOf(equipments[0]),
-                floor = 3
+                floorId = floors[1].id!!
             ),
             Classroom(
                 name = "1.38",
@@ -65,11 +75,12 @@ class DataLoader(
                 capacity = 120,
                 modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = 1
+                floorId = floors[0].id!!
             )
         )
         classroomRepository.saveAll(classrooms)
 
+        // Dodanie użytkownika
         val user = User(
             email = "admin",
             password = passwordEncoder.encode("admin"),
@@ -77,6 +88,7 @@ class DataLoader(
         )
         userRepository.save(user)
 
+        // Dodanie rezerwacji
         val reservations = listOf(
             Reservation(
                 title = "Egzamin Algebra",
@@ -135,5 +147,31 @@ class DataLoader(
             )
         )
         reservationRepository.saveAll(reservations)
+
+        val extraRooms = listOf(
+            ExtraRoom(
+                name = "WC Ground Floor",
+                modelKey = "WC1",
+                description = "Toaleta na parterze",
+                type = "WC",
+                floorId = floors[0].id!!
+            ),
+            ExtraRoom(
+                name = "Lift",
+                modelKey = "L1",
+                description = "Winda",
+                type = "Lift",
+                floorId = floors[1].id!!
+            ),
+            ExtraRoom(
+                name = "Canteen",
+                modelKey = "C1",
+                description = "Stołówka",
+                type = "Canteen",
+                floorId = floors[1].id!!
+            )
+        )
+        extraRoomRepository.saveAll(extraRooms)
     }
 }
+
