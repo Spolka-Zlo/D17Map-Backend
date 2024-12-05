@@ -30,7 +30,7 @@ class ClassroomService(
             capacity = classroomRequest.capacity,
             modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet(),
-            floorId = classroomRequest.floorId
+            floor = classroomRequest.floor
         )
         val savedClassroomDto = classroomRepository.save(classroom)
         return toClassroomResponse(savedClassroomDto)

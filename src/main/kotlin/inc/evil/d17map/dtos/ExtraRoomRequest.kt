@@ -1,5 +1,6 @@
 package inc.evil.d17map.dtos
 
+import inc.evil.d17map.entities.Floor
 import jakarta.validation.constraints.Size
 import java.util.UUID
 
@@ -11,5 +12,5 @@ class ExtraRoomRequest (
     var description: String,
     var type: String,
     val modelKey: String,
-    val floorId: UUID
+    val floor: Floor
 )

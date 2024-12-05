@@ -31,20 +31,16 @@ class DataLoader(
         )
         equipmentRepository.saveAll(equipments)
 
-        val building: Building = Building(name = "D17")
-
+        val building = Building(name = "D17")
         buildingRepository.save(building)
 
         val floors = listOf(
-            Floor(name = "1", buildingId = building.id!!),
-            Floor(name = "2", buildingId = building.id!!),
-            Floor(name = "3", buildingId = building.id!!),
-            Floor(name = "4", buildingId = building.id!!)
+            Floor(name = "1", building = building),
+            Floor(name = "2", building = building),
+            Floor(name = "3", building = building),
+            Floor(name = "4", building = building)
         )
-
         floorRepository.saveAll(floors)
-        building.floors.addAll(floors)
-        buildingRepository.save(building)
 
 
         val classrooms = listOf(
@@ -54,7 +50,7 @@ class DataLoader(
                 capacity = 100,
                 modelKey = "241",
                 equipments = mutableSetOf(equipments[2]),
-                floorId = floors[1].id!!
+                floor = floors[1]
             ),
             Classroom(
                 name = "4.27",
@@ -62,7 +58,7 @@ class DataLoader(
                 capacity = 115,
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[1]),
-                floorId = floors[3].id!!
+                floor = floors[3]
             ),
             Classroom(
                 name = "3.31",
@@ -70,7 +66,7 @@ class DataLoader(
                 capacity = 120,
                 modelKey = "331",
                 equipments = mutableSetOf(equipments[0]),
-                floorId = floors[2].id!!
+                floor = floors[2]
             ),
             Classroom(
                 name = "1.38",
@@ -78,7 +74,7 @@ class DataLoader(
                 capacity = 120,
                 modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floorId = floors[0].id!!
+                floor = floors[0]
             )
         )
         classroomRepository.saveAll(classrooms)
@@ -89,17 +85,16 @@ class DataLoader(
                 description = "męskie",
                 modelKey = "E7",
                 type = "WC",
-                floorId = floors[0].id!!
+                floor = floors[0]
             ),
             ExtraRoom(
                 name = "Sala do nauki",
                 description = "Stołówka studencka",
                 modelKey = "133",
                 type = "OTHER",
-                floorId = floors[0].id!!
+                floor = floors[0]
             ),
         )
-
         extraRoomRepository.saveAll(extraRooms)
 
         val user = User(

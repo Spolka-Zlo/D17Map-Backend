@@ -17,13 +17,13 @@ class FloorService(
     fun createFloor(floorRequest: FloorRequest): FloorResponse {
         val floor = Floor(
             name = floorRequest.name,
-            buildingId = floorRequest.buildingId
+            building = floorRequest.building
         )
         val savedFloor = floorRepository.save(floor)
         return FloorResponse(
             id = savedFloor.id.toString(),
             name = savedFloor.name,
-            buildingId = savedFloor.buildingId
+            building = savedFloor.building
         )
     }
 }

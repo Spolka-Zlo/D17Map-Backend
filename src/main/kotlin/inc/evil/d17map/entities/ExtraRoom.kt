@@ -14,5 +14,8 @@ class ExtraRoom (
     var description: String,
     var type: String,
     val modelKey: String,
-    val floorId: UUID
+
+    @ManyToOne
+    @JoinColumn(name = "floor_id", nullable = false)
+    val floor: Floor,
 )

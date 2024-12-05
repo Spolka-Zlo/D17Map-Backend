@@ -24,7 +24,7 @@ class ExtraRoomService(
             modelKey = extraRoomRequest.modelKey,
             description = extraRoomRequest.description,
             type = extraRoomRequest.type,
-            floorId = extraRoomRequest.floorId
+            floor = extraRoomRequest.floor
         )
         val savedExtraRoom = extraRoomRepository.save(extraRoom)
         return toExtraRoomResponse(savedExtraRoom)

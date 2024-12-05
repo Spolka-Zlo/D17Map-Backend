@@ -34,7 +34,7 @@ class FloorController(private val floorService: FloorService) {
             FloorResponse(
                 id = it.id.toString(),
                 name = it.name,
-                buildingId = it.buildingId
+                building = it.building
             )
         }
         return ResponseEntity(floorResponses, HttpStatus.OK)
