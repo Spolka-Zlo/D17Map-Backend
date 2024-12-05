@@ -83,7 +83,17 @@ class DataLoader(
             password = passwordEncoder.encode("admin"),
             userType = Role.STUDENT,
         )
-        userRepository.save(user)
+
+        val users = listOf(
+             user,
+             User(
+                email = "admin@admin.agh.edu.pl",
+                password = passwordEncoder.encode("admin@password1234"),
+                userType = Role.ADMIN,
+            )
+        )
+
+        userRepository.saveAll(users)
 
         val reservations = listOf(
             Reservation(

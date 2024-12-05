@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.util.*
 
 @RestController
 @RequestMapping("/classrooms")
@@ -70,5 +71,43 @@ class ClassroomController(private val classroomService: ClassroomService) {
     ): ResponseEntity<List<ClassroomResponse>> {
         val classrooms = classroomService.findAvailableClassrooms(date, timeRange, peopleCount)
         return ResponseEntity(classrooms, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Update a classroom by admin",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated the classroom."),
+            ApiResponse(responseCode = "404", description = "Classroom with the given ID not found."),
+            ApiResponse(responseCode = "400", description = "Invalid classroom data."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @PutMapping("/admin/{id}")
+    fun updateClassroomAdmin(
+        @PathVariable id: UUID,
+        @RequestBody @Valid classroomRequest: ClassroomRequest
+    ): ResponseEntity<ClassroomResponse> {
+        val updatedClassroom = classroomService.updateClassroom(id, classroomRequest)
+        return ResponseEntity(updatedClassroom, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Delete a classroom by ID",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully deleted the classroom."),
+            ApiResponse(responseCode = "404", description = "Classroom with the given ID not found."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeClassroom(@PathVariable id: UUID) {
+        classroomService.deleteById(id)
     }
 }
