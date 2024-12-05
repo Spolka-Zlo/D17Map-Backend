@@ -1,6 +1,5 @@
 package inc.evil.d17map.services
 
-import inc.evil.d17map.dtos.EquipmentResponse
 import inc.evil.d17map.dtos.ExtraRoomRequest
 import inc.evil.d17map.dtos.ExtraRoomResponse
 import inc.evil.d17map.entities.ExtraRoom
@@ -25,6 +24,7 @@ class ExtraRoomService(
             modelKey = extraRoomRequest.modelKey,
             description = extraRoomRequest.description,
             type = extraRoomRequest.type,
+            floorId = extraRoomRequest.floorId
         )
         val savedExtraRoom = extraRoomRepository.save(extraRoom)
         return toExtraRoomResponse(savedExtraRoom)

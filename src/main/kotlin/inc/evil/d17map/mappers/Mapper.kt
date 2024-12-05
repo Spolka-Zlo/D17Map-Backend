@@ -23,6 +23,7 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         modelKey = classroom.modelKey,
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
+        floorId = classroom.floorId
     )
 }
 
@@ -32,7 +33,8 @@ fun toExtraRoomResponse(extraRoom: ExtraRoom): ExtraRoomResponse =
         name = extraRoom.name,
         modelKey = extraRoom.modelKey,
         description = extraRoom.description,
-        type = extraRoom.type
+        type = extraRoom.type,
+        floorId = extraRoom.floorId
     )
 
 fun toClassroomSummary(classroom: Classroom): ClassroomSummary =

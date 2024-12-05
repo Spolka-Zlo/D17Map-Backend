@@ -43,6 +43,9 @@ class InvalidEquipmentDataException(message: String) : RuntimeException(message)
     }
 }
 
+class InvalidFloorDataException
+    : RuntimeException("Invalid floor data: name cannot be blank.")
+
 // Missing parameters
 
 class MissingParameterException(parameterName: String)

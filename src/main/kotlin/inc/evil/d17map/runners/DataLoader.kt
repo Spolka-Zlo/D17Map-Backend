@@ -17,7 +17,9 @@ class DataLoader(
     private val extraRoomRepository: ExtraRoomRepository,
     private val userRepository: UserRepository,
     private val reservationRepository: ReservationRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val buildingRepository: BuildingRepository,
+    private val floorRepository: FloorRepository
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
@@ -29,34 +31,54 @@ class DataLoader(
         )
         equipmentRepository.saveAll(equipments)
 
+        val building: Building = Building(name = "D17")
+
+        buildingRepository.save(building)
+
+        val floors = listOf(
+            Floor(name = "1", buildingId = building.id!!),
+            Floor(name = "2", buildingId = building.id!!),
+            Floor(name = "3", buildingId = building.id!!),
+            Floor(name = "4", buildingId = building.id!!)
+        )
+
+        floorRepository.saveAll(floors)
+        building.floors.addAll(floors)
+        buildingRepository.save(building)
+
+
         val classrooms = listOf(
             Classroom(
                 name = "2.41",
                 description = "fajna sala na egzaminy, dużo się tu dzieje",
                 capacity = 100,
                 modelKey = "241",
-                equipments = mutableSetOf(equipments[2])
+                equipments = mutableSetOf(equipments[2]),
+                floorId = floors[1].id!!
             ),
             Classroom(
                 name = "4.27",
                 description = "sieci sieci sieci i inne takie fajne",
                 capacity = 115,
                 modelKey = "427",
-                equipments = mutableSetOf(equipments[1])
+                equipments = mutableSetOf(equipments[1]),
+                floorId = floors[3].id!!
             ),
             Classroom(
                 name = "3.31",
                 description = "obiektowe zwierzaki ewoluują w tej sali",
                 capacity = 120,
                 modelKey = "331",
-                equipments = mutableSetOf(equipments[0])
+                equipments = mutableSetOf(equipments[0]),
+                floorId = floors[2].id!!
             ),
             Classroom(
                 name = "1.38",
                 description = "tutaj stało się wszystko",
                 capacity = 120,
                 modelKey = "138",
-                equipments = mutableSetOf(equipments[2], equipments[3])
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floorId = floors[0].id!!
             )
         )
         classroomRepository.saveAll(classrooms)
@@ -66,13 +88,15 @@ class DataLoader(
                 name = "WC",
                 description = "męskie",
                 modelKey = "E7",
-                type = "WC"
+                type = "WC",
+                floorId = floors[0].id!!
             ),
             ExtraRoom(
                 name = "Sala do nauki",
                 description = "Stołówka studencka",
                 modelKey = "133",
-                type = "OTHER"
+                type = "OTHER",
+                floorId = floors[0].id!!
             ),
         )
 

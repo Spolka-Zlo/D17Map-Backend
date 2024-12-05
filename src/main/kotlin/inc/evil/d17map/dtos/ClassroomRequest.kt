@@ -15,5 +15,6 @@ data class ClassroomRequest(
     @field:Positive(message = "Capacity must be a positive number.")
     val capacity: Int,
 
-    val equipmentIds: Set<UUID>
+    val equipmentIds: Set<UUID>,
+    val floorId: UUID
 )
