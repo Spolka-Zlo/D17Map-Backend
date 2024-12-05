@@ -1,15 +1,9 @@
 package inc.evil.d17map.runners
 
-import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Equipment
-import inc.evil.d17map.entities.Reservation
-import inc.evil.d17map.entities.User
+import inc.evil.d17map.entities.*
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.enums.Role
-import inc.evil.d17map.repositories.ClassroomRepository
-import inc.evil.d17map.repositories.EquipmentRepository
-import inc.evil.d17map.repositories.ReservationRepository
-import inc.evil.d17map.repositories.UserRepository
+import inc.evil.d17map.repositories.*
 import org.springframework.boot.CommandLineRunner
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -20,6 +14,7 @@ import java.time.LocalTime
 class DataLoader(
     private val equipmentRepository: EquipmentRepository,
     private val classroomRepository: ClassroomRepository,
+    private val extraRoomRepository: ExtraRoomRepository,
     private val userRepository: UserRepository,
     private val reservationRepository: ReservationRepository,
     private val passwordEncoder: PasswordEncoder
@@ -39,36 +34,53 @@ class DataLoader(
                 name = "2.41",
                 description = "fajna sala na egzaminy, dużo się tu dzieje",
                 capacity = 100,
-                modelKey = "key1",
+                modelKey = "241",
                 equipments = mutableSetOf(equipments[2])
             ),
             Classroom(
                 name = "4.27",
                 description = "sieci sieci sieci i inne takie fajne",
                 capacity = 115,
-                modelKey = "key2",
+                modelKey = "427",
                 equipments = mutableSetOf(equipments[1])
             ),
             Classroom(
                 name = "3.31",
                 description = "obiektowe zwierzaki ewoluują w tej sali",
                 capacity = 120,
-                modelKey = "key3",
+                modelKey = "331",
                 equipments = mutableSetOf(equipments[0])
             ),
             Classroom(
                 name = "1.38",
                 description = "tutaj stało się wszystko",
                 capacity = 120,
-                modelKey = "key4",
+                modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3])
             )
         )
         classroomRepository.saveAll(classrooms)
 
+        val extraRooms = listOf(
+            ExtraRoom(
+                name = "WC",
+                description = "męskie",
+                modelKey = "E7",
+                type = "WC"
+            ),
+            ExtraRoom(
+                name = "Sala do nauki",
+                description = "Stołówka studencka",
+                modelKey = "133",
+                type = "OTHER"
+            ),
+        )
+
+        extraRoomRepository.saveAll(extraRooms)
+
         val user = User(
-            email = "example@student.agh.edu.pl",
-            password = passwordEncoder.encode("example@password1234"),
+            email = "admin",
+            password = passwordEncoder.encode("admin"),
             userType = Role.STUDENT,
         )
         userRepository.save(user)

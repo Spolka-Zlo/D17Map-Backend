@@ -28,6 +28,8 @@ class UserNotFoundException : RuntimeException {
 class InvalidClassroomDataException
     : RuntimeException("Invalid classroom data: name cannot be blank and capacity must be greater than 0.")
 
+class InvalidExtraRoomDataException
+    : RuntimeException("Invalid extra room data: name cannot be blank and model key cannot be blank.")
 
 class InvalidEquipmentDataException(message: String) : RuntimeException(message) {
     companion object {
