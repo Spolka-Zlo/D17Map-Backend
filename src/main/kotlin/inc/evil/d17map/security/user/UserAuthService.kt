@@ -38,7 +38,7 @@ class UserAuthService(
 
         return LoginResponse(
             token = jwtService.generateToken(loginRequest.username),
-            role = Role.STUDENT,
+            role = Role.ADMIN,
         )
     }
 }
