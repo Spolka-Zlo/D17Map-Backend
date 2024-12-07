@@ -20,12 +20,6 @@ import io.swagger.v3.oas.annotations.servers.Server
         title = "D17Map API documentation",
         version = "1.0",
     ),
-    servers = [
-        Server(
-            description = "Local Development Server",
-            url = "http://localhost:8080"
-        )
-    ],
     security = [SecurityRequirement(name = "bearerAuthorization")]
 )
 @SecurityScheme(

@@ -45,7 +45,6 @@ class ReservationService(
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
         val reservation = Reservation(
-            id = classroom.id!!,
             title = reservationRequest.title,
             description = reservationRequest.description,
             date = reservationRequest.date,
