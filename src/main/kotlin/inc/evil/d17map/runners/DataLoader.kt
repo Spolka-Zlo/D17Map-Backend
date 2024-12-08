@@ -43,6 +43,7 @@ class DataLoader(
             Role(name = "ROLE_STUDENT", permissions = mutableSetOf(permissions[0])),
             Role(name = "ROLE_TEACHER", permissions = mutableSetOf(permissions[1], permissions[2])),
             Role(name = "ROLE_ADMIN", permissions = mutableSetOf(permissions[3])),
+            Role(name = "ROLE_USER", permissions = mutableSetOf(permissions[0])),
         )
 
         roleRepository.saveAll(roles)
@@ -125,7 +126,6 @@ class DataLoader(
         val user = User(
             email = "admin",
             password = passwordEncoder.encode("admin"),
-
         )
 
         val users = listOf(

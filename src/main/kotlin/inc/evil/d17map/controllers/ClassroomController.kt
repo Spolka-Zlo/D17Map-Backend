@@ -7,9 +7,11 @@ import inc.evil.d17map.services.ClassroomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.util.*
@@ -23,10 +25,6 @@ class ClassroomController(private val classroomService: ClassroomService) {
         summary = "Get all classrooms",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved all classrooms."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            )
         ]
     )
     @GetMapping
@@ -48,6 +46,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     fun createClassroom(@RequestBody @Valid classroomRequest: ClassroomRequest): ResponseEntity<ClassroomResponse> {
         if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
             throw InvalidClassroomDataException()
@@ -64,6 +63,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @GetMapping("/available")
+    @PermitAll
     fun getAvailableClassrooms(
         @RequestParam date: LocalDate,
         @RequestParam timeRange: String,
@@ -86,6 +86,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @PutMapping("/admin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateClassroomAdmin(
         @PathVariable id: UUID,
         @RequestBody @Valid classroomRequest: ClassroomRequest
@@ -107,6 +108,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
     )
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     fun removeClassroom(@PathVariable id: UUID) {
         classroomService.deleteById(id)
     }

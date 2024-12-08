@@ -3,16 +3,19 @@ package inc.evil.d17map.security.authentication
 import inc.evil.d17map.entities.User
 import inc.evil.d17map.exceptions.RoleNotFoundException
 import inc.evil.d17map.exceptions.UserAlreadyExistsException
+import inc.evil.d17map.mappers.toRoleResponse
 import inc.evil.d17map.repositories.UserRepository
 import inc.evil.d17map.security.authentication.jwt.TokenProvider
 import inc.evil.d17map.security.authorization.RoleRepository
-
-
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+
+
+private val logger = KotlinLogging.logger {}
 
 @Service
 class AuthService(
@@ -24,13 +27,15 @@ class AuthService(
 
     ) {
     companion object {
-        const val DEFAULT_ROLE = "ROLE_ADMIN" // TODO for test purposes only
+        const val DEFAULT_ROLE = "ROLE_USER" // TODO for test purposes only
     }
 
     fun registerUser(registerRequest: AuthRequest) {
+        logger.info { "Checking if user $registerRequest already exists." }
         if (userRepository.existsByEmail(registerRequest.username))
             throw UserAlreadyExistsException(registerRequest.username)
 
+        logger.info { "Registering user: $registerRequest with role $DEFAULT_ROLE" }
         roleRepository.findByName(DEFAULT_ROLE)?.let {
             val user = User(
                 email = registerRequest.username,
@@ -39,17 +44,26 @@ class AuthService(
             )
             userRepository.save(user)
         } ?: throw RoleNotFoundException(DEFAULT_ROLE)
+
+        logger.info { "Registration completed successfully." }
     }
 
     @Throws(AuthenticationException::class)
     fun verifyUser(loginRequest: AuthRequest): AuthResponse {
+        logger.info { "Checking user's $loginRequest credentials." }
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
 
+        logger.info { "Generating token..." }
+        val token = tokenProvider.generateToken(authentication)
+        val roles = toRoleResponse(authentication.authorities)
+
+        logger.info { "Generated token: $token." }
+        logger.info { "Logged user's roles: $roles" }
         return AuthResponse(
-            token = tokenProvider.generateToken(authentication),
-            roles = authentication.authorities.map { it.authority }.filter { it.startsWith("ROLE_") },
+            token = token,
+            roles = roles
         )
     }
 }

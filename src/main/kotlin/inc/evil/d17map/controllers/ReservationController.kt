@@ -8,9 +8,11 @@ import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -215,6 +217,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/events")
+    @PermitAll
     fun getEvents(
     ): ResponseEntity<List<ReservationResponse>> {
         val currentDateTime = LocalDateTime.now()
@@ -239,6 +242,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @PutMapping("/admin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateReservationAdmin(
         @PathVariable id: UUID,
         @RequestBody @Valid adminUpdateRequest: ReservationRequest
@@ -264,6 +268,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/admin/allReservations/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getUserReservationsForAdmin(
         @PathVariable userId: UUID
     ): ResponseEntity<List<ReservationResponse>> {
@@ -272,6 +277,7 @@ class ReservationController(private val reservationService: ReservationService) 
     }
 
     @GetMapping("/admin/allReservations")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getAllReservationsForAdmin(
     ): ResponseEntity<List<ReservationResponse>> {
         val reservations = reservationService.getAllReservations()

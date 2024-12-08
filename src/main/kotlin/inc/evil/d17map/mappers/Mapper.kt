@@ -5,6 +5,7 @@ import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.entities.Equipment
 import inc.evil.d17map.entities.ExtraRoom
 import inc.evil.d17map.entities.Reservation
+import org.springframework.security.core.GrantedAuthority
 import java.util.*
 
 
@@ -61,4 +62,11 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         description = reservation.description,
         numberOfParticipants = reservation.numberOfParticipants
     )
+
+fun toRoleResponse(authorities: Collection<GrantedAuthority>) =
+    authorities
+        .map { it.authority }
+        .filter { it.startsWith("ROLE_") }
+        .map { it.substring(5) }
+
 

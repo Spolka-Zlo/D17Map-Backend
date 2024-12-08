@@ -50,6 +50,7 @@
         <springdoc.version>2.7.0</springdoc.version>
         <lombok.version>1.18.24</lombok.version>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
+        <kotlin.logger.version>7.0.3</kotlin.logger.version>
     </properties>
 
     <dependencies>
@@ -150,6 +151,16 @@
             <version>1.9.0</version>
             <scope>test</scope>
         </dependency>
+
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>io.github.oshai</groupId>
+            <artifactId>kotlin-logging-jvm</artifactId>
+            <version>${kotlin.logger.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

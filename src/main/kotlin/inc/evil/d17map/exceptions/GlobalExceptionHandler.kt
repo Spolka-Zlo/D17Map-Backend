@@ -58,16 +58,6 @@ class GlobalExceptionHandler {
         return ResponseEntity(ErrorResponse(ex.message ?: "Invalid equipment data"), HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDenied(ex: AccessDeniedException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity(ErrorResponse("Access denied: ${ex.message}"), HttpStatus.FORBIDDEN)
-    }
-
-    @ExceptionHandler(AuthenticationException::class)
-    fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity(ErrorResponse("Authentication required: ${ex.message}"), HttpStatus.UNAUTHORIZED)
-    }
-
     @ExceptionHandler(UserNotFoundException::class)
     fun handleUserNotFound(ex: UserNotFoundException): ResponseEntity<ErrorResponse> {
         return ResponseEntity(ErrorResponse(ex.message ?: "User not found"), HttpStatus.NOT_FOUND)

@@ -7,9 +7,11 @@ import inc.evil.d17map.services.EquipmentService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -21,14 +23,11 @@ class EquipmentController(private val equipmentService: EquipmentService) {
     @Operation(
         summary = "Get all equipments",
         responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved all equipments."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            ),
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all equipments.")
         ]
     )
     @GetMapping
+    @PermitAll
     fun getAllEquipments(): ResponseEntity<List<EquipmentResponse>> {
         val equipments = equipmentService.getAll()
         return ResponseEntity(equipments, HttpStatus.OK)
@@ -47,6 +46,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     fun createEquipment(@RequestBody @Valid equipmentRequest: EquipmentRequest): ResponseEntity<EquipmentResponse> {
         if (equipmentRequest.name.isBlank()) {
             throw InvalidEquipmentDataException.blankName()
@@ -68,6 +68,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @PutMapping("/admin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateEquipmentAdmin(
         @PathVariable id: UUID,
         @RequestBody @Valid equipmentRequest: EquipmentRequest
@@ -89,6 +90,7 @@ class EquipmentController(private val equipmentService: EquipmentService) {
     )
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     fun removeEquipment(@PathVariable id: UUID) {
         equipmentService.removeEquipment(id)
     }
