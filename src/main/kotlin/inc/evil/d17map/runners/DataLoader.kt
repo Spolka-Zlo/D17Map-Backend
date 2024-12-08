@@ -2,10 +2,7 @@ package inc.evil.d17map.runners
 
 import inc.evil.d17map.entities.*
 import inc.evil.d17map.enums.ReservationType
-import inc.evil.d17map.repositories.ClassroomRepository
-import inc.evil.d17map.repositories.EquipmentRepository
-import inc.evil.d17map.repositories.ReservationRepository
-import inc.evil.d17map.repositories.UserRepository
+import inc.evil.d17map.repositories.*
 import inc.evil.d17map.security.authorization.Permission
 import inc.evil.d17map.security.authorization.PermissionRepository
 import inc.evil.d17map.security.authorization.Role
@@ -44,7 +41,8 @@ class DataLoader(
 
         val roles = listOf(
             Role(name = "ROLE_STUDENT", permissions = mutableSetOf(permissions[0])),
-            Role(name = "ROLE_TEACHER", permissions = mutableSetOf(permissions[1], permissions[2]))
+            Role(name = "ROLE_TEACHER", permissions = mutableSetOf(permissions[1], permissions[2])),
+            Role(name = "ROLE_ADMIN", permissions = mutableSetOf(permissions[3])),
         )
 
         roleRepository.saveAll(roles)
@@ -127,7 +125,7 @@ class DataLoader(
         val user = User(
             email = "admin",
             password = passwordEncoder.encode("admin"),
-            userType = Role.STUDENT,
+
         )
 
         val users = listOf(
@@ -135,7 +133,7 @@ class DataLoader(
              User(
                 email = "admin@admin.agh.edu.pl",
                 password = passwordEncoder.encode("admin@password1234"),
-                userType = Role.ADMIN,
+                roles = mutableSetOf(roles[2]),
             )
         )
 
