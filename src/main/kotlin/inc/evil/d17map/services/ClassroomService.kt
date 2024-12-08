@@ -3,12 +3,14 @@ package inc.evil.d17map.services
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.exceptions.ClassroomNotFoundException
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
 
 @Service
 class ClassroomService(
@@ -27,7 +29,8 @@ class ClassroomService(
             description = classroomRequest.description,
             capacity = classroomRequest.capacity,
             modelKey = classroomRequest.modelKey,
-            equipments = equipments.toMutableSet()
+            equipments = equipments.toMutableSet(),
+            floor = classroomRequest.floor
         )
         val savedClassroomDto = classroomRepository.save(classroom)
         return toClassroomResponse(savedClassroomDto)
@@ -41,6 +44,28 @@ class ClassroomService(
         return classrooms.map { toClassroomResponse(it) }
     }
 
+    fun updateClassroom(id: UUID, classroomRequest: ClassroomRequest): ClassroomResponse {
+        val classroom = classroomRepository.findById(id)
+            .orElseThrow { ClassroomNotFoundException(id) }
+
+        val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
+        classroom.name = classroomRequest.name
+        classroom.description = classroomRequest.description
+        classroom.capacity = classroomRequest.capacity
+        classroom.equipments = equipments.toMutableSet()
+
+        val updatedClassroom = classroomRepository.save(classroom)
+        return toClassroomResponse(updatedClassroom)
+    }
+
+    fun deleteById(id: UUID) {
+        if (!classroomRepository.existsById(id)) {
+            throw ClassroomNotFoundException(id)
+        }
+        classroomRepository.deleteById(id)
+    }
+
+
 // TODO uncomment and adjust when needed
 //    fun findById(id: UUID): ClassroomResponse {
 //        if (!classroomRepository.existsById(id)) {
@@ -48,24 +73,5 @@ class ClassroomService(
 //        }
 //        val classroomDto = classroomRepository.findOne(id)
 //        return toClassroomResponse(classroomDto)
-//    }
-//    fun deleteById(id: UUID) {
-//        if (!classroomRepository.existsById(id)) {
-//            throw ClassroomNotFoundException(id)
-//        }
-//        classroomRepository.deleteById(id)
-//    }
-//    fun updateClassroom(id: UUID, classroomResponse: ClassroomResponse): ClassroomResponse {
-//        if (!classroomRepository.existsById(id)) {
-//            throw ClassroomNotFoundException(id)
-//        }
-//        val classroom = classroomRepository.findOne(id)
-//        val equipments = equipmentRepository.findAllById(classroomResponse.equipmentIds)
-//        classroom?.name = classroomResponse.name
-//        classroom?.description = classroomResponse.description
-//        classroom?.capacity = classroomResponse.capacity
-//        classroom?.equipments = equipments.toMutableSet()
-//        val updatedClassroomDto = classroom?.let { classroomRepository.save(it) }
-//        return toClassroomResponse(updatedClassroomDto)
 //    }
 }

@@ -31,6 +31,8 @@ class RoleNotFoundException(roleName: String) : RuntimeException("Role with name
 class InvalidClassroomDataException
     : RuntimeException("Invalid classroom data: name cannot be blank and capacity must be greater than 0.")
 
+class InvalidExtraRoomDataException
+    : RuntimeException("Invalid extra room data: name cannot be blank and model key cannot be blank.")
 
 class InvalidEquipmentDataException(message: String) : RuntimeException(message) {
     companion object {
@@ -43,6 +45,9 @@ class InvalidEquipmentDataException(message: String) : RuntimeException(message)
         }
     }
 }
+
+class InvalidFloorDataException
+    : RuntimeException("Invalid floor data: name cannot be blank.")
 
 // Missing parameters
 

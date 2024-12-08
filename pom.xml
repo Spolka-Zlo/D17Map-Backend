@@ -11,7 +11,7 @@
 
     <groupId>inc.evil</groupId>
     <artifactId>d17-map-backend</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>d17-map-backend</name>
     <url />
     <licenses>
@@ -47,7 +47,7 @@
         <java.version>21</java.version>
         <kotlin.version>1.9.25</kotlin.version>
         <jjwt.version>0.12.6</jjwt.version>
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>2.7.0</springdoc.version>
         <lombok.version>1.18.24</lombok.version>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     </properties>
