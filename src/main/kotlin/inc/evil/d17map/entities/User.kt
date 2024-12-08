@@ -34,6 +34,6 @@ class User(
         id: UUID? = null,
         email: String,
         password: String,
-        userType: MutableSet<Role>
-    ) : this(id, email, password, userType, mutableSetOf())
+        roles: MutableSet<Role>
+    ) : this(id, email, password, roles, mutableSetOf())
 }

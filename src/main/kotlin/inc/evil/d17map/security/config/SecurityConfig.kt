@@ -9,19 +9,17 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.authentication.logout.LogoutFilter
 
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfig(
     private val userDetailsService: UserDetailsService,
     private val jwtFilter: JWTFilter
@@ -47,20 +45,30 @@ class SecurityConfig(
         return http
             .cors(Customizer.withDefaults())
             .csrf { it.disable() }
+            .exceptionHandling {
+                it
+                    .accessDeniedHandler(CustomAccessDeniedHandler())
+                    .authenticationEntryPoint(CustomAuthenticationEntryPoint())
+            }
+            .formLogin { it.disable() }
+            .httpBasic { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers(
-                    "/auth/**",
-                    *SWAGGER_ENDPOINTS
-                )
+                it
+                    .requestMatchers(
+                        "/auth/**",
+                        *SWAGGER_ENDPOINTS
+                    )
                     .permitAll()
-                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .requestMatchers(
+                        HttpMethod.OPTIONS, "/**"
+                    )
+                    .permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .logout { it.disable() }
+            .addFilterAfter(jwtFilter, LogoutFilter::class.java)
             .build()
     }
 

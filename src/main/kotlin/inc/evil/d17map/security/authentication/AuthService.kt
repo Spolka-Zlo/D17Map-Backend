@@ -20,10 +20,11 @@ class AuthService(
     private val roleRepository: RoleRepository,
     private val passwordEncoder: PasswordEncoder,
     private val authenticationManager: AuthenticationManager,
-    private val tokenProvider: TokenProvider
-) {
+    private val tokenProvider: TokenProvider,
+
+    ) {
     companion object {
-        const val DEFAULT_ROLE = "ROLE_STUDENT"
+        const val DEFAULT_ROLE = "ROLE_ADMIN" // TODO for test purposes only
     }
 
     fun registerUser(registerRequest: AuthRequest) {
@@ -41,14 +42,14 @@ class AuthService(
     }
 
     @Throws(AuthenticationException::class)
-    fun verifyUser(loginRequest: AuthRequest): PositiveAuthResponse {
+    fun verifyUser(loginRequest: AuthRequest): AuthResponse {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
 
-        return PositiveAuthResponse(
+        return AuthResponse(
             token = tokenProvider.generateToken(authentication),
-            roles = authentication.authorities.map { it.authority },
+            roles = authentication.authorities.map { it.authority }.filter { it.startsWith("ROLE_") },
         )
     }
 }
