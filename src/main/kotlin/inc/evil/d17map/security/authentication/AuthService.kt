@@ -27,7 +27,7 @@ class AuthService(
 
     ) {
     companion object {
-        const val DEFAULT_ROLE = "ROLE_USER" // TODO for test purposes only
+        const val DEFAULT_ROLE = "ROLE_STUDENT"
     }
 
     fun registerUser(registerRequest: AuthRequest) {

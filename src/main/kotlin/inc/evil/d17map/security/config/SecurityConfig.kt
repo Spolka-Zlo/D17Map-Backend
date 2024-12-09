@@ -54,18 +54,17 @@ class SecurityConfig(
             }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
+            .logout { it.disable() }
             .authorizeHttpRequests {
                 it
                     .requestMatchers(
                         "/auth/**",
                         *SWAGGER_ENDPOINTS
-                    )
-                    .permitAll()
+                    ).permitAll()
                     .requestMatchers(
                         HttpMethod.OPTIONS, "/**"
-                    )
-                    .permitAll()
-                    .anyRequest().authenticated()
+                    ).permitAll()
+                    .anyRequest().permitAll()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,13 +1,12 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
+import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.services.ClassroomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -63,7 +62,6 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @GetMapping("/available")
-    @PermitAll
     fun getAvailableClassrooms(
         @RequestParam date: LocalDate,
         @RequestParam timeRange: String,

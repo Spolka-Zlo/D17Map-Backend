@@ -3,8 +3,6 @@ package inc.evil.d17map.runners
 import inc.evil.d17map.entities.*
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.repositories.*
-import inc.evil.d17map.security.authorization.Permission
-import inc.evil.d17map.security.authorization.PermissionRepository
 import inc.evil.d17map.security.authorization.Role
 import inc.evil.d17map.security.authorization.RoleRepository
 import org.springframework.boot.CommandLineRunner
@@ -19,7 +17,6 @@ class DataLoader(
     private val classroomRepository: ClassroomRepository,
     private val extraRoomRepository: ExtraRoomRepository,
     private val userRepository: UserRepository,
-    private val permissionRepository: PermissionRepository,
     private val roleRepository: RoleRepository,
     private val reservationRepository: ReservationRepository,
     private val passwordEncoder: PasswordEncoder,
@@ -28,32 +25,20 @@ class DataLoader(
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        val permissions = listOf(
-            Permission(name = "VIEW_RES"),
-            Permission(name = "RES_1_Floor"),
-            Permission(name = "RES_2_Floor"),
-            Permission(name = "RES_3_Floor"),
-        )
-
-        permissionRepository.saveAll(permissions)
-
-
-
         val roles = listOf(
-            Role(name = "ROLE_STUDENT", permissions = mutableSetOf(permissions[0])),
-            Role(name = "ROLE_TEACHER", permissions = mutableSetOf(permissions[1], permissions[2])),
-            Role(name = "ROLE_ADMIN", permissions = mutableSetOf(permissions[3])),
-            Role(name = "ROLE_USER", permissions = mutableSetOf(permissions[0])),
+            Role(name = "ROLE_STUDENT"),
+            Role(name = "ROLE_TEACHER"),
+            Role(name = "ROLE_ADMIN"),
         )
 
         roleRepository.saveAll(roles)
 
 
         val equipments = listOf(
-            Equipment(name="COMPUTERS"),
-            Equipment(name="ROUTERS"),
-            Equipment(name="PROJECTOR"),
-            Equipment(name="BOARD")
+            Equipment(name = "COMPUTERS"),
+            Equipment(name = "ROUTERS"),
+            Equipment(name = "PROJECTOR"),
+            Equipment(name = "BOARD")
         )
         equipmentRepository.saveAll(equipments)
 
@@ -123,18 +108,28 @@ class DataLoader(
         )
         extraRoomRepository.saveAll(extraRooms)
 
-        val user = User(
+        val admin = User(
             email = "admin",
             password = passwordEncoder.encode("admin"),
+            roles = mutableSetOf(roles[2])
+        )
+
+        val teacher = User(
+            email = "teacher@agh.edu.pl",
+            password = passwordEncoder.encode("teacher"),
+            roles = mutableSetOf(roles[1])
+        )
+
+        val student = User(
+            email = "example@student.agh.edu.pl",
+            password = passwordEncoder.encode("student"),
+            roles = mutableSetOf(roles[0])
         )
 
         val users = listOf(
-             user,
-             User(
-                email = "admin@admin.agh.edu.pl",
-                password = passwordEncoder.encode("admin@password1234"),
-                roles = mutableSetOf(roles[2]),
-            )
+            admin,
+            teacher,
+            student,
         )
 
         userRepository.saveAll(users)
@@ -147,7 +142,7 @@ class DataLoader(
                 startTime = LocalTime.of(9, 0),
                 endTime = LocalTime.of(12, 0),
                 classroom = classrooms[0],
-                user = user,
+                user = teacher,
                 type = ReservationType.EXAM,
                 numberOfParticipants = 100
             ),
@@ -158,7 +153,7 @@ class DataLoader(
                 startTime = LocalTime.of(14, 0),
                 endTime = LocalTime.of(17, 0),
                 classroom = classrooms[1],
-                user = user,
+                user = teacher,
                 type = ReservationType.STUDENTS_CLUB_MEETING,
                 numberOfParticipants = 50
             ),
@@ -169,7 +164,7 @@ class DataLoader(
                 startTime = LocalTime.of(10, 0),
                 endTime = LocalTime.of(13, 0),
                 classroom = classrooms[2],
-                user = user,
+                user = teacher,
                 type = ReservationType.LECTURE,
                 numberOfParticipants = 120
             ),
@@ -180,7 +175,7 @@ class DataLoader(
                 startTime = LocalTime.of(16, 0),
                 endTime = LocalTime.of(18, 0),
                 classroom = classrooms[2],
-                user = user,
+                user = teacher,
                 type = ReservationType.STUDENTS_CLUB_MEETING,
                 numberOfParticipants = 30
             ),
@@ -191,7 +186,7 @@ class DataLoader(
                 startTime = LocalTime.of(12, 0),
                 endTime = LocalTime.of(15, 0),
                 classroom = classrooms[0],
-                user = user,
+                user = teacher,
                 type = ReservationType.EVENT,
                 numberOfParticipants = 80
             )

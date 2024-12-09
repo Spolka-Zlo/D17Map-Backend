@@ -1,8 +1,8 @@
 package inc.evil.d17map.security.authentication.jwt
 
 
-import inc.evil.d17map.security.config.SecurityProperties
 import inc.evil.d17map.security.UserPrincipal
+import inc.evil.d17map.security.config.SecurityProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -28,7 +28,6 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
 
     fun generateToken(authentication: Authentication): String {
         val principal = authentication.principal as UserPrincipal
-        val principalID = principal.userID.toString()
 
         val authorities = authentication.authorities.joinToString(",") { it.authority }
 
@@ -40,7 +39,7 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
 
         return Jwts.builder()
             .claims()
-            .subject(principalID)
+            .subject(principal.username)
             .issuedAt(issueDate)
             .expiration(expirationDate)
             .add("AUTHORITIES", authorities)
@@ -72,10 +71,8 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
                 .map { SimpleGrantedAuthority(it) }
 
         val userPrincipal = UserPrincipal(
-            UUID.fromString(claims.subject),
-            "",
-            "",
-            authorities
+            username = claims.subject,
+            authorities = authorities
         )
         return UsernamePasswordAuthenticationToken(userPrincipal, null, authorities)
     }

@@ -3,12 +3,13 @@ package inc.evil.d17map.exceptions
 import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.AuthenticationException
 import org.springframework.validation.BindException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.util.stream.Collectors
-import javax.security.sasl.AuthenticationException
 
 data class ErrorResponse(val message: String)
 
@@ -38,11 +39,6 @@ class GlobalExceptionHandler {
         return ResponseEntity(ErrorResponse(ex.message ?: "Invalid classroom data"), HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler(RuntimeException::class)
-    fun handleGenericException(ex: RuntimeException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity(ErrorResponse("An unexpected error occurred: ${ex.message}"), HttpStatus.INTERNAL_SERVER_ERROR)
-    }
-
     @ExceptionHandler(ClassroomNotFoundException::class)
     fun handleClassroomNotFound(ex: ClassroomNotFoundException): ResponseEntity<ErrorResponse> {
         return ResponseEntity(ErrorResponse(ex.message ?: "Classroom not found"), HttpStatus.NOT_FOUND)
@@ -66,5 +62,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException::class)
     fun handleUserAlreadyExistsException(ex: UserAlreadyExistsException): ResponseEntity<ErrorResponse> {
         return ResponseEntity(ErrorResponse(ex.message ?: "User already exists"), HttpStatus.CONFLICT)
+    }
+
+    @ExceptionHandler(RuntimeException::class)
+    fun handleGenericException(ex: RuntimeException): ResponseEntity<ErrorResponse> {
+
+        if (ex is AuthenticationException || ex is AccessDeniedException)
+            throw ex
+
+
+        return ResponseEntity(
+            ErrorResponse("An unexpected error occurred: ${ex.message}"),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 }

@@ -17,7 +17,6 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
 
         val errorDetails: MutableMap<String, Any> = HashMap()
-        errorDetails["error"] = HttpServletResponse.SC_UNAUTHORIZED
         errorDetails["message"] = "Unauthorized: " + authException.message
 
         val jsonResponse = ObjectMapper().writeValueAsString(errorDetails)

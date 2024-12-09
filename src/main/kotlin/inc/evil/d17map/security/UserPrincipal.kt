@@ -3,14 +3,17 @@ package inc.evil.d17map.security
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.util.*
 
 class UserPrincipal(
-    val userID: UUID,
     private val username: String,
     private val password: String,
     private val authorities: Collection<GrantedAuthority>
 ) : UserDetails {
+
+    constructor(
+        username: String,
+        authorities: Collection<GrantedAuthority>
+    ) : this(username, "", authorities)
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return authorities

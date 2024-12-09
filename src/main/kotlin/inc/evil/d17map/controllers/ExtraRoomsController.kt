@@ -7,12 +7,10 @@ import inc.evil.d17map.services.ExtraRoomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.web.bind.annotation.*
 
 
@@ -28,7 +26,6 @@ class ExtraRoomsController(private val extraRoomService: ExtraRoomService) {
         ]
     )
     @GetMapping
-    @PermitAll
     fun getAllExtraRooms(): ResponseEntity<List<ExtraRoomResponse>> {
         val extraRooms = extraRoomService.getExtraRooms()
         return ResponseEntity(extraRooms, HttpStatus.OK)

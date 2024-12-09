@@ -1,13 +1,12 @@
 package inc.evil.d17map.controllers
 
-import inc.evil.d17map.exceptions.InvalidEquipmentDataException
 import inc.evil.d17map.dtos.EquipmentRequest
 import inc.evil.d17map.dtos.EquipmentResponse
+import inc.evil.d17map.exceptions.InvalidEquipmentDataException
 import inc.evil.d17map.services.EquipmentService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,7 +26,6 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @GetMapping
-    @PermitAll
     fun getAllEquipments(): ResponseEntity<List<EquipmentResponse>> {
         val equipments = equipmentService.getAll()
         return ResponseEntity(equipments, HttpStatus.OK)

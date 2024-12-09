@@ -1,8 +1,8 @@
 package inc.evil.d17map.security.authentication
 
 import inc.evil.d17map.repositories.UserRepository
-import inc.evil.d17map.security.authorization.Role
 import inc.evil.d17map.security.UserPrincipal
+import inc.evil.d17map.security.authorization.Role
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -19,7 +19,6 @@ class BasicUserDetailsService(
     override fun loadUserByUsername(username: String) =
         userRepository.findByEmail(username)?.let {
             UserPrincipal(
-                it.id!!,
                 it.email,
                 it.password,
                 it.roles.toGrantedAuthorities()

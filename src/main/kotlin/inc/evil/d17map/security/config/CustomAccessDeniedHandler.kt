@@ -5,8 +5,9 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
+import org.springframework.stereotype.Component
 
-
+@Component
 class CustomAccessDeniedHandler : AccessDeniedHandler {
     override fun handle(
         request: HttpServletRequest,
@@ -17,7 +18,6 @@ class CustomAccessDeniedHandler : AccessDeniedHandler {
         response.status = HttpServletResponse.SC_FORBIDDEN
 
         val errorDetails: MutableMap<String, Any> = HashMap()
-        errorDetails["error"] = HttpServletResponse.SC_FORBIDDEN
         errorDetails["message"] = "Forbidden: " + accessDeniedException.message
 
         val jsonResponse = ObjectMapper().writeValueAsString(errorDetails)

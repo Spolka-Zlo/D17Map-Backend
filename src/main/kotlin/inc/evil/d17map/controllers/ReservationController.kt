@@ -8,7 +8,6 @@ import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.annotation.security.PermitAll
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -60,6 +59,7 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     fun createReservation(@RequestBody @Valid reservationRequest: ReservationRequest): ResponseEntity<ReservationResponse> {
         val createdReservation = reservationService.createReservation(reservationRequest)
         return ResponseEntity(createdReservation, HttpStatus.CREATED)
@@ -175,6 +175,7 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     fun removeReservation(
         @PathVariable(
             required = true,
@@ -196,6 +197,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     fun updateReservation(
         @PathVariable id: UUID,
         @RequestBody @Valid updateRequest: ReservationUpdateRequest
@@ -217,7 +219,6 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("/events")
-    @PermitAll
     fun getEvents(
     ): ResponseEntity<List<ReservationResponse>> {
         val currentDateTime = LocalDateTime.now()

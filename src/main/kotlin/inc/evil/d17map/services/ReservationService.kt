@@ -101,7 +101,9 @@ class ReservationService(
 
     fun updateReservation(id: UUID, updateRequest: ReservationUpdateRequest): ReservationResponse {
         val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
-        val classroom = classroomRepository.findOne(updateRequest.classroomId) ?: throw ClassroomNotFoundException(updateRequest.classroomId)
+        val classroom = classroomRepository.findOne(updateRequest.classroomId) ?: throw ClassroomNotFoundException(
+            updateRequest.classroomId
+        )
 
         reservation.run {
             this.title = updateRequest.title
@@ -121,6 +123,7 @@ class ReservationService(
         val reservations = reservationRepository.findAllCurrentOrFutureEvents(currentDate, currentTime)
         return reservations.map { toReservationResponse(it) }
     }
+
     fun updateReservationAdmin(id: UUID, adminUpdateRequest: ReservationRequest): ReservationResponse {
         val reservation = reservationRepository.findById(id)
             .orElseThrow { ReservationNotFoundException(id) }

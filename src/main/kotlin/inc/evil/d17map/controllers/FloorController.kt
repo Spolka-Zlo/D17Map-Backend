@@ -5,9 +5,8 @@ import inc.evil.d17map.dtos.FloorResponse
 import inc.evil.d17map.exceptions.InvalidFloorDataException
 import inc.evil.d17map.services.FloorService
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import jakarta.annotation.security.PermitAll
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -26,7 +25,6 @@ class FloorController(private val floorService: FloorService) {
         ]
     )
     @GetMapping
-    @PermitAll
     fun getAllFloors(): ResponseEntity<List<FloorResponse>> {
         val floors = floorService.getFloors()
         val floorResponses = floors.map {
