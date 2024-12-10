@@ -2,7 +2,6 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.FloorRequest
 import inc.evil.d17map.dtos.FloorResponse
-import inc.evil.d17map.exceptions.InvalidFloorDataException
 import inc.evil.d17map.services.FloorService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -32,9 +31,9 @@ class FloorController(private val floorService: FloorService) {
         val floors = floorService.getFloors()
         val floorResponses = floors.map {
             FloorResponse(
-                id = it.id.toString(),
+                id = it.id!!,
                 name = it.name,
-                building = it.building
+                buildingName = it.building.name
             )
         }
         return ResponseEntity(floorResponses, HttpStatus.OK)
@@ -52,11 +51,7 @@ class FloorController(private val floorService: FloorService) {
         ]
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     fun createFloor(@RequestBody @Valid floorRequest: FloorRequest): ResponseEntity<FloorResponse> {
-        if (floorRequest.name.isBlank()) {
-            throw InvalidFloorDataException()
-        }
         val createdFloor = floorService.createFloor(floorRequest)
         return ResponseEntity(createdFloor, HttpStatus.CREATED)
     }
