@@ -2,7 +2,9 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
+import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.entities.Floor
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
@@ -30,7 +32,10 @@ class ClassroomService(
             capacity = classroomRequest.capacity,
             modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet(),
-            floor = classroomRequest.floor
+            floor = Floor(
+                name=classroomRequest.floorName,
+                building = Building(name=classroomRequest.buildingName)
+            )
         )
         val savedClassroomDto = classroomRepository.save(classroom)
         return toClassroomResponse(savedClassroomDto)

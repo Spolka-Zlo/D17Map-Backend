@@ -2,7 +2,9 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ExtraRoomRequest
 import inc.evil.d17map.dtos.ExtraRoomResponse
+import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.ExtraRoom
+import inc.evil.d17map.entities.Floor
 import inc.evil.d17map.mappers.toExtraRoomResponse
 import inc.evil.d17map.repositories.ExtraRoomRepository
 import org.springframework.stereotype.Service
@@ -24,7 +26,10 @@ class ExtraRoomService(
             modelKey = extraRoomRequest.modelKey,
             description = extraRoomRequest.description,
             type = extraRoomRequest.type,
-            floor = extraRoomRequest.floor
+            floor = Floor(
+                name = extraRoomRequest.floorName,
+                building = Building(name=extraRoomRequest.buildingName)
+            )
         )
         val savedExtraRoom = extraRoomRepository.save(extraRoom)
         return toExtraRoomResponse(savedExtraRoom)

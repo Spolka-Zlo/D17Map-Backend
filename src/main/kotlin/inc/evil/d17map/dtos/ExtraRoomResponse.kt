@@ -1,5 +1,6 @@
 package inc.evil.d17map.dtos
 
+import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.Floor
 import java.util.*
 
@@ -9,5 +10,6 @@ class ExtraRoomResponse (
     val modelKey: String,
     val description: String,
     val type: String,
-    val floor: Floor
+    val floor: Floor,
+    val building: Building
 )
