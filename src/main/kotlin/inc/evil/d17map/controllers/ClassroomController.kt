@@ -103,14 +103,12 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @GetMapping("/{id}/photo")
-    fun getClassroomPhoto(@PathVariable id: UUID): ResponseEntity<ByteArray> {
+    fun getClassroomPhoto(@PathVariable id: UUID): () -> ResponseEntity<ByteArray> {
         val photo = classroomService.getClassroomPhotoById(id)
-        return if (photo != null) {
+        return {
             ResponseEntity.ok()
-                .header("Content-Type", "image/jpeg") // Domyślny typ zdjęcia, możesz dostosować
+                .header("Content-Type", "image/jpeg")
                 .body(photo)
-        } else {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
     }
 

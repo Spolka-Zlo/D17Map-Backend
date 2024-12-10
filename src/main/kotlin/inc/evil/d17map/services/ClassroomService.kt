@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
+import inc.evil.d17map.findOne
 
 @Service
 class ClassroomService(
@@ -64,8 +65,7 @@ class ClassroomService(
     }
 
     fun getClassroomPhotoById(id: UUID): ByteArray? {
-        val classroom = classroomRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Classroom with id $id not found") }
+        val classroom = classroomRepository.findOne(id) ?: throw ClassroomNotFoundException(id)
         return classroom.photo
     }
 
