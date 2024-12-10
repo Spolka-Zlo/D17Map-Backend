@@ -31,5 +31,8 @@ class Classroom(
         cascade = [CascadeType.PERSIST, CascadeType.REMOVE],
         orphanRemoval = true
     )
-    val reservations: MutableSet<Reservation> = mutableSetOf()
+    val reservations: MutableSet<Reservation> = mutableSetOf(),
+
+    @Lob
+    var photo: ByteArray? = null
 )

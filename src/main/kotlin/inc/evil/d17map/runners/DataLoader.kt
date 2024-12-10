@@ -5,6 +5,7 @@ import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.enums.Role
 import inc.evil.d17map.repositories.*
 import org.springframework.boot.CommandLineRunner
+import org.springframework.core.io.ClassPathResource
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -51,7 +52,8 @@ class DataLoader(
                 capacity = 30,
                 modelKey = "119",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[0]
+                floor = floors[0],
+                photo = ClassPathResource("photos/119.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "1.20",
