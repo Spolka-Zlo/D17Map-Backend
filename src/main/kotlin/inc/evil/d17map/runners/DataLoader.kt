@@ -46,14 +46,6 @@ class DataLoader(
         val classrooms = listOf(
             // 1 floor
             Classroom(
-                name = "1.4",
-                description = "Dziekanat",
-                capacity = 2,
-                modelKey = "14",
-                equipments = mutableSetOf(equipments[0], equipments[1]),
-                floor = floors[0]
-            ),
-            Classroom(
                 name = "1.19",
                 description = "sala 1.19 Lorem Ipsum",
                 capacity = 30,
@@ -95,6 +87,14 @@ class DataLoader(
                 floor = floors[1]
             ),
             // 3 floor
+            Classroom(
+                name = "3.13",
+                description = "Idealny do spotkań z opiekunem",
+                capacity = 12,
+                modelKey = "322",
+                equipments = mutableSetOf(equipments[0], equipments[1], equipments[2]),
+                floor = floors[2]
+            ),
             Classroom(
                 name = "3.22",
                 description = "Pracownia elektroniczna",
@@ -155,7 +155,7 @@ class DataLoader(
                 name = "4.22",
                 description = "sieci sieci sieci i inne takie fajne",
                 capacity = 16,
-                modelKey = "423",
+                modelKey = "422",
                 equipments = mutableSetOf(equipments[1]),
                 floor = floors[3]
             ),
@@ -192,14 +192,6 @@ class DataLoader(
                 floor = floors[3]
             ),
             Classroom(
-                name = "4.28",
-                description = "fajna sala taka o",
-                capacity = 20,
-                modelKey = "428",
-                equipments = mutableSetOf(equipments[1]),
-                floor = floors[3]
-            ),
-            Classroom(
                 name = "4.29",
                 description = "fajna sala taka o v2",
                 capacity = 20,
@@ -227,61 +219,170 @@ class DataLoader(
         classroomRepository.saveAll(classrooms)
 
         val extraRooms = listOf(
+            // floor 1
             ExtraRoom(
-                name = "WC",
-                description = "męskie",
+                name = "WC męskie 1 poziom",
+                description = "",
                 modelKey = "E7",
                 type = "WC",
                 floor = floors[0]
             ),
             ExtraRoom(
-                name = "WC",
-                description = "damskie",
+                name = "WC damskie 1 poziom",
+                description = "",
                 modelKey = "E9",
                 type = "WC",
                 floor = floors[0]
             ),
             ExtraRoom(
-                name = "WC",
-                description = "dla niepełnosprawnych",
+                name = "WC dla niepełnosprawnych 1 poziom",
+                description = "",
                 modelKey = "E8",
                 type = "WC",
                 floor = floors[0]
             ),
             ExtraRoom(
-                name = "Winda",
+                name = "Winda 1 poziom",
                 description = "",
                 modelKey = "E16",
-                type = "ELEVATOR",
+                type = "Windy",
                 floor = floors[0]
             ),
             ExtraRoom(
-                name = "Klatka schodowa",
+                name = "Klatka schodowa 1 poziom",
                 description = "",
                 modelKey = "E11",
-                type = "STAIRCASE",
+                type = "Klatki schodowe",
                 floor = floors[0]
             ),
             ExtraRoom(
                 name = "Pokój prodziekana Marka Gajęckiego",
                 description = "",
                 modelKey = "123",
-                type = "OTHER",
+                type = "Inne",
                 floor = floors[0]
             ),
             ExtraRoom(
                 name = "Dziekanat",
                 description = "",
                 modelKey = "14",
-                type = "OTHER",
+                type = "Inne",
                 floor = floors[0]
             ),
             ExtraRoom(
                 name = "Stołówka",
                 description = "Stołówka studencka",
                 modelKey = "133",
-                type = "OTHER",
+                type = "Inne",
                 floor = floors[0]
+            ),
+            // floor 2
+            ExtraRoom(
+                name = "WC męskie 2 poziom",
+                description = "",
+                modelKey = "245a",
+                type = "WC",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "WC damskie 2 poziom",
+                description = "",
+                modelKey = "244a",
+                type = "WC",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnosprawnych 2 poziom",
+                description = "",
+                modelKey = "246",
+                type = "WC",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "Winda 2 poziom",
+                description = "",
+                modelKey = "E18",
+                type = "Windy",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 2 poziom",
+                description = "",
+                modelKey = "239",
+                type = "Klatki schodowe",
+                floor = floors[0]
+            ),
+            // floor 3
+            ExtraRoom(
+                name = "WC męskie 3 poziom",
+                description = "",
+                modelKey = "316a",
+                type = "WC",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "WC damskie 3 poziom",
+                description = "damskie",
+                modelKey = "317a",
+                type = "WC",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnospraawnych 3 poziom",
+                description = "",
+                modelKey = "315",
+                type = "WC",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "Winda 3 poziom",
+                description = "",
+                modelKey = "E19",
+                type = "Windy",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 3 poziom",
+                description = "",
+                modelKey = "318",
+                type = "Klatki schodowe",
+                floor = floors[2]
+            ),
+            // floor 4
+            ExtraRoom(
+                name = "WC męskie 4 poziom",
+                description = "",
+                modelKey = "416a",
+                type = "WC",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "WC damskie 4 poziom",
+                description = "",
+                modelKey = "417a",
+                type = "WC",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnosprawnych 4 poziom",
+                description = "",
+                modelKey = "415",
+                type = "WC",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "Winda 4 poziom",
+                description = "",
+                modelKey = "E20",
+                type = "Windy",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 4 poziom",
+                description = "",
+                modelKey = "418",
+                type = "Klatki schodowe",
+                floor = floors[3]
             ),
         )
         extraRoomRepository.saveAll(extraRooms)
