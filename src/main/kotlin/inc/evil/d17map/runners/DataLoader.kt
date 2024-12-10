@@ -24,10 +24,10 @@ class DataLoader(
 
     override fun run(vararg args: String?) {
         val equipments = listOf(
-            Equipment(name="COMPUTERS"),
-            Equipment(name="ROUTERS"),
-            Equipment(name="PROJECTOR"),
-            Equipment(name="BOARD")
+            Equipment(name="Komputery"),
+            Equipment(name="Routery"),
+            Equipment(name="Projektor"),
+            Equipment(name="Tablica")
         )
         equipmentRepository.saveAll(equipments)
 
@@ -44,55 +44,345 @@ class DataLoader(
 
 
         val classrooms = listOf(
+            // 1 floor
+            Classroom(
+                name = "1.19",
+                description = "sala 1.19 Lorem Ipsum",
+                capacity = 30,
+                modelKey = "119",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = floors[0]
+            ),
+            Classroom(
+                name = "1.20",
+                description = "sala 1.20 dolor sit amet consectetur",
+                capacity = 30,
+                modelKey = "120",
+                equipments = mutableSetOf(equipments[0], equipments[3]),
+                floor = floors[0]
+            ),
+            Classroom(
+                name = "1.36",
+                description = "sala obok bufetu, nie wiem po co to komu",
+                capacity = 40,
+                modelKey = "136",
+                equipments = mutableSetOf(equipments[0], equipments[3]),
+                floor = floors[0]
+            ),
+            Classroom(
+                name = "1.38",
+                description = "sala z dużym projektorze, fajne miejsce na WDI",
+                capacity = 120,
+                modelKey = "138",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = floors[0]
+            ),
+            // 2 floor
             Classroom(
                 name = "2.41",
                 description = "fajna sala na egzaminy, dużo się tu dzieje",
                 capacity = 100,
                 modelKey = "241",
-                equipments = mutableSetOf(equipments[2]),
+                equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[1]
             ),
+            // 3 floor
             Classroom(
-                name = "4.27",
+                name = "3.13",
+                description = "Idealny do spotkań z opiekunem",
+                capacity = 12,
+                modelKey = "322",
+                equipments = mutableSetOf(equipments[0], equipments[1], equipments[2]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.22",
+                description = "Pracownia elektroniczna",
+                capacity = 12,
+                modelKey = "322",
+                equipments = mutableSetOf(equipments[0], equipments[1], equipments[2]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.23",
+                description = "Pracownia elektroniczna v2",
+                capacity = 12,
+                modelKey = "323",
+                equipments = mutableSetOf(equipments[0], equipments[1], equipments[2]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.27a",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327a",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.27b",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327b",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.27c",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327c",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.27d",
+                description = "Sala dydaktyczna z tablcą",
+                capacity = 30,
+                modelKey = "327d",
+                equipments = mutableSetOf(equipments[2], equipments[3]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "3.27e",
+                description = "Sala z komputerami",
+                capacity = 12,
+                modelKey = "327e",
+                equipments = mutableSetOf(equipments[0], equipments[2], equipments[3]),
+                floor = floors[2]
+            ),
+            Classroom(
+                name = "4.22",
                 description = "sieci sieci sieci i inne takie fajne",
-                capacity = 115,
+                capacity = 16,
+                modelKey = "422",
+                equipments = mutableSetOf(equipments[1]),
+                floor = floors[3]
+            ),
+            Classroom(
+                name = "4.23",
+                description = "sieci sieci sieci i inne takie fajne v2",
+                capacity = 16,
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[1]),
                 floor = floors[3]
             ),
             Classroom(
-                name = "3.31",
-                description = "obiektowe zwierzaki ewoluują w tej sali",
-                capacity = 120,
-                modelKey = "331",
-                equipments = mutableSetOf(equipments[0]),
-                floor = floors[2]
+                name = "4.26",
+                description = "fajna sala na chmury",
+                capacity = 20,
+                modelKey = "426",
+                equipments = mutableSetOf(equipments[1]),
+                floor = floors[3]
             ),
             Classroom(
-                name = "1.38",
-                description = "tutaj stało się wszystko",
-                capacity = 120,
-                modelKey = "138",
-                equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[0]
-            )
+                name = "4.27",
+                description = "fajna sala na funkcjyjne",
+                capacity = 20,
+                modelKey = "427",
+                equipments = mutableSetOf(equipments[2]),
+                floor = floors[3]
+            ),
+            Classroom(
+                name = "4.28",
+                description = "fajna sala taka o",
+                capacity = 20,
+                modelKey = "428",
+                equipments = mutableSetOf(equipments[3]),
+                floor = floors[3]
+            ),
+            Classroom(
+                name = "4.29",
+                description = "fajna sala taka o v2",
+                capacity = 20,
+                modelKey = "429",
+                equipments = mutableSetOf(equipments[1]),
+                floor = floors[3]
+            ),
+            Classroom(
+                name = "4.30",
+                description = "fajna sala taka o v3",
+                capacity = 20,
+                modelKey = "431",
+                equipments = mutableSetOf(equipments[1], equipments[3]),
+                floor = floors[3]
+            ),
+            Classroom(
+                name = "4.31",
+                description = "fajna sala taka o v4",
+                capacity = 20,
+                modelKey = "430",
+                equipments = mutableSetOf(equipments[1] , equipments[2]),
+                floor = floors[3]
+            ),
         )
         classroomRepository.saveAll(classrooms)
 
         val extraRooms = listOf(
+            // floor 1
             ExtraRoom(
-                name = "WC",
-                description = "męskie",
+                name = "WC męskie 1 poziom",
+                description = "",
                 modelKey = "E7",
                 type = "WC",
                 floor = floors[0]
             ),
             ExtraRoom(
-                name = "Sala do nauki",
+                name = "WC damskie 1 poziom",
+                description = "",
+                modelKey = "E9",
+                type = "WC",
+                floor = floors[0]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnosprawnych 1 poziom",
+                description = "",
+                modelKey = "E8",
+                type = "WC",
+                floor = floors[0]
+            ),
+            ExtraRoom(
+                name = "Winda 1 poziom",
+                description = "",
+                modelKey = "E16",
+                type = "Windy",
+                floor = floors[0]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 1 poziom",
+                description = "",
+                modelKey = "E11",
+                type = "Klatki schodowe",
+                floor = floors[0]
+            ),
+            ExtraRoom(
+                name = "Pokój prodziekana Marka Gajęckiego",
+                description = "",
+                modelKey = "123",
+                type = "Inne",
+                floor = floors[0]
+            ),
+            ExtraRoom(
+                name = "Dziekanat",
+                description = "",
+                modelKey = "14",
+                type = "Inne",
+                floor = floors[0]
+            ),
+            ExtraRoom(
+                name = "Stołówka",
                 description = "Stołówka studencka",
                 modelKey = "133",
-                type = "OTHER",
+                type = "Inne",
                 floor = floors[0]
+            ),
+            // floor 2
+            ExtraRoom(
+                name = "WC męskie 2 poziom",
+                description = "",
+                modelKey = "245a",
+                type = "WC",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "WC damskie 2 poziom",
+                description = "",
+                modelKey = "244a",
+                type = "WC",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnosprawnych 2 poziom",
+                description = "",
+                modelKey = "246",
+                type = "WC",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "Winda 2 poziom",
+                description = "",
+                modelKey = "E18",
+                type = "Windy",
+                floor = floors[1]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 2 poziom",
+                description = "",
+                modelKey = "239",
+                type = "Klatki schodowe",
+                floor = floors[0]
+            ),
+            // floor 3
+            ExtraRoom(
+                name = "WC męskie 3 poziom",
+                description = "",
+                modelKey = "316a",
+                type = "WC",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "WC damskie 3 poziom",
+                description = "damskie",
+                modelKey = "317a",
+                type = "WC",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnospraawnych 3 poziom",
+                description = "",
+                modelKey = "315",
+                type = "WC",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "Winda 3 poziom",
+                description = "",
+                modelKey = "E19",
+                type = "Windy",
+                floor = floors[2]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 3 poziom",
+                description = "",
+                modelKey = "318",
+                type = "Klatki schodowe",
+                floor = floors[2]
+            ),
+            // floor 4
+            ExtraRoom(
+                name = "WC męskie 4 poziom",
+                description = "",
+                modelKey = "416a",
+                type = "WC",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "WC damskie 4 poziom",
+                description = "",
+                modelKey = "417a",
+                type = "WC",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "WC dla niepełnosprawnych 4 poziom",
+                description = "",
+                modelKey = "415",
+                type = "WC",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "Winda 4 poziom",
+                description = "",
+                modelKey = "E20",
+                type = "Windy",
+                floor = floors[3]
+            ),
+            ExtraRoom(
+                name = "Klatka schodowa 4 poziom",
+                description = "",
+                modelKey = "418",
+                type = "Klatki schodowe",
+                floor = floors[3]
             ),
         )
         extraRoomRepository.saveAll(extraRooms)
