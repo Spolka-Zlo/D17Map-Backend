@@ -1,10 +1,7 @@
 package inc.evil.d17map.mappers
 
 import inc.evil.d17map.dtos.*
-import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Equipment
-import inc.evil.d17map.entities.ExtraRoom
-import inc.evil.d17map.entities.Reservation
+import inc.evil.d17map.entities.*
 import java.util.*
 
 
@@ -64,3 +61,11 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         numberOfParticipants = reservation.numberOfParticipants
     )
 
+
+fun toFloorResponse(floor: Floor): FloorResponse {
+    return FloorResponse(
+        id = floor.id!!,
+        name = floor.name,
+        buildingName = floor.building.name
+    )
+}

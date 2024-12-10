@@ -2,6 +2,7 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.FloorRequest
 import inc.evil.d17map.dtos.FloorResponse
+import inc.evil.d17map.mappers.toFloorResponse
 import inc.evil.d17map.services.FloorService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -29,13 +30,7 @@ class FloorController(private val floorService: FloorService) {
     @GetMapping
     fun getAllFloors(): ResponseEntity<List<FloorResponse>> {
         val floors = floorService.getFloors()
-        val floorResponses = floors.map {
-            FloorResponse(
-                id = it.id!!,
-                name = it.name,
-                buildingName = it.building.name
-            )
-        }
+        val floorResponses = floors.map { toFloorResponse(it) }
         return ResponseEntity(floorResponses, HttpStatus.OK)
     }
 
