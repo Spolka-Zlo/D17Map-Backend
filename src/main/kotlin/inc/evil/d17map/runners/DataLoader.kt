@@ -6,6 +6,7 @@ import inc.evil.d17map.repositories.*
 import inc.evil.d17map.security.authorization.Role
 import inc.evil.d17map.security.authorization.RoleRepository
 import org.springframework.boot.CommandLineRunner
+import org.springframework.core.io.ClassPathResource
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -62,7 +63,8 @@ class DataLoader(
                 capacity = 30,
                 modelKey = "119",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[0]
+                floor = floors[0],
+                photo = ClassPathResource("photos/119.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "1.20",
@@ -86,7 +88,8 @@ class DataLoader(
                 capacity = 120,
                 modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[0]
+                floor = floors[0],
+                photo = ClassPathResource("photos/138.jpg").inputStream.readBytes()
             ),
             // 2 floor
             Classroom(
@@ -95,7 +98,8 @@ class DataLoader(
                 capacity = 100,
                 modelKey = "241",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[1]
+                floor = floors[1],
+                photo = ClassPathResource("photos/241.jpg").inputStream.readBytes()
             ),
             // 3 floor
             Classroom(
@@ -128,7 +132,8 @@ class DataLoader(
                 capacity = 30,
                 modelKey = "327a",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[2]
+                floor = floors[2],
+                photo = ClassPathResource("photos/327.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "3.27b",
@@ -136,7 +141,8 @@ class DataLoader(
                 capacity = 30,
                 modelKey = "327b",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[2]
+                floor = floors[2],
+                photo = ClassPathResource("photos/327.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "3.27c",
@@ -144,7 +150,8 @@ class DataLoader(
                 capacity = 30,
                 modelKey = "327c",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[2]
+                floor = floors[2],
+                photo = ClassPathResource("photos/327.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "3.27d",
@@ -152,7 +159,8 @@ class DataLoader(
                 capacity = 30,
                 modelKey = "327d",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
-                floor = floors[2]
+                floor = floors[2],
+                photo = ClassPathResource("photos/327d.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "3.27e",
@@ -160,7 +168,8 @@ class DataLoader(
                 capacity = 12,
                 modelKey = "327e",
                 equipments = mutableSetOf(equipments[0], equipments[2], equipments[3]),
-                floor = floors[2]
+                floor = floors[2],
+                photo = ClassPathResource("photos/327e.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "4.22",
@@ -168,7 +177,8 @@ class DataLoader(
                 capacity = 16,
                 modelKey = "422",
                 equipments = mutableSetOf(equipments[1]),
-                floor = floors[3]
+                floor = floors[3],
+                photo = ClassPathResource("photos/422.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "4.23",
@@ -184,7 +194,8 @@ class DataLoader(
                 capacity = 20,
                 modelKey = "426",
                 equipments = mutableSetOf(equipments[1]),
-                floor = floors[3]
+                floor = floors[3],
+                photo = ClassPathResource("photos/426.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "4.27",
@@ -192,7 +203,8 @@ class DataLoader(
                 capacity = 20,
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[2]),
-                floor = floors[3]
+                floor = floors[3],
+                photo = ClassPathResource("photos/427.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "4.28",
@@ -200,7 +212,8 @@ class DataLoader(
                 capacity = 20,
                 modelKey = "428",
                 equipments = mutableSetOf(equipments[3]),
-                floor = floors[3]
+                floor = floors[3],
+                photo = ClassPathResource("photos/427.jpg").inputStream.readBytes()
             ),
             Classroom(
                 name = "4.29",
