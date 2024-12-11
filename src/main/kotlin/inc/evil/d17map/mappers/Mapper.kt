@@ -65,7 +65,7 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
 fun toFloorResponse(floor: Floor): FloorResponse {
     return FloorResponse(
         id = floor.id!!,
-        name = floor.name,
+        floorName = floor.name,
         buildingName = floor.building.name
     )
 }
