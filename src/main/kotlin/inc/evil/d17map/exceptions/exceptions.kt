@@ -27,6 +27,8 @@ class UserNotFoundException : RuntimeException {
 
 class InvalidClassroomDataException(message: String) : RuntimeException(message)
 
+class InvalidExtraRoomDataException(message: String) : RuntimeException(message)
+
 class InvalidEquipmentDataException(message: String) : RuntimeException(message) {
     companion object {
         fun blankName(): InvalidEquipmentDataException {
