@@ -95,24 +95,6 @@ class ClassroomController(private val classroomService: ClassroomService) {
     }
 
     @Operation(
-        summary = "Get photo of a classroom by ID",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved photo."),
-            ApiResponse(responseCode = "404", description = "Classroom with the given ID not found."),
-            ApiResponse(responseCode = "400", description = "Invalid classroom data provided.")
-        ]
-    )
-    @GetMapping("/{id}/photo")
-    fun getClassroomPhoto(@PathVariable id: UUID): () -> ResponseEntity<ByteArray> {
-        val photo = classroomService.getClassroomPhotoById(id)
-        return {
-            ResponseEntity.ok()
-                .header("Content-Type", "image/jpeg")
-                .body(photo)
-        }
-    }
-
-    @Operation(
         summary = "Delete a classroom by ID",
         responses = [
             ApiResponse(responseCode = "204", description = "Successfully deleted the classroom."),

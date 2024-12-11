@@ -17,6 +17,5 @@ data class ClassroomRequest(
     val capacity: Int,
 
     val equipmentIds: Set<UUID>,
-    val floorId: UUID,
-    val photo: ByteArray?
+    val floor: Floor
 )
