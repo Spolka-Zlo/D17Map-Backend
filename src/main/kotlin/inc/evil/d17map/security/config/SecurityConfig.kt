@@ -1,6 +1,8 @@
 package inc.evil.d17map.security.config
 
 import inc.evil.d17map.security.authentication.jwt.JWTFilter
+import inc.evil.d17map.security.authorization.policy.PolicyAuthorizationManager
+import inc.evil.d17map.security.authorization.test.PolicyRequestMatcher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -64,8 +66,8 @@ class SecurityConfig(
                     .requestMatchers(
                         HttpMethod.OPTIONS, "/**"
                     ).permitAll()
-                    .anyRequest().permitAll()
-            }
+                    .requestMatchers(PolicyRequestMatcher()).access(PolicyAuthorizationManager())
+                    .anyRequest().permitAll()        }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
