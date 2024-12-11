@@ -1,20 +1,22 @@
 package inc.evil.d17map.repositories
 
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.entities.Floor
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.UUID
+import java.util.*
 
 @Repository
 interface ClassroomRepository : JpaRepository<Classroom, UUID> {
 
     @Query("""
         SELECT c FROM Classroom c 
-        WHERE c.capacity >= :peopleCount 
+        WHERE c.floor = :floor 
+        AND c.capacity >= :peopleCount 
         AND NOT EXISTS (
             SELECT r FROM Reservation r 
             WHERE r.classroom = c 
@@ -23,10 +25,30 @@ interface ClassroomRepository : JpaRepository<Classroom, UUID> {
         )
     """)
     fun findAvailableClassrooms(
+        @Param("floor") floor: Floor,
         @Param("date") date: LocalDate,
         @Param("startTime") startTime: LocalTime,
         @Param("endTime") endTime: LocalTime,
         @Param("peopleCount") peopleCount: Int
     ): List<Classroom>
-}
 
+    @Query("""
+        SELECT c FROM Classroom c 
+        WHERE c.floor = :floor
+    """)
+    fun findByFloor(@Param("floor") floor: Floor): List<Classroom>
+
+    @Query("""
+        SELECT c FROM Classroom c 
+        WHERE c.id = :id 
+        AND c.floor = :floor
+    """)
+    fun findByIdAndFloor(@Param("id") id: UUID, @Param("floor") floor: Floor): Classroom?
+
+    @Query("""
+        SELECT COUNT(c) > 0 FROM Classroom c 
+        WHERE c.id = :id 
+        AND c.floor = :floor
+    """)
+    fun existsByIdAndFloor(@Param("id") id: UUID, @Param("floor") floor: Floor): Boolean
+}

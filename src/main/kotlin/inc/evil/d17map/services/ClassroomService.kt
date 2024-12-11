@@ -2,10 +2,9 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
-import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Floor
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
+import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
@@ -14,19 +13,23 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
-import inc.evil.d17map.findOne
 
 @Service
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
     private val equipmentRepository: EquipmentRepository,
+    private val floorRepository: FloorRepository
 ) {
-    fun getAll(): List<ClassroomResponse> {
-        val classrooms = classroomRepository.findAll()
+    fun getByBuildingAndFloor(buildingName: String, floorName: String): List<ClassroomResponse> {
+        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
+            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
+        val classrooms = classroomRepository.findByFloor(floor)
         return classrooms.map { toClassroomResponse(it) }
     }
 
-    fun createClassroom(classroomRequest: ClassroomRequest): ClassroomResponse {
+    fun createClassroom(buildingName: String, floorName: String, classroomRequest: ClassroomRequest): ClassroomResponse {
+        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
+            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
         val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
         val classroom = Classroom(
             name = classroomRequest.name,
@@ -34,57 +37,56 @@ class ClassroomService(
             capacity = classroomRequest.capacity,
             modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet(),
-            floor = Floor(
-                name=classroomRequest.floorName,
-                building = Building(name=classroomRequest.buildingName)
-            ),
+            floor = floor,
             photo = classroomRequest.photo
         )
-        val savedClassroomDto = classroomRepository.save(classroom)
-        return toClassroomResponse(savedClassroomDto)
+        val savedClassroom = classroomRepository.save(classroom)
+        return toClassroomResponse(savedClassroom)
     }
 
-    fun findAvailableClassrooms(date: LocalDate, timeRange: String, peopleCount: Int): List<ClassroomResponse> {
+    fun findAvailableClassrooms(
+        buildingName: String,
+        floorName: String,
+        date: LocalDate,
+        timeRange: String,
+        peopleCount: Int
+    ): List<ClassroomResponse> {
+        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
+            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
         val (start, end) = timeRange.split("-")
         val (startTime, endTime) = Pair(LocalTime.parse(start), LocalTime.parse(end))
-
-        val classrooms = classroomRepository.findAvailableClassrooms(date, startTime, endTime, peopleCount)
+        val classrooms = classroomRepository.findAvailableClassrooms(floor, date, startTime, endTime, peopleCount)
         return classrooms.map { toClassroomResponse(it) }
     }
 
-    fun updateClassroom(id: UUID, classroomRequest: ClassroomRequest): ClassroomResponse {
-        val classroom = classroomRepository.findById(id)
-            .orElseThrow { ClassroomNotFoundException(id) }
-
+    fun updateClassroom(buildingName: String, floorName: String, id: UUID, classroomRequest: ClassroomRequest): ClassroomResponse {
+        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
+            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
+        val classroom = classroomRepository.findByIdAndFloor(id, floor)
+            ?: throw ClassroomNotFoundException(id)
         val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
         classroom.name = classroomRequest.name
         classroom.description = classroomRequest.description
         classroom.capacity = classroomRequest.capacity
         classroom.equipments = equipments.toMutableSet()
-
         val updatedClassroom = classroomRepository.save(classroom)
         return toClassroomResponse(updatedClassroom)
     }
 
-    fun getClassroomPhotoById(id: UUID): ByteArray? {
-        val classroom = classroomRepository.findOne(id) ?: throw ClassroomNotFoundException(id)
+    fun getClassroomPhotoById(buildingName: String, floorName: String, id: UUID): ByteArray? {
+        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
+            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
+        val classroom = classroomRepository.findByIdAndFloor(id, floor)
+            ?: throw ClassroomNotFoundException(id)
         return classroom.photo
     }
 
-    fun deleteById(id: UUID) {
-        if (!classroomRepository.existsById(id)) {
+    fun deleteByBuildingAndFloor(buildingName: String, floorName: String, id: UUID) {
+        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
+            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
+        if (!classroomRepository.existsByIdAndFloor(id, floor)) {
             throw ClassroomNotFoundException(id)
         }
         classroomRepository.deleteById(id)
     }
-
-
-// TODO uncomment and adjust when needed
-//    fun findById(id: UUID): ClassroomResponse {
-//        if (!classroomRepository.existsById(id)) {
-//            throw ClassroomNotFoundException(id)
-//        }
-//        val classroomDto = classroomRepository.findOne(id)
-//        return toClassroomResponse(classroomDto)
-//    }
 }
