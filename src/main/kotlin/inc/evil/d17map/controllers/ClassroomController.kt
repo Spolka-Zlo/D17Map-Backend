@@ -103,13 +103,11 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @GetMapping("/{id}/photo")
-    fun getClassroomPhoto(@PathVariable id: UUID): () -> ResponseEntity<ByteArray> {
+    fun getClassroomPhoto(@PathVariable id: UUID): ResponseEntity<ByteArray> {
         val photo = classroomService.getClassroomPhotoById(id)
-        return {
-            ResponseEntity.ok()
-                .header("Content-Type", "image/jpeg")
-                .body(photo)
-        }
+        return ResponseEntity.ok()
+            .header("Content-Type", "image/jpeg")
+            .body(photo)
     }
 
     @Operation(
