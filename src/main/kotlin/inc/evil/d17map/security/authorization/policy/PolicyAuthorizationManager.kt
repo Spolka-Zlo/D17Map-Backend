@@ -27,17 +27,21 @@ class PolicyAuthorizationManager : AuthorizationManager<RequestAuthorizationCont
         // May be used later
         val contextParameters = emptyMap<String, String>()
 
-        val requestBody = request.inputStream
-            ?.bufferedReader()
-            ?.use { it.readText() }
-            ?.takeIf { it.isNotBlank() }
+//        val requestBody: String? = try {
+//            request.reader.readText()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            null  // Return null in case of an exception
+//        }
+
+
 
         val authorizationRequest = AuthorizationRequest(
             authentication = auth,
             method = method,
             url = url,
             urlParameters = urlParameters,
-            requestBody = requestBody,
+            requestBody = null,
             contextParameters = contextParameters
         )
 
