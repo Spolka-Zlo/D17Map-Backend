@@ -3,6 +3,7 @@ package inc.evil.d17map.services
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.entities.Photo
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
@@ -14,12 +15,14 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 import inc.evil.d17map.findOne
+import inc.evil.d17map.repositories.PhotoRepository
 
 @Service
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
     private val equipmentRepository: EquipmentRepository,
-    private val floorRepository: FloorRepository
+    private val floorRepository: FloorRepository,
+    private val photoRepository: PhotoRepository
 ) {
     fun getAll(): List<ClassroomResponse> {
         val classrooms = classroomRepository.findAll()
@@ -29,6 +32,9 @@ class ClassroomService(
     fun createClassroom(classroomRequest: ClassroomRequest): ClassroomResponse {
         val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
         val floor = floorRepository.findById(classroomRequest.floorId)
+        val photo = classroomRequest.photo
+        val photoId = photo?.let { photoRepository.save(Photo(data = it)).id }
+
         val classroom = Classroom(
             name = classroomRequest.name,
             description = classroomRequest.description,
@@ -36,7 +42,7 @@ class ClassroomService(
             modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet(),
             floor = floor.orElseThrow { EntityNotFoundException("Floor with id ${classroomRequest.floorId} not found") },
-            photo = classroomRequest.photo
+            photoId = photoId
         )
         val savedClassroomDto = classroomRepository.save(classroom)
         return toClassroomResponse(savedClassroomDto)
@@ -64,9 +70,10 @@ class ClassroomService(
         return toClassroomResponse(updatedClassroom)
     }
 
-    fun getClassroomPhotoById(id: UUID): ByteArray? {
+    fun getClassroomPhotoById(id: UUID): ByteArray {
         val classroom = classroomRepository.findOne(id) ?: throw ClassroomNotFoundException(id)
-        return classroom.photo
+        val photoId = classroom.photoId
+        return photoRepository.findOne(photoId!!)?.data ?: throw ClassroomNotFoundException(id)
     }
 
     fun deleteById(id: UUID) {

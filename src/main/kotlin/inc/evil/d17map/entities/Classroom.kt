@@ -33,6 +33,5 @@ class Classroom(
     )
     val reservations: MutableSet<Reservation> = mutableSetOf(),
 
-    @Lob
-    var photo: ByteArray? = null
+    var photoId: UUID? = null
 )
