@@ -1,8 +1,8 @@
 package inc.evil.d17map.dtos
 
-import inc.evil.d17map.entities.Building
+import java.util.*
 
 class FloorRequest (
-    var name: String,
-    val building: Building
+    var floorName: String,
+    val buildingId: UUID
 )

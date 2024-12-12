@@ -1,10 +1,7 @@
 package inc.evil.d17map.mappers
 
 import inc.evil.d17map.dtos.*
-import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Equipment
-import inc.evil.d17map.entities.ExtraRoom
-import inc.evil.d17map.entities.Reservation
+import inc.evil.d17map.entities.*
 import java.util.*
 
 
@@ -23,7 +20,8 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         modelKey = classroom.modelKey,
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
-        floor = classroom.floor
+        floorName = classroom.floor.name,
+        buildingName = classroom.floor.building.name
     )
 }
 
@@ -34,7 +32,8 @@ fun toExtraRoomResponse(extraRoom: ExtraRoom): ExtraRoomResponse =
         modelKey = extraRoom.modelKey,
         description = extraRoom.description,
         type = extraRoom.type,
-        floor = extraRoom.floor
+        floorName = extraRoom.floor.name,
+        buildingName = extraRoom.floor.building.name
     )
 
 fun toClassroomSummary(classroom: Classroom): ClassroomSummary =
@@ -62,3 +61,11 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         numberOfParticipants = reservation.numberOfParticipants
     )
 
+
+fun toFloorResponse(floor: Floor): FloorResponse {
+    return FloorResponse(
+        id = floor.id!!,
+        floorName = floor.name,
+        buildingName = floor.building.name
+    )
+}

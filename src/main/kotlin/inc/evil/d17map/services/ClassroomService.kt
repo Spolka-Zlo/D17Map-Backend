@@ -2,13 +2,14 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
+import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.entities.Floor
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import inc.evil.d17map.repositories.FloorRepository
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
@@ -19,7 +20,6 @@ import inc.evil.d17map.findOne
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
     private val equipmentRepository: EquipmentRepository,
-    private val floorRepository: FloorRepository
 ) {
     fun getAll(): List<ClassroomResponse> {
         val classrooms = classroomRepository.findAll()
@@ -28,14 +28,16 @@ class ClassroomService(
 
     fun createClassroom(classroomRequest: ClassroomRequest): ClassroomResponse {
         val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
-        val floor = floorRepository.findById(classroomRequest.floorId)
         val classroom = Classroom(
             name = classroomRequest.name,
             description = classroomRequest.description,
             capacity = classroomRequest.capacity,
             modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet(),
-            floor = floor.orElseThrow { EntityNotFoundException("Floor with id ${classroomRequest.floorId} not found") },
+            floor = Floor(
+                name=classroomRequest.floorName,
+                building = Building(name=classroomRequest.buildingName)
+            ),
             photo = classroomRequest.photo
         )
         val savedClassroomDto = classroomRepository.save(classroom)
