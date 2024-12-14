@@ -13,9 +13,24 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@RequestMapping("/extra-rooms/{buildingName}/{floorName}")
+@RequestMapping("/extra-rooms")
 @Tag(name = "Extra Rooms")
 class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
+
+    @Operation(
+        summary = "Get all extra rooms in a specific building",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all extra rooms for the building."),
+            ApiResponse(responseCode = "401", description = "Unauthorized access.")
+        ]
+    )
+    @GetMapping("/{buildingName}/all")
+    fun getAllExtraRoomsByBuilding(
+        @PathVariable buildingName: String
+    ): ResponseEntity<List<ExtraRoomResponse>> {
+        val extraRooms = extraRoomService.getExtraRoomsByBuilding(buildingName)
+        return ResponseEntity(extraRooms, HttpStatus.OK)
+    }
 
     @Operation(
         summary = "Get all extra rooms on a specific floor of a building",
@@ -24,7 +39,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @GetMapping
+    @GetMapping("/{buildingName}/{floorName}")
     fun getAllExtraRooms(
         @PathVariable buildingName: String,
         @PathVariable floorName: String
@@ -41,7 +56,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @PostMapping
+    @PostMapping("/{buildingName}/{floorName}")
     @ResponseStatus(HttpStatus.CREATED)
     fun createExtraRoom(
         @PathVariable buildingName: String,
@@ -60,7 +75,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{buildingName}/{floorName}/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeExtraRoom(
         @PathVariable buildingName: String,

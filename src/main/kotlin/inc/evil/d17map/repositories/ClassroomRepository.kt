@@ -51,4 +51,11 @@ interface ClassroomRepository : JpaRepository<Classroom, UUID> {
         AND c.floor = :floor
     """)
     fun existsByIdAndFloor(@Param("id") id: UUID, @Param("floor") floor: Floor): Boolean
+
+    @Query("""
+    SELECT c FROM Classroom c
+    WHERE c.floor.building.name = :buildingName
+""")
+    fun findAllByBuildingName(buildingName: String): List<Classroom>
+
 }

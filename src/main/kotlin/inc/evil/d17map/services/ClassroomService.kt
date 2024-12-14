@@ -89,4 +89,10 @@ class ClassroomService(
         }
         classroomRepository.deleteById(id)
     }
+
+    fun getAllClassroomsByBuilding(buildingName: String): List<ClassroomResponse> {
+        val classrooms = classroomRepository.findAllByBuildingName(buildingName)
+        return classrooms.map { toClassroomResponse(it) }
+    }
+
 }

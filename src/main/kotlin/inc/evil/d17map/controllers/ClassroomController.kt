@@ -14,9 +14,27 @@ import java.time.LocalDate
 import java.util.*
 
 @RestController
-@RequestMapping("/classrooms/{buildingName}/{floorName}")
+@RequestMapping("/classrooms")
 @Tag(name = "Classrooms")
 class ClassroomController(private val classroomService: ClassroomService) {
+
+    @Operation(
+        summary = "Get all classrooms in a specific building",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all classrooms for the building."),
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
+        ]
+    )
+    @GetMapping("/{buildingName}/all")
+    fun getAllClassroomsByBuilding(
+        @PathVariable buildingName: String
+    ): ResponseEntity<List<ClassroomResponse>> {
+        val classrooms = classroomService.getAllClassroomsByBuilding(buildingName)
+        return ResponseEntity(classrooms, HttpStatus.OK)
+    }
 
     @Operation(
         summary = "Get all classrooms on a specific floor of a building",
@@ -28,7 +46,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             )
         ]
     )
-    @GetMapping
+    @GetMapping("/{buildingName}/{floorName}")
     fun getAllClassroomsByBuildingAndFloor(
         @PathVariable buildingName: String,
         @PathVariable floorName: String
@@ -48,7 +66,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             )
         ]
     )
-    @PostMapping
+    @PostMapping("/{buildingName}/{floorName}")
     @ResponseStatus(HttpStatus.CREATED)
     fun createClassroom(
         @PathVariable buildingName: String,
@@ -66,7 +84,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "400", description = "Invalid criteria data provided.")
         ]
     )
-    @GetMapping("/available")
+    @GetMapping("/{buildingName}/{floorName}/available")
     fun getAvailableClassrooms(
         @PathVariable buildingName: String,
         @PathVariable floorName: String,
@@ -90,7 +108,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             )
         ]
     )
-    @PutMapping("/admin/{id}")
+    @PutMapping("/{buildingName}/{floorName}/admin/{id}")
     fun updateClassroomAdmin(
         @PathVariable buildingName: String,
         @PathVariable floorName: String,
@@ -101,7 +119,6 @@ class ClassroomController(private val classroomService: ClassroomService) {
         return ResponseEntity(updatedClassroom, HttpStatus.OK)
     }
 
-
     @Operation(
         summary = "Get photo of a classroom by ID on a specific floor of a building",
         responses = [
@@ -110,7 +127,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "400", description = "Invalid classroom data provided.")
         ]
     )
-    @GetMapping("/{id}/photo")
+    @GetMapping("/{buildingName}/{floorName}/{id}/photo")
     fun getClassroomPhoto(
         @PathVariable buildingName: String,
         @PathVariable floorName: String,
@@ -133,7 +150,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             )
         ]
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{buildingName}/{floorName}/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeClassroom(
         @PathVariable buildingName: String,

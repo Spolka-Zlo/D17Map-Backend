@@ -18,6 +18,12 @@ interface ExtraRoomRepository : JpaRepository<ExtraRoom, UUID> {
 
     @Query("""
         SELECT e FROM ExtraRoom e
+        WHERE e.floor.building.name = :buildingName
+    """)
+    fun findByBuilding(buildingName: String): List<ExtraRoom>
+
+    @Query("""
+        SELECT e FROM ExtraRoom e
         WHERE e.id = :id
         AND e.floor.name = :floorName
         AND e.floor.building.name = :buildingName

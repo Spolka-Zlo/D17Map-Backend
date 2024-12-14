@@ -20,6 +20,11 @@ class ExtraRoomService(
         return extraRooms.map { toExtraRoomResponse(it) }
     }
 
+    fun getExtraRoomsByBuilding(buildingName: String): List<ExtraRoomResponse> {
+        val extraRooms = extraRoomRepository.findByBuilding(buildingName)
+        return extraRooms.map { toExtraRoomResponse(it) }
+    }
+
     fun createExtraRoom(buildingName: String, floorName: String, extraRoomRequest: ExtraRoomRequest): ExtraRoomResponse {
         val extraRoom = ExtraRoom(
             name = extraRoomRequest.name,
