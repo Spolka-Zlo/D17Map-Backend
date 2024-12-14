@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface BuildingRepository : JpaRepository<Building, UUID>
+interface BuildingRepository : JpaRepository<Building, UUID> {
+    fun findByName(name: String): Building?
+}

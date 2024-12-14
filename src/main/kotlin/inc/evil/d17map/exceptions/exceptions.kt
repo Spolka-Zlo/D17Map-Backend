@@ -23,7 +23,13 @@ class UserNotFoundException : RuntimeException {
     constructor(email: String) : super("User with email '$email' not found")
 }
 
+class BuildingNotFoundException(buildingName: String) : RuntimeException(
+    "Building with name '$buildingName' not found."
+)
+
 // INVALID DATA
+
+class InvalidReservationDataException(message: String) : RuntimeException(message)
 
 class InvalidClassroomDataException(message: String) : RuntimeException(message)
 
