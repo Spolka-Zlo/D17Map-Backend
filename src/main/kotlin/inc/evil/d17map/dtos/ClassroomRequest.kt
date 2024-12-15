@@ -1,6 +1,5 @@
 package inc.evil.d17map.dtos
 
-import inc.evil.d17map.entities.Floor
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
 import java.util.*
@@ -17,6 +16,7 @@ data class ClassroomRequest(
     val capacity: Int,
 
     val equipmentIds: Set<UUID>,
-    val floorId: UUID,
+    val floorName: String,
+    val buildingName: String,
     val photo: ByteArray?
 )

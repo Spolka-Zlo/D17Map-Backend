@@ -1,9 +1,9 @@
 package inc.evil.d17map.dtos
 
-import inc.evil.d17map.entities.Building
+import java.util.UUID
 
 class FloorResponse (
-    val id: String,
-    val name: String,
-    val building: Building
+    val id: UUID,
+    val floorName: String,
+    val buildingName: String
 )

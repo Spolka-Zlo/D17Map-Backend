@@ -2,7 +2,6 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ExtraRoomRequest
 import inc.evil.d17map.dtos.ExtraRoomResponse
-import inc.evil.d17map.exceptions.InvalidExtraRoomDataException
 import inc.evil.d17map.services.ExtraRoomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -46,9 +45,6 @@ class ExtraRoomsController(private val extraRoomService: ExtraRoomService) {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     fun createExtraRoom(@RequestBody @Valid extraRoomRequest: ExtraRoomRequest): ResponseEntity<ExtraRoomResponse> {
-        if (extraRoomRequest.name.isBlank()) {
-            throw InvalidExtraRoomDataException()
-        }
         val createdExtraRoom = extraRoomService.createExtraRoom(extraRoomRequest)
         return ResponseEntity(createdExtraRoom, HttpStatus.CREATED)
     }
