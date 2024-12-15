@@ -75,16 +75,17 @@ class ReservationService(
         return reservations.map { toReservationResponse(it) }
     }
 
-    fun getUserFutureReservations(): List<ReservationResponse>? {
+    fun getUserFutureReservations(buildingName: String): List<ReservationResponse>? {
         val username = SecurityContextHolder.getContext().authentication.name
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
-
 
         val futureReservations = reservationRepository.findAllFuture(
             user.id!!,
             LocalDate.now(),
-            LocalTime.now()
+            LocalTime.now(),
+            buildingName
         )
+
         return futureReservations.map { toReservationResponse(it) }
     }
 

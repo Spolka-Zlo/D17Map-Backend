@@ -165,9 +165,11 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/user/future")
-    fun getFutureReservations(): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getUserFutureReservations()
+    @GetMapping("/{buildingName}/user/future")
+    fun getFutureReservations(
+        @PathVariable buildingName: String,
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getUserFutureReservations(buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 

@@ -53,6 +53,7 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
         "SELECT r " +
                 "FROM Reservation r " +
                 "WHERE r.user.id = :userID " +
+                "AND r.classroom.floor.building.name = :buildingName " +
                 "AND (r.date > :currentDate " +
                 "OR (r.date = :currentDate AND r.startTime > :currentTime))" +
                 "ORDER BY r.date, r.startTime"
@@ -61,6 +62,7 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
         @Param("userID") userID: UUID,
         @Param("currentDate") currentDate: LocalDate,
         @Param("currentTime") currentTime: LocalTime,
+        @Param("buildingName") buildingName: String
     ): List<Reservation>
 
     @Query(
