@@ -10,7 +10,9 @@ import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
+
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
@@ -65,6 +67,7 @@ class ClassroomService(
         return toClassroomResponse(updatedClassroom)
     }
 
+    @Transactional(readOnly=true)
     fun getClassroomPhotoById(id: UUID): ByteArray? {
         val classroom = classroomRepository.findOne(id) ?: throw ClassroomNotFoundException(id)
         return classroom.photo

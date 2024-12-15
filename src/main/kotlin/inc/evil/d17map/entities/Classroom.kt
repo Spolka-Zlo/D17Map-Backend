@@ -34,5 +34,6 @@ class Classroom(
     val reservations: MutableSet<Reservation> = mutableSetOf(),
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     var photo: ByteArray? = null
 )

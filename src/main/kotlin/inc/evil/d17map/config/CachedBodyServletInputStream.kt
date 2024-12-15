@@ -10,14 +10,12 @@ class CachedBodyServletInputStream(cachedBody: ByteArray) : ServletInputStream()
 
     private val cachedBodyInputStream: InputStream = ByteArrayInputStream(cachedBody)
 
-    override fun isFinished(): Boolean {
-        return try {
-            cachedBodyInputStream.available() == 0
-        } catch (e: IOException) {
-            e.printStackTrace()
-            false
-        }
-    }
+    override fun isFinished(): Boolean =
+        runCatching { cachedBodyInputStream.available() == 0 }
+            .getOrElse {
+                it.printStackTrace()
+                false
+            }
 
     override fun isReady(): Boolean {
         return true

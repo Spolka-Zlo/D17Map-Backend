@@ -2,7 +2,6 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
-import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.services.ClassroomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -44,12 +43,8 @@ class ClassroomController(private val classroomService: ClassroomService) {
         ]
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     fun createClassroom(@RequestBody @Valid classroomRequest: ClassroomRequest): ResponseEntity<ClassroomResponse> {
-        if (classroomRequest.name.isBlank() || classroomRequest.capacity <= 0) {
-            throw InvalidClassroomDataException()
-        }
         val createdClassroom = classroomService.createClassroom(classroomRequest)
         return ResponseEntity(createdClassroom, HttpStatus.CREATED)
     }

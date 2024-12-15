@@ -5,8 +5,8 @@ import inc.evil.d17map.dtos.FloorResponse
 import inc.evil.d17map.mappers.toFloorResponse
 import inc.evil.d17map.services.FloorService
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -43,7 +43,6 @@ class FloorController(private val floorService: FloorService) {
         ]
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     fun createFloor(@RequestBody @Valid floorRequest: FloorRequest): ResponseEntity<FloorResponse> {
         val createdFloor = floorService.createFloor(floorRequest)
