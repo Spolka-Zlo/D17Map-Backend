@@ -5,6 +5,7 @@ import org.springframework.security.authorization.AuthorizationDecision
 import org.springframework.security.authorization.AuthorizationManager
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext
+import org.springframework.web.util.ContentCachingRequestWrapper
 import java.util.*
 import java.util.function.Supplier
 
@@ -14,26 +15,20 @@ class PolicyAuthorizationManager : AuthorizationManager<RequestAuthorizationCont
         authentication: Supplier<Authentication>?,
         requestAuthorizationContext: RequestAuthorizationContext?
     ): AuthorizationDecision? {
-
         val auth = authentication?.get() ?: return null
         val request = requestAuthorizationContext?.request ?: return null
 
-        val method = HttpMethod.valueOf(request.method.uppercase(Locale.getDefault()))
-        val url = request.requestURI
-        val urlParameters = request.parameterMap.mapValues { (_, values) ->
+        val wrappedRequest = ContentCachingRequestWrapper(request)
+
+        val method = HttpMethod.valueOf(wrappedRequest.method.uppercase(Locale.getDefault()))
+        val url = wrappedRequest.requestURI
+        val urlParameters = wrappedRequest.parameterMap.mapValues { (_, values) ->
             values.joinToString(",")
         }
+        val requestBody = request.inputStream.use { it.readBytes() }
 
         // May be used later
         val contextParameters = emptyMap<String, String>()
-
-//        val requestBody: String? = try {
-//            request.reader.readText()
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            null  // Return null in case of an exception
-//        }
-
 
 
         val authorizationRequest = AuthorizationRequest(
@@ -41,9 +36,10 @@ class PolicyAuthorizationManager : AuthorizationManager<RequestAuthorizationCont
             method = method,
             url = url,
             urlParameters = urlParameters,
-            requestBody = null,
+            requestBody = requestBody,
             contextParameters = contextParameters
         )
+
 
         println(authorizationRequest)
         return AuthorizationDecision(true)

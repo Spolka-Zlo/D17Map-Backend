@@ -8,6 +8,6 @@ data class AuthorizationRequest(
     val method: HttpMethod,
     val url: String,
     val urlParameters: Map<String, String>,
-    val requestBody: String?,
+    val requestBody: ByteArray?,
     val contextParameters: Map<String, Any>
 )

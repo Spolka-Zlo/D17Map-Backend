@@ -14,6 +14,6 @@ class TestController {
 
     @PostMapping("/test")
     fun post(@RequestBody body: TestBody): TestBody {
-        return TestBody("a", "b", "c", "d", "e")
+        return body
     }
 }
