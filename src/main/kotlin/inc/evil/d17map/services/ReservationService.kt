@@ -31,8 +31,13 @@ class ReservationService(
         return reservations.map { toReservationResponse(it) }
     }
 
-    fun getReservationById(id: UUID): ReservationResponse {
+    fun getReservationById(buildingName: String, id: UUID): ReservationResponse {
         val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
+
+        if (reservation.classroom.floor.building.name != buildingName)
+            throw InvalidReservationDataException("The building name '$buildingName' does not match the " +
+                    "classroom's building '${reservation.classroom.floor.building.name}'.")
+
         return toReservationResponse(reservation)
     }
 

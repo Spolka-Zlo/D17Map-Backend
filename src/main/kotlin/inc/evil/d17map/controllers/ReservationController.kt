@@ -85,7 +85,7 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/week/{buildingName}")
+    @GetMapping("/{buildingName}/week")
     fun getReservationsForWeek(
         @RequestParam(
             name = "startDay",
@@ -129,14 +129,15 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{buildingName}/{id}")
     fun getReservationById(
         @PathVariable(
             required = true,
             name = "id"
-        ) id: UUID
+        ) id: UUID,
+        @PathVariable buildingName: String,
     ): ResponseEntity<ReservationResponse> {
-        val reservations = reservationService.getReservationById(id)
+        val reservations = reservationService.getReservationById(buildingName, id)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
@@ -184,7 +185,7 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @DeleteMapping("/{id}/{buildingName}")
+    @DeleteMapping("/{buildingName}/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeReservation(
         @PathVariable id: UUID,
@@ -225,7 +226,7 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/events/{buildingName}")
+    @GetMapping("/{buildingName}/events")
     fun getEvents(
         @PathVariable buildingName: String,
     ): ResponseEntity<List<ReservationResponse>> {
@@ -265,7 +266,7 @@ class ReservationController(private val reservationService: ReservationService) 
             ApiResponse(responseCode = "403", description = "Forbidden access. The user does not have the necessary permissions.")
         ]
     )
-    @GetMapping("/admin/allReservations/{buildingName}/{userId}")
+    @GetMapping("/{buildingName}/admin/allReservations/{userId}")
     fun getUserReservationsForAdmin(
         @PathVariable buildingName: String,
         @PathVariable userId: UUID,
@@ -285,7 +286,7 @@ class ReservationController(private val reservationService: ReservationService) 
             ApiResponse(responseCode = "404", description = "Building not found.")
         ]
     )
-    @GetMapping("/admin/allReservations/{buildingName}")
+    @GetMapping("/{buildingName}/admin/allReservations")
     fun getAllReservationsForAdmin(
         @PathVariable buildingName: String
     ): ResponseEntity<List<ReservationResponse>> {
