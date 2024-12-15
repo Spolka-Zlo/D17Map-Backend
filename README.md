@@ -128,10 +128,9 @@ The following commands should be issued from the root directory of the project.
 ## 🔷 Cleaning Docker
 Sometimes docker has problems with itself, but there is a couple of commands which you can try to fix it:
 
-1. `docker compose down -v` - this command stops containers and removes them.
-2. `docker system prune` - removes all dangling/untagged resources
-3. `docker system prune -a` - removes a little bit more ;)
-4. `docker volume rm <your volume name>` - obvious (use `docker volume ls` to list all volumes)
-5. `docker volume prune` - removes all dangling volumes
+1. `docker system prune` - removes all dangling/untagged resources
+2. `docker system prune -a` - removes a little bit more ;)
+3. `docker volume rm <your volume name>` - obvious (use `docker volume ls` to list all volumes)
+4. `docker volume prune` - removes all dangling volumes
 
 Other useful commands may be found [here](https://contabo.com/blog/how-to-remove-docker-volumes-images-and-containers/)
