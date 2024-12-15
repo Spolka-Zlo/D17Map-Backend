@@ -43,7 +43,6 @@ class EquipmentController(private val equipmentService: EquipmentService) {
         ]
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     fun createEquipment(@RequestBody @Valid equipmentRequest: EquipmentRequest): ResponseEntity<EquipmentResponse> {
         if (equipmentRequest.name.isBlank()) {

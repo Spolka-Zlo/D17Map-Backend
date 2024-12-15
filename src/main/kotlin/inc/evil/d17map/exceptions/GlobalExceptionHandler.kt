@@ -66,11 +66,9 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException::class)
     fun handleGenericException(ex: RuntimeException): ResponseEntity<ErrorResponse> {
-
         ex.printStackTrace()
         if (ex is AuthenticationException || ex is AccessDeniedException)
             throw ex
-
 
         return ResponseEntity(
             ErrorResponse("An unexpected error occurred: ${ex.message}"),

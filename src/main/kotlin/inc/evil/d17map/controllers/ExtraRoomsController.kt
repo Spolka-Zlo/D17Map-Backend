@@ -42,7 +42,6 @@ class ExtraRoomsController(private val extraRoomService: ExtraRoomService) {
         ]
     )
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
     fun createExtraRoom(@RequestBody @Valid extraRoomRequest: ExtraRoomRequest): ResponseEntity<ExtraRoomResponse> {
         val createdExtraRoom = extraRoomService.createExtraRoom(extraRoomRequest)
