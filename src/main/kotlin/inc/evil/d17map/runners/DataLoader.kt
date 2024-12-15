@@ -23,7 +23,6 @@ class DataLoader(
     private val passwordEncoder: PasswordEncoder,
     private val buildingRepository: BuildingRepository,
     private val floorRepository: FloorRepository,
-    private val photosRepository: PhotoRepository
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
@@ -37,10 +36,10 @@ class DataLoader(
 
 
         val equipments = listOf(
-            Equipment(name="Komputery"),
-            Equipment(name="Routery"),
-            Equipment(name="Projektor"),
-            Equipment(name="Tablica")
+            Equipment(name = "Komputery"),
+            Equipment(name = "Routery"),
+            Equipment(name = "Projektor"),
+            Equipment(name = "Tablica")
         )
         equipmentRepository.saveAll(equipments)
 
@@ -56,18 +55,15 @@ class DataLoader(
         floorRepository.saveAll(floors)
 
         val photos = listOf(
-            Photo(data = ClassPathResource("photos/119.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/138.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/241.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/327.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/327d.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/327e.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/422.jpg").inputStream.readBytes()),
-            Photo(data = ClassPathResource("photos/426.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/119.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/138.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/241.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/327.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/327d.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/327e.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/422.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/426.jpg").inputStream.readBytes()),
         )
-        val savedPhotos = photosRepository.saveAll(photos)
-
-        val savedPhotosId = savedPhotos.map { it.id!! }
 
 
         val classrooms = listOf(
@@ -79,7 +75,7 @@ class DataLoader(
                 modelKey = "119",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[0],
-                photoId = savedPhotosId[0]
+                photo = photos[0]
             ),
             Classroom(
                 name = "1.20",
@@ -104,7 +100,7 @@ class DataLoader(
                 modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[0],
-                photoId = savedPhotosId[1]
+                photo = photos[1]
             ),
             // 2 floor
             Classroom(
@@ -114,7 +110,7 @@ class DataLoader(
                 modelKey = "241",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[1],
-                photoId = savedPhotosId[2]
+                photo = photos[2]
             ),
             // 3 floor
             Classroom(
@@ -148,7 +144,7 @@ class DataLoader(
                 modelKey = "327a",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photoId = savedPhotosId[3]
+                photo = photos[3]
             ),
             Classroom(
                 name = "3.27b",
@@ -157,7 +153,7 @@ class DataLoader(
                 modelKey = "327b",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photoId = savedPhotosId[3]
+                photo = photos[3]
             ),
             Classroom(
                 name = "3.27c",
@@ -166,7 +162,7 @@ class DataLoader(
                 modelKey = "327c",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photoId = savedPhotosId[3]
+                photo = photos[3]
             ),
             Classroom(
                 name = "3.27d",
@@ -175,7 +171,7 @@ class DataLoader(
                 modelKey = "327d",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photoId = savedPhotosId[4]
+                photo = photos[4]
             ),
             Classroom(
                 name = "3.27e",
@@ -184,7 +180,7 @@ class DataLoader(
                 modelKey = "327e",
                 equipments = mutableSetOf(equipments[0], equipments[2], equipments[3]),
                 floor = floors[2],
-                photoId = savedPhotosId[5]
+                photo = photos[5]
             ),
             Classroom(
                 name = "4.22",
@@ -193,7 +189,7 @@ class DataLoader(
                 modelKey = "422",
                 equipments = mutableSetOf(equipments[1]),
                 floor = floors[3],
-                photoId = savedPhotosId[6]
+                photo = photos[6]
             ),
             Classroom(
                 name = "4.23",
@@ -210,7 +206,7 @@ class DataLoader(
                 modelKey = "426",
                 equipments = mutableSetOf(equipments[1]),
                 floor = floors[3],
-                photoId = savedPhotosId[7]
+                photo = photos[7]
             ),
             Classroom(
                 name = "4.27",
@@ -219,7 +215,7 @@ class DataLoader(
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[2]),
                 floor = floors[3],
-                photoId = savedPhotosId[7]
+                photo = photos[7]
             ),
             Classroom(
                 name = "4.28",
@@ -228,7 +224,7 @@ class DataLoader(
                 modelKey = "428",
                 equipments = mutableSetOf(equipments[3]),
                 floor = floors[3],
-                photoId = savedPhotosId[7]
+                photo = photos[7]
             ),
             Classroom(
                 name = "4.29",
@@ -251,7 +247,7 @@ class DataLoader(
                 description = "fajna sala taka o v4",
                 capacity = 20,
                 modelKey = "430",
-                equipments = mutableSetOf(equipments[1] , equipments[2]),
+                equipments = mutableSetOf(equipments[1], equipments[2]),
                 floor = floors[3]
             ),
         )

@@ -2,14 +2,14 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
+import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.entities.Floor
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
 import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
-import inc.evil.d17map.repositories.FloorRepository
-import inc.evil.d17map.repositories.PhotoRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
@@ -18,9 +18,7 @@ import java.util.*
 @Service
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
-    private val equipmentRepository: EquipmentRepository,
-    private val floorRepository: FloorRepository,
-    private val photoRepository: PhotoRepository
+    private val equipmentRepository: EquipmentRepository
 ) {
     fun getAll(): List<ClassroomResponse> {
         val classrooms = classroomRepository.findAll()
@@ -79,13 +77,4 @@ class ClassroomService(
         classroomRepository.deleteById(id)
     }
 
-
-// TODO uncomment and adjust when needed
-//    fun findById(id: UUID): ClassroomResponse {
-//        if (!classroomRepository.existsById(id)) {
-//            throw ClassroomNotFoundException(id)
-//        }
-//        val classroomDto = classroomRepository.findOne(id)
-//        return toClassroomResponse(classroomDto)
-//    }
 }
