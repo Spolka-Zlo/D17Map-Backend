@@ -31,11 +31,11 @@ class AuthService(
     }
 
     fun registerUser(registerRequest: AuthRequest) {
-        logger.info { "Checking if user $registerRequest already exists." }
+        logger.info { "Checking if user ${registerRequest.username} already exists." }
         if (userRepository.existsByEmail(registerRequest.username))
             throw UserAlreadyExistsException(registerRequest.username)
 
-        logger.info { "Registering user: $registerRequest with role $DEFAULT_ROLE" }
+        logger.info { "Registering user: ${registerRequest.username} with role $DEFAULT_ROLE" }
         roleRepository.findByName(DEFAULT_ROLE)?.let {
             val user = User(
                 email = registerRequest.username,
@@ -50,7 +50,7 @@ class AuthService(
 
     @Throws(AuthenticationException::class)
     fun verifyUser(loginRequest: AuthRequest): AuthResponse {
-        logger.info { "Checking user's $loginRequest credentials." }
+        logger.info { "Checking user's ${loginRequest.username} credentials." }
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
@@ -59,7 +59,7 @@ class AuthService(
         val token = tokenProvider.generateToken(authentication)
         val roles = toRoleResponse(authentication.authorities)
 
-        logger.info { "Generated token: $token." }
+        logger.info { "Token generated successfully" }
         logger.info { "Logged user's roles: $roles" }
         return AuthResponse(
             token = token,

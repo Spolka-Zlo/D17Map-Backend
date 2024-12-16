@@ -1,5 +1,6 @@
 package inc.evil.d17map.exceptions
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.util.stream.Collectors
 
-data class ErrorResponse(val message: String)
+private val logger = KotlinLogging.logger {}
+
 
 @ControllerAdvice
 class GlobalExceptionHandler {
@@ -66,7 +68,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException::class)
     fun handleGenericException(ex: RuntimeException): ResponseEntity<ErrorResponse> {
-        ex.printStackTrace()
+        logger.error(ex) { "Generic Exception caught: ${ex.message}" }
         if (ex is AuthenticationException || ex is AccessDeniedException)
             throw ex
 

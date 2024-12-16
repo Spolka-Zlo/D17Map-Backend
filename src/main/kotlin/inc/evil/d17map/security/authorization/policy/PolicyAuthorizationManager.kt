@@ -14,9 +14,9 @@ class PolicyAuthorizationManager : AuthorizationManager<RequestAuthorizationCont
     override fun check(
         authentication: Supplier<Authentication>?,
         requestAuthorizationContext: RequestAuthorizationContext?
-    ): AuthorizationDecision? {
-        val auth = authentication?.get() ?: return null
-        val request = requestAuthorizationContext?.request ?: return null
+    ): AuthorizationDecision {
+        val auth = authentication?.get() ?: throw IllegalStateException("Authentication not set")
+        val request = requestAuthorizationContext?.request ?: throw IllegalStateException("Request is not set")
 
         val wrappedRequest = ContentCachingRequestWrapper(request)
 

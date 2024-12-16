@@ -1,13 +1,15 @@
 package inc.evil.d17map.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import inc.evil.d17map.exceptions.EnhancedErrorResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
+import java.time.LocalDateTime
 
 
-class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
+class CustomAuthenticationEntryPoint(private val objectMapper: ObjectMapper) : AuthenticationEntryPoint {
     override fun commence(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -16,10 +18,13 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
         response.contentType = "application/json"
         response.status = HttpServletResponse.SC_UNAUTHORIZED
 
-        val errorDetails: MutableMap<String, Any> = HashMap()
-        errorDetails["message"] = "Unauthorized: " + authException.message
+        val errorResponse = EnhancedErrorResponse(
+            errorCode = "UNAUTHORIZED",
+            message = "Unauthorized: ${authException.message}",
+            timestamp = LocalDateTime.now()
+        )
 
-        val jsonResponse = ObjectMapper().writeValueAsString(errorDetails)
+        val jsonResponse = objectMapper.writeValueAsString(errorResponse)
         response.writer.write(jsonResponse)
     }
 }
