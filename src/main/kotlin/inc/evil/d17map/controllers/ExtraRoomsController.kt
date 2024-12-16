@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-@RequestMapping("/extra-rooms")
 @Tag(name = "Extra Rooms")
 class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
 
@@ -24,7 +23,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @GetMapping("/{buildingName}/all")
+    @GetMapping("/building/{buildingName}/extra-rooms")
     fun getAllExtraRoomsByBuilding(
         @PathVariable buildingName: String
     ): ResponseEntity<List<ExtraRoomResponse>> {
@@ -39,7 +38,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @GetMapping("/{buildingName}/{floorName}")
+    @GetMapping("/building/{buildingName}/floor/{floorName}/extra-rooms")
     fun getAllExtraRooms(
         @PathVariable buildingName: String,
         @PathVariable floorName: String
@@ -56,7 +55,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @PostMapping("/{buildingName}/{floorName}")
+    @PostMapping("/building/{buildingName}/floor/{floorName}/extra-rooms")
     @ResponseStatus(HttpStatus.CREATED)
     fun createExtraRoom(
         @PathVariable buildingName: String,
@@ -75,7 +74,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @DeleteMapping("/{buildingName}/{floorName}/{id}")
+    @DeleteMapping("/building/{buildingName}/floor/{floorName}/extra-rooms/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeExtraRoom(
         @PathVariable buildingName: String,
