@@ -26,7 +26,9 @@ import org.springframework.security.web.authentication.logout.LogoutFilter
 @EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfig(
     private val userDetailsService: UserDetailsService,
-    private val jwtFilter: JWTFilter
+    private val jwtFilter: JWTFilter,
+    private val customAccessDeniedHandler: CustomAccessDeniedHandler,
+    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 ) {
 
     private companion object {
@@ -51,8 +53,8 @@ class SecurityConfig(
             .csrf { it.disable() }
             .exceptionHandling {
                 it
-                    .accessDeniedHandler(CustomAccessDeniedHandler())
-                    .authenticationEntryPoint(CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(customAccessDeniedHandler)
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)
             }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
@@ -67,7 +69,8 @@ class SecurityConfig(
                         HttpMethod.OPTIONS, "/**"
                     ).permitAll()
                     .requestMatchers(PolicyRequestMatcher()).access(PolicyAuthorizationManager())
-                    .anyRequest().permitAll()        }
+                    .anyRequest().permitAll()
+            }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
