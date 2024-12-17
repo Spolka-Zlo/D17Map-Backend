@@ -117,13 +117,12 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "400", description = "Invalid classroom data provided.")
         ]
     )
-    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/{id}/photo")
+    @GetMapping("$BUILDINGS_PATH$CLASSROOMS_PATH/{id}/photo")
     fun getClassroomPhoto(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @PathVariable id: UUID
     ): ResponseEntity<ByteArray> {
-        val photo = classroomService.getClassroomPhotoById(buildingName, floorName, id)
+        val photo = classroomService.getClassroomPhotoById(buildingName, id)
         return ResponseEntity.ok()
             .header("Content-Type", "image/jpeg")
             .body(photo)
@@ -137,13 +136,12 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @DeleteMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/{id}")
+    @DeleteMapping("$BUILDINGS_PATH$CLASSROOMS_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeClassroom(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @PathVariable id: UUID
     ) {
-        classroomService.deleteByBuildingAndFloor(buildingName, floorName, id)
+        classroomService.deleteByBuildingAndFloor(buildingName, id)
     }
 }

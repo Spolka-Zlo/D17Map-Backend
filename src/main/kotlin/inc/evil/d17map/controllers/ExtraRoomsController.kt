@@ -45,7 +45,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
         ]
     )
     @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH")
-    fun getAllExtraRooms(
+    fun getAllExtraRoomsByBuildingAndFloor(
         @PathVariable buildingName: String,
         @PathVariable floorName: String
     ): ResponseEntity<List<ExtraRoomResponse>> {
@@ -61,14 +61,13 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @PostMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH")
+    @PostMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH")
     @ResponseStatus(HttpStatus.CREATED)
     fun createExtraRoom(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @RequestBody @Valid extraRoomRequest: ExtraRoomRequest
     ): ResponseEntity<ExtraRoomResponse> {
-        val createdExtraRoom = extraRoomService.createExtraRoom(buildingName, floorName, extraRoomRequest)
+        val createdExtraRoom = extraRoomService.createExtraRoom(buildingName, extraRoomRequest.floorName, extraRoomRequest)
         return ResponseEntity(createdExtraRoom, HttpStatus.CREATED)
     }
 
@@ -80,13 +79,12 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @DeleteMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH/{id}")
+    @DeleteMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeExtraRoom(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @PathVariable id: UUID
     ) {
-        extraRoomService.deleteExtraRoom(buildingName, floorName, id)
+        extraRoomService.deleteExtraRoom(buildingName, id)
     }
 }

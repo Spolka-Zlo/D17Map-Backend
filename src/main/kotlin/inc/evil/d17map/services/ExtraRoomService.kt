@@ -40,9 +40,9 @@ class ExtraRoomService(
         return toExtraRoomResponse(savedExtraRoom)
     }
 
-    fun deleteExtraRoom(buildingName: String, floorName: String, id: UUID) {
-        val extraRoom = extraRoomRepository.findByIdAndBuildingAndFloor(id, buildingName, floorName)
-            ?: throw InvalidExtraRoomDataException("Extra room with ID $id not found on floor '$floorName' in building '$buildingName'.")
+    fun deleteExtraRoom(buildingName: String, id: UUID) {
+        val extraRoom = extraRoomRepository.findByIdAndBuilding(id, buildingName)
+            ?: throw InvalidExtraRoomDataException("Extra room with ID $id not found in building '$buildingName'.")
         extraRoomRepository.delete(extraRoom)
     }
 }

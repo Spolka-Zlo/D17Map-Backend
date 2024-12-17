@@ -25,8 +25,7 @@ interface ExtraRoomRepository : JpaRepository<ExtraRoom, UUID> {
     @Query("""
         SELECT e FROM ExtraRoom e
         WHERE e.id = :id
-        AND e.floor.name = :floorName
         AND e.floor.building.name = :buildingName
     """)
-    fun findByIdAndBuildingAndFloor(id: UUID, buildingName: String, floorName: String): ExtraRoom?
+    fun findByIdAndBuilding(id: UUID, buildingName: String): ExtraRoom?
 }

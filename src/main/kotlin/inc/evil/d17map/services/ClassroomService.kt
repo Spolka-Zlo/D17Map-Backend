@@ -70,18 +70,15 @@ class ClassroomService(
         return toClassroomResponse(updatedClassroom)
     }
 
-    fun getClassroomPhotoById(buildingName: String, floorName: String, id: UUID): ByteArray? {
-        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
-            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
-        val classroom = classroomRepository.findByIdAndFloor(id, floor)
-            ?: throw ClassroomNotFoundException(id)
-        return classroom.photo
+    fun getClassroomPhotoById(buildingName: String, id: UUID): ByteArray? {
+        val classroom = classroomRepository.findById(id)
+            .orElseThrow { ClassroomNotFoundException(id) }
+        return classroom.photo?.takeIf { it.isNotEmpty() }
     }
 
-    fun deleteByBuildingAndFloor(buildingName: String, floorName: String, id: UUID) {
-        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
-            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
-        if (!classroomRepository.existsByIdAndFloor(id, floor)) {
+
+    fun deleteByBuildingAndFloor(buildingName: String, id: UUID) {
+        if (!classroomRepository.existsById(id)) {
             throw ClassroomNotFoundException(id)
         }
         classroomRepository.deleteById(id)
