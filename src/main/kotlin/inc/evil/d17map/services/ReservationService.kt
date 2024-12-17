@@ -105,8 +105,8 @@ class ReservationService(
         return reservations.map { toReservationResponse(it) }
     }
 
-    fun getReservationTypes(): List<ReservationType> {
-        return ReservationType.entries
+    fun getReservationTypes(): List<String> {
+        return ReservationType.entries.map { it.value }
     }
 
     fun removeReservation(id: UUID, buildingName: String) {
