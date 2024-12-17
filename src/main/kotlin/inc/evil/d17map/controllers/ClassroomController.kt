@@ -80,15 +80,14 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "400", description = "Invalid criteria data provided.")
         ]
     )
-    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/available")
+    @GetMapping("$BUILDINGS_PATH$CLASSROOMS_PATH/available")
     fun getAvailableClassrooms(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @RequestParam date: LocalDate,
         @RequestParam timeRange: String,
         @RequestParam peopleCount: Int
     ): ResponseEntity<List<ClassroomResponse>> {
-        val classrooms = classroomService.findAvailableClassrooms(buildingName, floorName, date, timeRange, peopleCount)
+        val classrooms = classroomService.findAvailableClassrooms(buildingName, date, timeRange, peopleCount)
         return ResponseEntity(classrooms, HttpStatus.OK)
     }
 

@@ -14,9 +14,8 @@ import java.util.*
 interface ClassroomRepository : JpaRepository<Classroom, UUID> {
 
     @Query("""
-        SELECT c FROM Classroom c 
-        WHERE c.floor = :floor 
-        AND c.capacity >= :peopleCount 
+        SELECT c FROM Classroom c
+        WHERE c.capacity >= :peopleCount 
         AND NOT EXISTS (
             SELECT r FROM Reservation r 
             WHERE r.classroom = c 
@@ -25,7 +24,6 @@ interface ClassroomRepository : JpaRepository<Classroom, UUID> {
         )
     """)
     fun findAvailableClassrooms(
-        @Param("floor") floor: Floor,
         @Param("date") date: LocalDate,
         @Param("startTime") startTime: LocalTime,
         @Param("endTime") endTime: LocalTime,

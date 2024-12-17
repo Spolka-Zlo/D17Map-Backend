@@ -46,16 +46,13 @@ class ClassroomService(
 
     fun findAvailableClassrooms(
         buildingName: String,
-        floorName: String,
         date: LocalDate,
         timeRange: String,
         peopleCount: Int
     ): List<ClassroomResponse> {
-        val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
-            ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
         val (start, end) = timeRange.split("-")
         val (startTime, endTime) = Pair(LocalTime.parse(start), LocalTime.parse(end))
-        val classrooms = classroomRepository.findAvailableClassrooms(floor, date, startTime, endTime, peopleCount)
+        val classrooms = classroomRepository.findAvailableClassrooms(date, startTime, endTime, peopleCount)
         return classrooms.map { toClassroomResponse(it) }
     }
 
