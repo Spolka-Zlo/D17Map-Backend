@@ -4,7 +4,6 @@ import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.entities.Classroom
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
-import inc.evil.d17map.findOne
 import inc.evil.d17map.exceptions.InvalidClassroomDataException
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
@@ -29,7 +28,11 @@ class ClassroomService(
         return classrooms.map { toClassroomResponse(it) }
     }
 
-    fun createClassroom(buildingName: String, floorName: String, classroomRequest: ClassroomRequest): ClassroomResponse {
+    fun createClassroom(
+        buildingName: String,
+        floorName: String,
+        classroomRequest: ClassroomRequest
+    ): ClassroomResponse {
         val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
             ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
         val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
@@ -58,7 +61,12 @@ class ClassroomService(
         return classrooms.map { toClassroomResponse(it) }
     }
 
-    fun updateClassroom(buildingName: String, floorName: String, id: UUID, classroomRequest: ClassroomRequest): ClassroomResponse {
+    fun updateClassroom(
+        buildingName: String,
+        floorName: String,
+        id: UUID,
+        classroomRequest: ClassroomRequest
+    ): ClassroomResponse {
         val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
             ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
         val classroom = classroomRepository.findByIdAndFloor(id, floor)
@@ -72,12 +80,12 @@ class ClassroomService(
         return toClassroomResponse(updatedClassroom)
     }
 
-    @Transactional(readOnly=true)
-    fun getClassroomPhotoById(id: UUID): ByteArray? {
-        val classroom = classroomRepository.findOne(id) ?: throw ClassroomNotFoundException(id)
-        return classroom.photo
+    @Transactional(readOnly = true)
+    fun getClassroomPhotoById(buildingName: String, id: UUID): ByteArray? {
+        val classroom = classroomRepository.findById(id)
+            .orElseThrow { ClassroomNotFoundException(id) }
+        return classroom.photo?.takeIf { it.isNotEmpty() }
     }
-
 
     fun deleteByBuildingAndFloor(buildingName: String, id: UUID) {
         if (!classroomRepository.existsById(id)) {
