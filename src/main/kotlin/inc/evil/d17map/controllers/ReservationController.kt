@@ -17,12 +17,11 @@ import java.time.LocalDateTime
 import java.util.*
 
 @RestController
-@RequestMapping("/reservations")
 @Tag(name = "Reservations")
 class ReservationController(private val reservationService: ReservationService) {
 
     companion object {
-        private const val BUILDING_PATH = "/buildings/{buildingName}"
+        private const val BUILDING_PATH = "/buildings/{buildingName}/reservations"
     }
 
     @Operation(
@@ -39,10 +38,10 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping
+    @GetMapping(BUILDING_PATH)
     fun getReservationsByDay(
         @RequestParam(value = "day", required = true) day: LocalDate,
-        @RequestParam(value = "buildingName", required = true) buildingName: String
+        @PathVariable buildingName: String
     ): ResponseEntity<List<ReservationResponse>> {
         val reservations = reservationService.getGivenDayReservations(day, buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
