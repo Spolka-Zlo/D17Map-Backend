@@ -32,30 +32,16 @@ interface ClassroomRepository : JpaRepository<Classroom, UUID> {
         @Param("peopleCount") peopleCount: Int
     ): List<Classroom>
 
-    @Query("""
-        SELECT c FROM Classroom c 
-        WHERE c.floor = :floor
-    """)
     fun findByFloor(@Param("floor") floor: Floor): List<Classroom>
 
-    @Query("""
-        SELECT c FROM Classroom c 
-        WHERE c.id = :id 
-        AND c.floor = :floor
-    """)
     fun findByIdAndFloor(@Param("id") id: UUID, @Param("floor") floor: Floor): Classroom?
 
-    @Query("""
-        SELECT COUNT(c) > 0 FROM Classroom c 
-        WHERE c.id = :id 
-        AND c.floor = :floor
-    """)
     fun existsByIdAndFloor(@Param("id") id: UUID, @Param("floor") floor: Floor): Boolean
 
     @Query("""
     SELECT c FROM Classroom c
     WHERE c.floor.building.name = :buildingName
-""")
+    """)
     fun findAllByBuildingName(buildingName: String): List<Classroom>
 
 }
