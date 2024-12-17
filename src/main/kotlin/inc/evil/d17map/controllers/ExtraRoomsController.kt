@@ -11,40 +11,81 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-
+import java.util.*
 
 @RestController
-@RequestMapping("/extra-rooms")
 @Tag(name = "Extra Rooms")
-class ExtraRoomsController(private val extraRoomService: ExtraRoomService) {
+class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
+
+    companion object {
+        private const val BUILDINGS_PATH = "/buildings/{buildingName}"
+        private const val FLOORS_PATH = "/floors/{floorName}"
+        private const val EXTRA_ROOMS_PATH = "/extra-rooms"
+    }
 
     @Operation(
-        summary = "Get all extra rooms",
+        summary = "Get all extra rooms in a specific building",
         responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved all extra rooms.")
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all extra rooms for the building."),
+            ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @GetMapping
-    fun getAllExtraRooms(): ResponseEntity<List<ExtraRoomResponse>> {
-        val extraRooms = extraRoomService.getExtraRooms()
+    @GetMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH")
+    fun getAllExtraRoomsByBuilding(
+        @PathVariable buildingName: String
+    ): ResponseEntity<List<ExtraRoomResponse>> {
+        val extraRooms = extraRoomService.getExtraRoomsByBuilding(buildingName)
         return ResponseEntity(extraRooms, HttpStatus.OK)
     }
 
     @Operation(
-        summary = "Create a new extra room",
+        summary = "Get all extra rooms on a specific floor of a building",
         responses = [
-            ApiResponse(responseCode = "201", description = "Successfully created new extra room."),
-            ApiResponse(responseCode = "400", description = "Invalid extra room request. The name field is required."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            )
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all extra rooms.")
         ]
     )
-    @PostMapping
+    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH")
+    fun getAllExtraRoomsByBuildingAndFloor(
+        @PathVariable buildingName: String,
+        @PathVariable floorName: String
+    ): ResponseEntity<List<ExtraRoomResponse>> {
+        val extraRooms = extraRoomService.getExtraRooms(buildingName, floorName)
+        return ResponseEntity(extraRooms, HttpStatus.OK)
+    }
+
+    @Operation(
+        summary = "Create a new extra room on a specific floor of a building",
+        responses = [
+            ApiResponse(responseCode = "201", description = "Successfully created new extra room."),
+            ApiResponse(responseCode = "400", description = "Invalid extra room request."),
+            ApiResponse(responseCode = "401", description = "Unauthorized access.")
+        ]
+    )
+    @PostMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH")
     @PreAuthorize("hasRole('ADMIN')")
-    fun createExtraRoom(@RequestBody @Valid extraRoomRequest: ExtraRoomRequest): ResponseEntity<ExtraRoomResponse> {
-        val createdExtraRoom = extraRoomService.createExtraRoom(extraRoomRequest)
+    fun createExtraRoom(
+        @PathVariable buildingName: String,
+        @RequestBody @Valid extraRoomRequest: ExtraRoomRequest
+    ): ResponseEntity<ExtraRoomResponse> {
+        val createdExtraRoom =
+            extraRoomService.createExtraRoom(buildingName, extraRoomRequest.floorName, extraRoomRequest)
         return ResponseEntity(createdExtraRoom, HttpStatus.CREATED)
+    }
+
+    @Operation(
+        summary = "Delete an extra room by ID on a specific floor of a building",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully deleted the extra room."),
+            ApiResponse(responseCode = "404", description = "Extra room with the given ID not found."),
+            ApiResponse(responseCode = "401", description = "Unauthorized access.")
+        ]
+    )
+    @DeleteMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeExtraRoom(
+        @PathVariable buildingName: String,
+        @PathVariable id: UUID
+    ) {
+        extraRoomService.deleteExtraRoom(buildingName, id)
     }
 }

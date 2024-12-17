@@ -13,16 +13,25 @@ import java.util.*
 interface ReservationRepository : JpaRepository<Reservation, UUID> {
 
 
-    @Query("SELECT r FROM Reservation r WHERE r.date = :date ORDER BY r.date, r.startTime")
-    fun findAllByDate(@Param("date") date: LocalDate): List<Reservation>
+    @Query("SELECT r FROM Reservation r WHERE r.date = :date AND r.classroom.floor.building.name = :buildingName ORDER BY r.date, r.startTime")
+    fun findAllByDateAndBuildingName(
+        @Param("date") date: LocalDate,
+        @Param("buildingName") buildingName: String
+    ): List<Reservation>
 
-    fun findAllByUserId(userId: UUID): List<Reservation>
+    @Query("SELECT r FROM Reservation r WHERE r.user.id = :userId AND r.classroom.floor.building.name = :buildingName ORDER BY r.date, r.startTime")
+    fun findAllByUserIdAndBuildingName(
+        @Param("userId") userId: UUID,
+        @Param("buildingName") buildingName: String
+    ): List<Reservation>
 
-
-    @Query("SELECT r FROM Reservation r WHERE r.date BETWEEN :startDate AND :endDate ORDER BY r.date, r.startTime")
-    fun findAllByDateBetween(
+    @Query("SELECT r FROM Reservation r WHERE r.date BETWEEN :startDate AND :endDate " +
+            "AND r.classroom.floor.building.name = :buildingName " +
+            "ORDER BY r.date, r.startTime")
+    fun findAllByDateBetweenAndBuildingName(
         @Param("startDate") startDate: LocalDate,
-        @Param("endDate") endDate: LocalDate
+        @Param("endDate") endDate: LocalDate,
+        @Param("buildingName") buildingName: String
     ): List<Reservation>
 
     @Query(
@@ -30,18 +39,21 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
                 "FROM Reservation r " +
                 "WHERE r.user.id = :userID " +
                 "AND r.date BETWEEN :startDate AND :endDate " +
+                "AND r.classroom.floor.building.name = :buildingName " +
                 "ORDER BY r.date, r.startTime"
     )
-    fun findAllByUserAndDateBetween(
+    fun findAllByUserAndDateBetweenAndBuilding(
         @Param("userID") userID: UUID,
         @Param("startDate") startDate: LocalDate,
-        @Param("endDate") endDate: LocalDate
+        @Param("endDate") endDate: LocalDate,
+        @Param("buildingName") buildingName: String
     ): List<Reservation>
 
     @Query(
         "SELECT r " +
                 "FROM Reservation r " +
                 "WHERE r.user.id = :userID " +
+                "AND r.classroom.floor.building.name = :buildingName " +
                 "AND (r.date > :currentDate " +
                 "OR (r.date = :currentDate AND r.startTime > :currentTime))" +
                 "ORDER BY r.date, r.startTime"
@@ -50,6 +62,7 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
         @Param("userID") userID: UUID,
         @Param("currentDate") currentDate: LocalDate,
         @Param("currentTime") currentTime: LocalTime,
+        @Param("buildingName") buildingName: String
     ): List<Reservation>
 
     @Query(
@@ -58,11 +71,15 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
                 "WHERE (r.date > :currentDate " +
                 "OR (r.date = :currentDate AND r.endTime >= :currentTime)) " +
                 "AND r.type = 'EVENT' " +
+                "AND r.classroom.floor.building.name = :buildingName " +
                 "ORDER BY r.date, r.startTime"
     )
     fun findAllCurrentOrFutureEvents(
         @Param("currentDate") currentDate: LocalDate,
-        @Param("currentTime") currentTime: LocalTime
+        @Param("currentTime") currentTime: LocalTime,
+        @Param("buildingName") buildingName: String
     ): List<Reservation>
 
+    @Query("SELECT r FROM Reservation r WHERE r.classroom.floor.building.name = :buildingName")
+    fun findAllByBuildingName(@Param("buildingName") buildingName: String): List<Reservation>
 }

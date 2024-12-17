@@ -26,10 +26,17 @@ class UserNotFoundException : RuntimeException {
 class RoleNotFoundException(roleName: String) : RuntimeException("Role with name '$roleName' not found")
 
 
+class BuildingNotFoundException(buildingName: String) : RuntimeException(
+    "Building with name '$buildingName' not found."
+)
+
 // INVALID DATA
 
-class InvalidClassroomDataException
-    : RuntimeException("Invalid classroom data: name cannot be blank and capacity must be greater than 0.")
+class InvalidReservationDataException(message: String) : RuntimeException(message)
+
+class InvalidClassroomDataException(message: String) : RuntimeException(message)
+
+class InvalidExtraRoomDataException(message: String) : RuntimeException(message)
 
 class InvalidEquipmentDataException(message: String) : RuntimeException(message) {
     companion object {

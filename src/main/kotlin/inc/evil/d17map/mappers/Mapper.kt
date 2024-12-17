@@ -61,7 +61,7 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         startTime = reservation.startTime,
         endTime = reservation.endTime,
         classroom = toClassroomSummary(reservation.classroom),
-        type = reservation.type,
+        type = reservation.type.value,
         description = reservation.description,
         numberOfParticipants = reservation.numberOfParticipants
     )

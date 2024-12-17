@@ -496,7 +496,7 @@ class DataLoader(
             Reservation(
                 title = "Konferencja IT",
                 description = "Prezentacja IT",
-                date = LocalDate.of(2024, 12, 5),
+                date = LocalDate.of(2027, 12, 5),
                 startTime = LocalTime.of(12, 0),
                 endTime = LocalTime.of(15, 0),
                 classroom = classrooms[0],
