@@ -136,7 +136,7 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/types")
+    @GetMapping("reservations/types")
     fun getReservationTypes(): ResponseEntity<List<String>> {
         return ResponseEntity(reservationService.getReservationTypes(), HttpStatus.OK)
     }
