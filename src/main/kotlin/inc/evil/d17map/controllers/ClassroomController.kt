@@ -17,6 +17,12 @@ import java.util.*
 @Tag(name = "Classrooms")
 class ClassroomController(private val classroomService: ClassroomService) {
 
+    companion object {
+        private const val BUILDINGS_PATH = "/buildings/{buildingName}"
+        private const val FLOORS_PATH = "/floors/{floorName}"
+        private const val CLASSROOMS_PATH = "/classrooms"
+    }
+
     @Operation(
         summary = "Get all classrooms in a specific building",
         responses = [
@@ -24,7 +30,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @GetMapping("/building/{buildingName}/classrooms")
+    @GetMapping("$BUILDINGS_PATH$CLASSROOMS_PATH")
     fun getAllClassroomsByBuilding(
         @PathVariable buildingName: String
     ): ResponseEntity<List<ClassroomResponse>> {
@@ -39,7 +45,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @GetMapping("/building/{buildingName}/floor/{floorName}/classrooms")
+    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH")
     fun getAllClassroomsByBuildingAndFloor(
         @PathVariable buildingName: String,
         @PathVariable floorName: String
@@ -56,7 +62,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @PostMapping("/building/{buildingName}/floor/{floorName}/classrooms")
+    @PostMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH")
     @ResponseStatus(HttpStatus.CREATED)
     fun createClassroom(
         @PathVariable buildingName: String,
@@ -74,7 +80,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "400", description = "Invalid criteria data provided.")
         ]
     )
-    @GetMapping("/building/{buildingName}/floor/{floorName}/classrooms/available")
+    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/available")
     fun getAvailableClassrooms(
         @PathVariable buildingName: String,
         @PathVariable floorName: String,
@@ -95,7 +101,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @PutMapping("/building/{buildingName}/floor/{floorName}/classrooms/admin/{id}")
+    @PutMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/admin/{id}")
     fun updateClassroomAdmin(
         @PathVariable buildingName: String,
         @PathVariable floorName: String,
@@ -114,7 +120,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "400", description = "Invalid classroom data provided.")
         ]
     )
-    @GetMapping("/building/{buildingName}/floor/{floorName}/classrooms/{id}/photo")
+    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/{id}/photo")
     fun getClassroomPhoto(
         @PathVariable buildingName: String,
         @PathVariable floorName: String,
@@ -134,7 +140,7 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @DeleteMapping("/building/{buildingName}/floor/{floorName}/classrooms/{id}")
+    @DeleteMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeClassroom(
         @PathVariable buildingName: String,

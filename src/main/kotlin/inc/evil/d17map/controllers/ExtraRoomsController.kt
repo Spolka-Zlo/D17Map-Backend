@@ -16,6 +16,12 @@ import java.util.*
 @Tag(name = "Extra Rooms")
 class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
 
+    companion object {
+        private const val BUILDINGS_PATH = "/buildings/{buildingName}"
+        private const val FLOORS_PATH = "/floors/{floorName}"
+        private const val EXTRA_ROOMS_PATH = "/extra-rooms"
+    }
+
     @Operation(
         summary = "Get all extra rooms in a specific building",
         responses = [
@@ -23,7 +29,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @GetMapping("/building/{buildingName}/extra-rooms")
+    @GetMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH")
     fun getAllExtraRoomsByBuilding(
         @PathVariable buildingName: String
     ): ResponseEntity<List<ExtraRoomResponse>> {
@@ -38,7 +44,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @GetMapping("/building/{buildingName}/floor/{floorName}/extra-rooms")
+    @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH")
     fun getAllExtraRooms(
         @PathVariable buildingName: String,
         @PathVariable floorName: String
@@ -55,7 +61,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @PostMapping("/building/{buildingName}/floor/{floorName}/extra-rooms")
+    @PostMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH")
     @ResponseStatus(HttpStatus.CREATED)
     fun createExtraRoom(
         @PathVariable buildingName: String,
@@ -74,7 +80,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access.")
         ]
     )
-    @DeleteMapping("/building/{buildingName}/floor/{floorName}/extra-rooms/{id}")
+    @DeleteMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeExtraRoom(
         @PathVariable buildingName: String,
