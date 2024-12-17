@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/floors")
 @Tag(name = "Floors")
 class FloorController(private val floorService: FloorService) {
+    companion object {
+        private const val BUILDINGS_PATH = "/buildings/{buildingName}"
+    }
+
     @Operation(
         summary = "Get all floors",
         responses = [
@@ -27,9 +30,9 @@ class FloorController(private val floorService: FloorService) {
             )
         ]
     )
-    @GetMapping
-    fun getAllFloors(): ResponseEntity<List<FloorResponse>> {
-        val floors = floorService.getFloors()
+    @GetMapping("$BUILDINGS_PATH/floors")
+    fun getAllFloors(@PathVariable buildingName: String): ResponseEntity<List<FloorResponse>> {
+        val floors = floorService.getFloors(buildingName)
         val floorResponses = floors.map { toFloorResponse(it) }
         return ResponseEntity(floorResponses, HttpStatus.OK)
     }
@@ -45,9 +48,12 @@ class FloorController(private val floorService: FloorService) {
             )
         ]
     )
-    @PostMapping
-    fun createFloor(@RequestBody @Valid floorRequest: FloorRequest): ResponseEntity<FloorResponse> {
-        val createdFloor = floorService.createFloor(floorRequest)
+    @PostMapping("$BUILDINGS_PATH/floors")
+    fun createFloor(
+        @RequestBody @Valid floorRequest: FloorRequest,
+        @PathVariable buildingName: String
+    ): ResponseEntity<FloorResponse> {
+        val createdFloor = floorService.createFloor(floorRequest, buildingName)
         return ResponseEntity(createdFloor, HttpStatus.CREATED)
     }
 }

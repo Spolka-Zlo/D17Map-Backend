@@ -16,9 +16,13 @@ import java.time.LocalDateTime
 import java.util.*
 
 @RestController
-@RequestMapping("/reservations")
 @Tag(name = "Reservations")
 class ReservationController(private val reservationService: ReservationService) {
+
+    companion object {
+        private const val BUILDING_PATH = "/buildings/{buildingName}/reservations"
+    }
+
     @Operation(
         summary = "Get reservations by day",
         responses = [
@@ -33,14 +37,12 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping
+    @GetMapping(BUILDING_PATH)
     fun getReservationsByDay(
-        @RequestParam(
-            value = "day",
-            required = true
-        ) day: LocalDate
+        @RequestParam(value = "day", required = true) day: LocalDate,
+        @PathVariable buildingName: String
     ): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getGivenDayReservations(day)
+        val reservations = reservationService.getGivenDayReservations(day, buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
@@ -55,56 +57,54 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @PostMapping
+    @PostMapping(BUILDING_PATH)
     @ResponseStatus(HttpStatus.CREATED)
-    fun createReservation(@RequestBody @Valid reservationRequest: ReservationRequest): ResponseEntity<ReservationResponse> {
-        val createdReservation = reservationService.createReservation(reservationRequest)
+    fun createReservation(
+        @PathVariable buildingName: String,
+        @RequestBody @Valid reservationRequest: ReservationRequest
+    ): ResponseEntity<ReservationResponse> {
+        val createdReservation = reservationService.createReservation(buildingName, reservationRequest)
         return ResponseEntity(createdReservation, HttpStatus.CREATED)
     }
 
-
     @Operation(
-        summary = "Get all reservations for a week",
+        summary = "Get all reservations for a week in a specific building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "400", description = "Invalid building name or date."),
             ApiResponse(
                 responseCode = "401",
                 description = "Unauthorized access. The user is not authenticated and needs to log in."
             )
         ]
     )
-    @GetMapping("/week")
+    @GetMapping("$BUILDING_PATH/week")
     fun getReservationsForWeek(
-        @RequestParam(
-            name = "startDay",
-            required = true
-        ) monday: LocalDate
+        @RequestParam(name = "startDay", required = true) monday: LocalDate,
+        @PathVariable buildingName: String,
     ): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getReservationsForWeek(monday)
+        val reservations = reservationService.getReservationsForWeek(monday, buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
     @Operation(
-        summary = "Get all reservations for a week for given user",
+        summary = "Get all reservations for a week for given user in a specific building",
         responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for next week."),
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations for the week."),
             ApiResponse(
                 responseCode = "401",
                 description = "Unauthorized access. The user is not authenticated and needs to log in."
             )
         ]
     )
-    @GetMapping("/user/week")
+    @GetMapping("$BUILDING_PATH/user/week")
     fun getMyWeekReservations(
-        @RequestParam(
-            name = "startDay",
-            required = true
-        ) monday: LocalDate
+        @RequestParam(name = "startDay", required = true) monday: LocalDate,
+        @PathVariable buildingName: String,
     ): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getUserWeekReservations(monday)
+        val reservations = reservationService.getUserWeekReservations(monday, buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
-
 
     @Operation(
         summary = "Get reservation by id",
@@ -117,14 +117,12 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/{id}")
+    @GetMapping("$BUILDING_PATH/{id}")
     fun getReservationById(
-        @PathVariable(
-            required = true,
-            name = "id"
-        ) id: UUID
+        @PathVariable(name = "id", required = true) id: UUID,
+        @PathVariable buildingName: String,
     ): ResponseEntity<ReservationResponse> {
-        val reservations = reservationService.getReservationById(id)
+        val reservations = reservationService.getReservationById(buildingName, id)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
@@ -138,7 +136,7 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/types")
+    @GetMapping("reservations/types")
     fun getReservationTypes(): ResponseEntity<List<String>> {
         return ResponseEntity(reservationService.getReservationTypes(), HttpStatus.OK)
     }
@@ -153,14 +151,16 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/user/future")
-    fun getFutureReservations(): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getUserFutureReservations()
+    @GetMapping("$BUILDING_PATH/user/future")
+    fun getFutureReservations(
+        @PathVariable buildingName: String,
+    ): ResponseEntity<List<ReservationResponse>> {
+        val reservations = reservationService.getUserFutureReservations(buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
     @Operation(
-        summary = "Remove reservation by id",
+        summary = "Remove reservation by id for a specific building",
         responses = [
             ApiResponse(responseCode = "204", description = "Successfully removed reservation."),
             ApiResponse(responseCode = "404", description = "Reservation with given id not found"),
@@ -170,39 +170,34 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("$BUILDING_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeReservation(
-        @PathVariable(
-            required = true,
-            name = "id"
-        ) id: UUID
-    ) = reservationService.removeReservation(id)
-
+        @PathVariable id: UUID,
+        @PathVariable buildingName: String
+    ) = reservationService.removeReservation(id, buildingName)
 
     @Operation(
-        summary = "Update an existing reservation",
+        summary = "Update an existing reservation in a specific building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully updated reservation."),
             ApiResponse(responseCode = "400", description = "Invalid reservation data."),
             ApiResponse(responseCode = "404", description = "Reservation not found."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            )
+            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @PutMapping("/{id}")
+    @PutMapping("$BUILDING_PATH/{id}")
     fun updateReservation(
         @PathVariable id: UUID,
+        @PathVariable buildingName: String,
         @RequestBody @Valid updateRequest: ReservationUpdateRequest
     ): ResponseEntity<ReservationResponse> {
-        val updatedReservation = reservationService.updateReservation(id, updateRequest)
+        val updatedReservation = reservationService.updateReservation(id, buildingName, updateRequest)
         return ResponseEntity(updatedReservation, HttpStatus.OK)
     }
 
     @Operation(
-        summary = "Get all future and current events",
+        summary = "Get all future and current events for a specific building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved events."),
             ApiResponse(responseCode = "400", description = "Invalid data."),
@@ -213,67 +208,70 @@ class ReservationController(private val reservationService: ReservationService) 
             )
         ]
     )
-    @GetMapping("/events")
+    @GetMapping("$BUILDING_PATH/events")
     fun getEvents(
+        @PathVariable buildingName: String,
     ): ResponseEntity<List<ReservationResponse>> {
         val currentDateTime = LocalDateTime.now()
-        val reservations = reservationService.getCurrentOrFutureEvents(currentDateTime)
+        val reservations = reservationService.getCurrentOrFutureEvents(currentDateTime, buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
     @Operation(
-        summary = "Update an existing reservation by admin",
+        summary = "Update an existing reservation by admin for a specific building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully updated reservation."),
             ApiResponse(responseCode = "400", description = "Invalid reservation data."),
             ApiResponse(responseCode = "404", description = "Reservation not found."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            ),
-            ApiResponse(
-                responseCode = "403",
-                description = "Forbidden access. The user does not have the necessary permissions."
-            )
+            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in."),
+            ApiResponse(responseCode = "403", description = "Forbidden access. The user does not have the necessary permissions.")
         ]
     )
-    @PutMapping("/admin/{id}")
+    @PutMapping("$BUILDING_PATH/admin/{id}")
     fun updateReservationAdmin(
         @PathVariable id: UUID,
+        @PathVariable buildingName: String,
         @RequestBody @Valid adminUpdateRequest: ReservationRequest
     ): ResponseEntity<ReservationResponse> {
-        val updatedReservation = reservationService.updateReservationAdmin(id, adminUpdateRequest)
+        val updatedReservation = reservationService.updateReservationAdmin(id,  buildingName, adminUpdateRequest)
         return ResponseEntity(updatedReservation, HttpStatus.OK)
     }
 
     @Operation(
-        summary = "Get all user's reservations (admin only)",
+        summary = "Get all user's reservations (admin only) for a specific building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved reservations."),
-            ApiResponse(responseCode = "400", description = "Invalid user data."),
+            ApiResponse(responseCode = "400", description = "Invalid user or building data."),
             ApiResponse(responseCode = "404", description = "Reservations not found."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            ),
-            ApiResponse(
-                responseCode = "403",
-                description = "Forbidden access. The user does not have the necessary permissions."
-            )
+            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in."),
+            ApiResponse(responseCode = "403", description = "Forbidden access. The user does not have the necessary permissions.")
         ]
     )
-    @GetMapping("/admin/allReservations/{userId}")
+    @GetMapping("$BUILDING_PATH/admin/allReservations/{userId}")
     fun getUserReservationsForAdmin(
-        @PathVariable userId: UUID
+        @PathVariable buildingName: String,
+        @PathVariable userId: UUID,
     ): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getReservationsForUser(userId)
+        val reservations = reservationService.getReservationsForUserInBuilding(userId, buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 
-    @GetMapping("/admin/allReservations")
+    @Operation(
+        summary = "Get all reservations for a building (Admin only)",
+        description = "Retrieve all reservations for a specific building. This endpoint is only accessible to admin users.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all reservations for the specified building."),
+            ApiResponse(responseCode = "400", description = "Invalid building name provided."),
+            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in."),
+            ApiResponse(responseCode = "403", description = "Forbidden access. The user does not have the necessary permissions."),
+            ApiResponse(responseCode = "404", description = "Building not found.")
+        ]
+    )
+    @GetMapping("$BUILDING_PATH/admin/allReservations")
     fun getAllReservationsForAdmin(
+        @PathVariable buildingName: String
     ): ResponseEntity<List<ReservationResponse>> {
-        val reservations = reservationService.getAllReservations()
+        val reservations = reservationService.getAllReservationsForBuilding(buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
 }

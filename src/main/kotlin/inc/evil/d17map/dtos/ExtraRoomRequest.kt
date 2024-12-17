@@ -11,5 +11,4 @@ class ExtraRoomRequest (
     var type: String,
     val modelKey: String,
     val floorName: String,
-    val buildingName: String
 )
