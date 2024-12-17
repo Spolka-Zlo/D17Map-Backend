@@ -62,14 +62,13 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @PostMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH")
+    @PostMapping("$BUILDINGS_PATH$CLASSROOMS_PATH")
     @ResponseStatus(HttpStatus.CREATED)
     fun createClassroom(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @RequestBody @Valid classroomRequest: ClassroomRequest
     ): ResponseEntity<ClassroomResponse> {
-        val createdClassroom = classroomService.createClassroom(buildingName, floorName, classroomRequest)
+        val createdClassroom = classroomService.createClassroom(buildingName, classroomRequest.floorName, classroomRequest)
         return ResponseEntity(createdClassroom, HttpStatus.CREATED)
     }
 
@@ -100,14 +99,13 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
-    @PutMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH/admin/{id}")
+    @PutMapping("$BUILDINGS_PATH$CLASSROOMS_PATH/admin/{id}")
     fun updateClassroomAdmin(
         @PathVariable buildingName: String,
-        @PathVariable floorName: String,
         @PathVariable id: UUID,
         @RequestBody @Valid classroomRequest: ClassroomRequest
     ): ResponseEntity<ClassroomResponse> {
-        val updatedClassroom = classroomService.updateClassroom(buildingName, floorName, id, classroomRequest)
+        val updatedClassroom = classroomService.updateClassroom(buildingName, classroomRequest.floorName, id, classroomRequest)
         return ResponseEntity(updatedClassroom, HttpStatus.OK)
     }
 
