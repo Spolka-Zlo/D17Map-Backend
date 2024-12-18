@@ -2,6 +2,7 @@ package inc.evil.d17map.controllers
 
 import inc.evil.d17map.dtos.ExtraRoomRequest
 import inc.evil.d17map.dtos.ExtraRoomResponse
+import inc.evil.d17map.dtos.ExtraRoomUpdateRequest
 import inc.evil.d17map.services.ExtraRoomService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -88,4 +89,24 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
     ) {
         extraRoomService.deleteExtraRoom(buildingName, id)
     }
+
+    @Operation(
+        summary = "Update an existing extra room by ID",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully updated the extra room."),
+            ApiResponse(responseCode = "400", description = "Invalid extra room data."),
+            ApiResponse(responseCode = "404", description = "Extra room not found."),
+            ApiResponse(responseCode = "401", description = "Unauthorized access.")
+        ]
+    )
+    @PutMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH/{id}")
+    fun updateExtraRoom(
+        @PathVariable buildingName: String,
+        @PathVariable id: UUID,
+        @RequestBody @Valid extraRoomRequest: ExtraRoomUpdateRequest
+    ): ResponseEntity<ExtraRoomResponse> {
+        val updatedExtraRoom = extraRoomService.updateExtraRoom(buildingName, id, extraRoomRequest)
+        return ResponseEntity(updatedExtraRoom, HttpStatus.OK)
+    }
+
 }
