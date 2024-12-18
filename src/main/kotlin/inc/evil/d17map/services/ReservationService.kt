@@ -56,6 +56,17 @@ class ReservationService(
         val username = SecurityContextHolder.getContext().authentication.name
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
+        if (reservationRequest.startTime >= reservationRequest.endTime) {
+            throw InvalidReservationDataException("Start time must be earlier than end time.")
+        }
+
+        if (reservationRequest.startTime.minute % 15 != 0 || reservationRequest.endTime.minute % 15 != 0) {
+            throw InvalidReservationDataException(
+                "Start time (${reservationRequest.startTime}) and end time (${reservationRequest.endTime}) must " +
+                        "align with 15-minute time slots (e.g., 08:00, 08:15, 08:30)."
+            )
+        }
+
         val reservation = Reservation(
             title = reservationRequest.title,
             description = reservationRequest.description,

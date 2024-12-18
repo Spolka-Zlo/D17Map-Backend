@@ -2,6 +2,7 @@ package inc.evil.d17map.services
 
 import inc.evil.d17map.dtos.ExtraRoomRequest
 import inc.evil.d17map.dtos.ExtraRoomResponse
+import inc.evil.d17map.dtos.ExtraRoomUpdateRequest
 import inc.evil.d17map.entities.Building
 import inc.evil.d17map.entities.ExtraRoom
 import inc.evil.d17map.entities.Floor
@@ -45,4 +46,19 @@ class ExtraRoomService(
             ?: throw InvalidExtraRoomDataException("Extra room with ID $id not found in building '$buildingName'.")
         extraRoomRepository.delete(extraRoom)
     }
+
+    fun updateExtraRoom(buildingName: String, id: UUID, extraRoomRequest: ExtraRoomUpdateRequest): ExtraRoomResponse {
+        val existingExtraRoom = extraRoomRepository.findByIdAndBuilding(id, buildingName)
+            ?: throw InvalidExtraRoomDataException("Extra room with ID $id not found in building '$buildingName'.")
+
+        existingExtraRoom.apply {
+            name = extraRoomRequest.name
+            description = extraRoomRequest.description
+            type = extraRoomRequest.type
+        }
+
+        val savedExtraRoom = extraRoomRepository.save(existingExtraRoom)
+        return toExtraRoomResponse(savedExtraRoom)
+    }
+
 }
