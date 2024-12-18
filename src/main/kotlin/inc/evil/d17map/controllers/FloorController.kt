@@ -5,11 +5,12 @@ import inc.evil.d17map.dtos.FloorResponse
 import inc.evil.d17map.mappers.toFloorResponse
 import inc.evil.d17map.services.FloorService
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 
@@ -23,11 +24,7 @@ class FloorController(private val floorService: FloorService) {
     @Operation(
         summary = "Get all floors",
         responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved all floors."),
-            ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized access. The user is not authenticated and needs to log in."
-            )
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all floors.")
         ]
     )
     @GetMapping("$BUILDINGS_PATH/floors")
@@ -49,6 +46,7 @@ class FloorController(private val floorService: FloorService) {
         ]
     )
     @PostMapping("$BUILDINGS_PATH/floors")
+    @PreAuthorize("hasRole('ADMIN')")
     fun createFloor(
         @RequestBody @Valid floorRequest: FloorRequest,
         @PathVariable buildingName: String

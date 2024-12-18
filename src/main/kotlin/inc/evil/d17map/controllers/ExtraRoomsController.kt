@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -40,8 +41,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
     @Operation(
         summary = "Get all extra rooms on a specific floor of a building",
         responses = [
-            ApiResponse(responseCode = "200", description = "Successfully retrieved all extra rooms."),
-            ApiResponse(responseCode = "401", description = "Unauthorized access.")
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all extra rooms.")
         ]
     )
     @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$EXTRA_ROOMS_PATH")
@@ -62,12 +62,13 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
         ]
     )
     @PostMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     fun createExtraRoom(
         @PathVariable buildingName: String,
         @RequestBody @Valid extraRoomRequest: ExtraRoomRequest
     ): ResponseEntity<ExtraRoomResponse> {
-        val createdExtraRoom = extraRoomService.createExtraRoom(buildingName, extraRoomRequest.floorName, extraRoomRequest)
+        val createdExtraRoom =
+            extraRoomService.createExtraRoom(buildingName, extraRoomRequest.floorName, extraRoomRequest)
         return ResponseEntity(createdExtraRoom, HttpStatus.CREATED)
     }
 

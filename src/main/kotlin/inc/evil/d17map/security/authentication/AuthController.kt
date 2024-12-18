@@ -1,4 +1,4 @@
-package inc.evil.d17map.security.user
+package inc.evil.d17map.security.authentication
 
 
 import io.swagger.v3.oas.annotations.Operation
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "Authentication")
 @SecurityRequirements // WARNING: Hacky way of disabling authorization for this controller in OpenApi spec
 class AuthController(
-    private val userAuthService: UserAuthService
+    private val authService: AuthService
 ) {
 
     @Operation(
@@ -26,7 +26,7 @@ class AuthController(
     )
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun register(@RequestBody authRequest: AuthRequest) = userAuthService.registerUser(authRequest)
+    fun register(@RequestBody authRequest: AuthRequest) = authService.registerUser(authRequest)
 
     @Operation(
         summary = "Authenticate a user and return JWT",
@@ -36,7 +36,6 @@ class AuthController(
         ]
     )
     @PostMapping("/login")
-    fun login(@RequestBody authRequest: AuthRequest): LoginResponse {
-        return userAuthService.verifyUser(authRequest)
-    }
+    fun login(@RequestBody authRequest: AuthRequest) = authService.verifyUser(authRequest)
+
 }

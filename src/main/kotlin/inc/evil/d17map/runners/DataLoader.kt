@@ -2,8 +2,9 @@ package inc.evil.d17map.runners
 
 import inc.evil.d17map.entities.*
 import inc.evil.d17map.enums.ReservationType
-import inc.evil.d17map.enums.Role
 import inc.evil.d17map.repositories.*
+import inc.evil.d17map.security.authorization.Role
+import inc.evil.d17map.security.authorization.RoleRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -17,18 +18,28 @@ class DataLoader(
     private val classroomRepository: ClassroomRepository,
     private val extraRoomRepository: ExtraRoomRepository,
     private val userRepository: UserRepository,
+    private val roleRepository: RoleRepository,
     private val reservationRepository: ReservationRepository,
     private val passwordEncoder: PasswordEncoder,
     private val buildingRepository: BuildingRepository,
-    private val floorRepository: FloorRepository
+    private val floorRepository: FloorRepository,
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
+        val roles = listOf(
+            Role(name = "ROLE_STUDENT"),
+            Role(name = "ROLE_TEACHER"),
+            Role(name = "ROLE_ADMIN"),
+        )
+
+        roleRepository.saveAll(roles)
+
+
         val equipments = listOf(
-            Equipment(name="Komputery"),
-            Equipment(name="Routery"),
-            Equipment(name="Projektor"),
-            Equipment(name="Tablica")
+            Equipment(name = "Komputery"),
+            Equipment(name = "Routery"),
+            Equipment(name = "Projektor"),
+            Equipment(name = "Tablica")
         )
         equipmentRepository.saveAll(equipments)
 
@@ -43,6 +54,17 @@ class DataLoader(
         )
         floorRepository.saveAll(floors)
 
+        val photos = listOf(
+            (ClassPathResource("photos/119.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/138.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/241.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/327.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/327d.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/327e.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/422.jpg").inputStream.readBytes()),
+            (ClassPathResource("photos/426.jpg").inputStream.readBytes()),
+        )
+
 
         val classrooms = listOf(
             // 1 floor
@@ -53,7 +75,7 @@ class DataLoader(
                 modelKey = "119",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[0],
-                photo = ClassPathResource("photos/119.jpg").inputStream.readBytes()
+                photo = photos[0]
             ),
             Classroom(
                 name = "1.20",
@@ -78,7 +100,7 @@ class DataLoader(
                 modelKey = "138",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[0],
-                photo = ClassPathResource("photos/138.jpg").inputStream.readBytes()
+                photo = photos[1]
             ),
             // 2 floor
             Classroom(
@@ -88,7 +110,7 @@ class DataLoader(
                 modelKey = "241",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[1],
-                photo = ClassPathResource("photos/241.jpg").inputStream.readBytes()
+                photo = photos[2]
             ),
             // 3 floor
             Classroom(
@@ -122,7 +144,7 @@ class DataLoader(
                 modelKey = "327a",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photo = ClassPathResource("photos/327.jpg").inputStream.readBytes()
+                photo = photos[3]
             ),
             Classroom(
                 name = "3.27b",
@@ -131,7 +153,7 @@ class DataLoader(
                 modelKey = "327b",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photo = ClassPathResource("photos/327.jpg").inputStream.readBytes()
+                photo = photos[3]
             ),
             Classroom(
                 name = "3.27c",
@@ -140,7 +162,7 @@ class DataLoader(
                 modelKey = "327c",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photo = ClassPathResource("photos/327.jpg").inputStream.readBytes()
+                photo = photos[3]
             ),
             Classroom(
                 name = "3.27d",
@@ -149,7 +171,7 @@ class DataLoader(
                 modelKey = "327d",
                 equipments = mutableSetOf(equipments[2], equipments[3]),
                 floor = floors[2],
-                photo = ClassPathResource("photos/327d.jpg").inputStream.readBytes()
+                photo = photos[4]
             ),
             Classroom(
                 name = "3.27e",
@@ -158,7 +180,7 @@ class DataLoader(
                 modelKey = "327e",
                 equipments = mutableSetOf(equipments[0], equipments[2], equipments[3]),
                 floor = floors[2],
-                photo = ClassPathResource("photos/327e.jpg").inputStream.readBytes()
+                photo = photos[5]
             ),
             Classroom(
                 name = "4.22",
@@ -167,7 +189,7 @@ class DataLoader(
                 modelKey = "422",
                 equipments = mutableSetOf(equipments[1]),
                 floor = floors[3],
-                photo = ClassPathResource("photos/422.jpg").inputStream.readBytes()
+                photo = photos[6]
             ),
             Classroom(
                 name = "4.23",
@@ -184,7 +206,7 @@ class DataLoader(
                 modelKey = "426",
                 equipments = mutableSetOf(equipments[1]),
                 floor = floors[3],
-                photo = ClassPathResource("photos/426.jpg").inputStream.readBytes()
+                photo = photos[7]
             ),
             Classroom(
                 name = "4.27",
@@ -193,7 +215,7 @@ class DataLoader(
                 modelKey = "427",
                 equipments = mutableSetOf(equipments[2]),
                 floor = floors[3],
-                photo = ClassPathResource("photos/427.jpg").inputStream.readBytes()
+                photo = photos[7]
             ),
             Classroom(
                 name = "4.28",
@@ -202,7 +224,7 @@ class DataLoader(
                 modelKey = "428",
                 equipments = mutableSetOf(equipments[3]),
                 floor = floors[3],
-                photo = ClassPathResource("photos/427.jpg").inputStream.readBytes()
+                photo = photos[7]
             ),
             Classroom(
                 name = "4.29",
@@ -225,7 +247,7 @@ class DataLoader(
                 description = "fajna sala taka o v4",
                 capacity = 20,
                 modelKey = "430",
-                equipments = mutableSetOf(equipments[1] , equipments[2]),
+                equipments = mutableSetOf(equipments[1], equipments[2]),
                 floor = floors[3]
             ),
         )
@@ -400,19 +422,28 @@ class DataLoader(
         )
         extraRoomRepository.saveAll(extraRooms)
 
-        val user = User(
+        val admin = User(
             email = "admin",
             password = passwordEncoder.encode("admin"),
-            userType = Role.STUDENT,
+            roles = mutableSetOf(roles[2])
+        )
+
+        val teacher = User(
+            email = "teacher@agh.edu.pl",
+            password = passwordEncoder.encode("teacher"),
+            roles = mutableSetOf(roles[1])
+        )
+
+        val student = User(
+            email = "example@student.agh.edu.pl",
+            password = passwordEncoder.encode("student"),
+            roles = mutableSetOf(roles[0])
         )
 
         val users = listOf(
-             user,
-             User(
-                email = "admin@admin.agh.edu.pl",
-                password = passwordEncoder.encode("admin@password1234"),
-                userType = Role.ADMIN,
-            )
+            admin,
+            teacher,
+            student,
         )
 
         userRepository.saveAll(users)
@@ -425,7 +456,7 @@ class DataLoader(
                 startTime = LocalTime.of(9, 0),
                 endTime = LocalTime.of(12, 0),
                 classroom = classrooms[0],
-                user = user,
+                user = teacher,
                 type = ReservationType.EXAM,
                 numberOfParticipants = 100
             ),
@@ -436,7 +467,7 @@ class DataLoader(
                 startTime = LocalTime.of(14, 0),
                 endTime = LocalTime.of(17, 0),
                 classroom = classrooms[1],
-                user = user,
+                user = teacher,
                 type = ReservationType.STUDENTS_CLUB_MEETING,
                 numberOfParticipants = 50
             ),
@@ -447,7 +478,7 @@ class DataLoader(
                 startTime = LocalTime.of(10, 0),
                 endTime = LocalTime.of(13, 0),
                 classroom = classrooms[2],
-                user = user,
+                user = teacher,
                 type = ReservationType.LECTURE,
                 numberOfParticipants = 120
             ),
@@ -458,7 +489,7 @@ class DataLoader(
                 startTime = LocalTime.of(16, 0),
                 endTime = LocalTime.of(18, 0),
                 classroom = classrooms[2],
-                user = user,
+                user = teacher,
                 type = ReservationType.STUDENTS_CLUB_MEETING,
                 numberOfParticipants = 30
             ),
@@ -469,7 +500,7 @@ class DataLoader(
                 startTime = LocalTime.of(12, 0),
                 endTime = LocalTime.of(15, 0),
                 classroom = classrooms[0],
-                user = user,
+                user = teacher,
                 type = ReservationType.EVENT,
                 numberOfParticipants = 80
             )

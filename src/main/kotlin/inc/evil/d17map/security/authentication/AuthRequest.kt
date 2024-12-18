@@ -1,4 +1,4 @@
-package inc.evil.d17map.security.user
+package inc.evil.d17map.security.authentication
 
 data class AuthRequest(
     val username: String,

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.util.*
@@ -27,7 +28,10 @@ class ClassroomController(private val classroomService: ClassroomService) {
         summary = "Get all classrooms in a specific building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved all classrooms for the building."),
-            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
         ]
     )
     @GetMapping("$BUILDINGS_PATH$CLASSROOMS_PATH")
@@ -42,7 +46,6 @@ class ClassroomController(private val classroomService: ClassroomService) {
         summary = "Get all classrooms on a specific floor of a building",
         responses = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved all classrooms."),
-            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
         ]
     )
     @GetMapping("$BUILDINGS_PATH$FLOORS_PATH$CLASSROOMS_PATH")
@@ -59,16 +62,21 @@ class ClassroomController(private val classroomService: ClassroomService) {
         responses = [
             ApiResponse(responseCode = "201", description = "Successfully created new classroom."),
             ApiResponse(responseCode = "400", description = "Invalid classroom data."),
-            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
         ]
     )
     @PostMapping("$BUILDINGS_PATH$CLASSROOMS_PATH")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     fun createClassroom(
         @PathVariable buildingName: String,
         @RequestBody @Valid classroomRequest: ClassroomRequest
     ): ResponseEntity<ClassroomResponse> {
-        val createdClassroom = classroomService.createClassroom(buildingName, classroomRequest.floorName, classroomRequest)
+        val createdClassroom =
+            classroomService.createClassroom(buildingName, classroomRequest.floorName, classroomRequest)
         return ResponseEntity(createdClassroom, HttpStatus.CREATED)
     }
 
@@ -96,16 +104,21 @@ class ClassroomController(private val classroomService: ClassroomService) {
             ApiResponse(responseCode = "200", description = "Successfully updated the classroom."),
             ApiResponse(responseCode = "404", description = "Classroom with the given ID not found."),
             ApiResponse(responseCode = "400", description = "Invalid classroom data."),
-            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
         ]
     )
     @PutMapping("$BUILDINGS_PATH$CLASSROOMS_PATH/admin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateClassroomAdmin(
         @PathVariable buildingName: String,
         @PathVariable id: UUID,
         @RequestBody @Valid classroomRequest: ClassroomRequest
     ): ResponseEntity<ClassroomResponse> {
-        val updatedClassroom = classroomService.updateClassroom(buildingName, classroomRequest.floorName, id, classroomRequest)
+        val updatedClassroom =
+            classroomService.updateClassroom(buildingName, classroomRequest.floorName, id, classroomRequest)
         return ResponseEntity(updatedClassroom, HttpStatus.OK)
     }
 
@@ -133,11 +146,15 @@ class ClassroomController(private val classroomService: ClassroomService) {
         responses = [
             ApiResponse(responseCode = "204", description = "Successfully deleted the classroom."),
             ApiResponse(responseCode = "404", description = "Classroom with the given ID not found."),
-            ApiResponse(responseCode = "401", description = "Unauthorized access. The user is not authenticated and needs to log in.")
+            ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized access. The user is not authenticated and needs to log in."
+            )
         ]
     )
     @DeleteMapping("$BUILDINGS_PATH$CLASSROOMS_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     fun removeClassroom(
         @PathVariable buildingName: String,
         @PathVariable id: UUID

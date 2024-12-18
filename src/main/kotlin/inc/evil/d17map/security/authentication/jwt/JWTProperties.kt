@@ -1,4 +1,4 @@
-package inc.evil.d17map.security.jwt
+package inc.evil.d17map.security.authentication.jwt
 
 
 data class JWTProperties (

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -172,6 +173,7 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     @DeleteMapping("$BUILDING_PATH/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     fun removeReservation(
         @PathVariable id: UUID,
         @PathVariable buildingName: String
@@ -228,6 +230,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @PutMapping("$BUILDING_PATH/admin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateReservationAdmin(
         @PathVariable id: UUID,
         @PathVariable buildingName: String,
@@ -248,6 +251,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("$BUILDING_PATH/admin/allReservations/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getUserReservationsForAdmin(
         @PathVariable buildingName: String,
         @PathVariable userId: UUID,
@@ -268,6 +272,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("$BUILDING_PATH/admin/allReservations")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getAllReservationsForAdmin(
         @PathVariable buildingName: String
     ): ResponseEntity<List<ReservationResponse>> {
