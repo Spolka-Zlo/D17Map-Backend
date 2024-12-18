@@ -100,6 +100,7 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
         ]
     )
     @PutMapping("$BUILDINGS_PATH$EXTRA_ROOMS_PATH/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateExtraRoom(
         @PathVariable buildingName: String,
         @PathVariable id: UUID,
@@ -108,5 +109,4 @@ class ExtraRoomController(private val extraRoomService: ExtraRoomService) {
         val updatedExtraRoom = extraRoomService.updateExtraRoom(buildingName, id, extraRoomRequest)
         return ResponseEntity(updatedExtraRoom, HttpStatus.OK)
     }
-
 }
