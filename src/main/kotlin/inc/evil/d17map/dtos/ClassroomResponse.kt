@@ -10,5 +10,4 @@ data class ClassroomResponse(
     val equipmentIds: Set<UUID>,
     val id: UUID,
     val floorName: String,
-    val buildingName: String
 )

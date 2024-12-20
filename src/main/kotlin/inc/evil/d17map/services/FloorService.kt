@@ -24,8 +24,10 @@ class FloorService(
             ?: throw BuildingNotFoundException(buildingName)
 
         if (buildingName != building.name) {
-            throw InvalidReservationDataException("The building name '$buildingName' does not match the " +
-                    "building name from  create floor request '${building.name}'.")
+            throw InvalidReservationDataException(
+                "The building name '$buildingName' does not match the " +
+                        "building name from  create floor request '${building.name}'."
+            )
         }
 
         val floor = Floor(
@@ -37,7 +39,6 @@ class FloorService(
         return FloorResponse(
             id = savedFloor.id!!,
             floorName = savedFloor.name,
-            buildingName = savedFloor.building.name
         )
     }
 }

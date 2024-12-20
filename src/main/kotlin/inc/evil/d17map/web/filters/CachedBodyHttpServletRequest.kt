@@ -1,4 +1,4 @@
-package inc.evil.d17map.config
+package inc.evil.d17map.web.filters
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.ServletInputStream
@@ -12,15 +12,14 @@ import java.io.InputStreamReader
 
 private val logger = KotlinLogging.logger {}
 
-class CachedBodyHttpServletRequest(request: HttpServletRequest) : HttpServletRequestWrapper(request) {
+class CachedBodyHttpServletRequest @Throws(IOException::class) constructor(request: HttpServletRequest) :
+    HttpServletRequestWrapper(request) {
+    private val cachedBody: ByteArray
 
-    private val cachedBody: ByteArray = try {
-        val requestInputStream = request.inputStream
-        StreamUtils.copyToByteArray(requestInputStream)
-
-    } catch (ex: IOException) {
-        logger.error(ex) { "Unable to read and cache request body: $ex" }
-        throw IllegalStateException("Unable to read and cache request body", ex)
+    init {
+        logger.info { "Initializing cached request..." }
+        cachedBody = StreamUtils.copyToByteArray(request.inputStream)
+        logger.info { "Initializing cached request completed." }
     }
 
     override fun getInputStream(): ServletInputStream {

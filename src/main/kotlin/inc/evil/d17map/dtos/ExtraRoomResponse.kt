@@ -9,5 +9,4 @@ class ExtraRoomResponse (
     val description: String,
     val type: String,
     val floorName: String,
-    val buildingName: String
 )

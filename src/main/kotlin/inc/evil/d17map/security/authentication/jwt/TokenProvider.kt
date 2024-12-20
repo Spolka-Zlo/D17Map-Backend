@@ -48,13 +48,6 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
             .compact()
     }
 
-    fun validateToken(token: String) = runCatching {
-        Jwts.parser()
-            .verifyWith(secretKey)
-            .build()
-            .parseSignedClaims(token)
-    }.isSuccess
-
     fun extractClaims(token: String): Claims =
         Jwts.parser()
             .verifyWith(secretKey)

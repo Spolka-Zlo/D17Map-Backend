@@ -35,8 +35,10 @@ class ReservationService(
         val reservation = reservationRepository.findOne(id) ?: throw ReservationNotFoundException(id)
 
         if (reservation.classroom.floor.building.name != buildingName)
-            throw InvalidReservationDataException("The building name '$buildingName' does not match the " +
-                    "classroom's building '${reservation.classroom.floor.building.name}'.")
+            throw InvalidReservationDataException(
+                "The building name '$buildingName' does not match the " +
+                        "classroom's building '${reservation.classroom.floor.building.name}'."
+            )
 
         return toReservationResponse(reservation)
     }
@@ -49,8 +51,10 @@ class ReservationService(
             ?: throw BuildingNotFoundException(buildingName)
 
         if (classroom.floor.building.name != building.name) {
-            throw InvalidReservationDataException("The building name '$buildingName' does not match the " +
-                    "classroom's building '${classroom.floor.building.name}'.")
+            throw InvalidReservationDataException(
+                "The building name '$buildingName' does not match the " +
+                        "classroom's building '${classroom.floor.building.name}'."
+            )
         }
 
         val username = SecurityContextHolder.getContext().authentication.name
@@ -112,13 +116,15 @@ class ReservationService(
 
         val endOfWeek = monday.plusDays(6)
 
-        val reservations = reservationRepository.findAllByUserAndDateBetweenAndBuilding(user.id!!, monday, endOfWeek, buildingName)
+        val reservations =
+            reservationRepository.findAllByUserAndDateBetweenAndBuilding(user.id!!, monday, endOfWeek, buildingName)
         return reservations.map { toReservationResponse(it) }
     }
 
-    fun getReservationTypes(): List<String> {
-        return ReservationType.entries.map { it.value }
+    fun getReservationTypes(): List<ReservationType> {
+        return ReservationType.entries
     }
+
 
     fun removeReservation(id: UUID, buildingName: String) {
         val reservation = reservationRepository.findById(id)
@@ -132,8 +138,11 @@ class ReservationService(
     }
 
 
-
-    fun updateReservation(id: UUID, buildingName: String, updateRequest: ReservationUpdateRequest): ReservationResponse {
+    fun updateReservation(
+        id: UUID,
+        buildingName: String,
+        updateRequest: ReservationUpdateRequest
+    ): ReservationResponse {
         val reservation = reservationRepository.findById(id).orElseThrow { ReservationNotFoundException(id) }
 
         val classroom = classroomRepository.findById(updateRequest.classroomId)
@@ -163,7 +172,11 @@ class ReservationService(
         return reservations.map { toReservationResponse(it) }
     }
 
-    fun updateReservationAdmin(id: UUID, buildingName: String, adminUpdateRequest: ReservationRequest): ReservationResponse {
+    fun updateReservationAdmin(
+        id: UUID,
+        buildingName: String,
+        adminUpdateRequest: ReservationRequest
+    ): ReservationResponse {
         val reservation = reservationRepository.findById(id)
             .orElseThrow { ReservationNotFoundException(id) }
 

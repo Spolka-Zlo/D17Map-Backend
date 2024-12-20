@@ -1,7 +1,10 @@
 package inc.evil.d17map.security.authentication.jwt
 
-
+import inc.evil.d17map.exceptions.JWTFilterException
+import inc.evil.d17map.security.config.PublicRequestMatcher
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.UnsupportedJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -15,7 +18,8 @@ private val kotlinLogger = KotlinLogging.logger {}
 
 @Component
 class JWTFilter(
-    private val tokenProvider: TokenProvider
+    private val tokenProvider: TokenProvider,
+    private val publicRequestMatcher: PublicRequestMatcher
 ) : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
@@ -24,21 +28,29 @@ class JWTFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        try {
-            extractToken(request)
-                ?.takeIf(tokenProvider::validateToken)
-                ?.let {
-                    kotlinLogger.info { "Token generated successfully. Clearing Security Context..." }
-                    SecurityContextHolder.clearContext()
-                    kotlinLogger.info { "Security Context cleared successfully. Saving new authentication..." }
-                    SecurityContextHolder.getContext().authentication = tokenProvider.getAuthentication(it)
-                    kotlinLogger.info { "Authentication saved successfully" }
-                }
-        } catch (ex: Exception) {
-            kotlinLogger.error(ex) { "JWT Error: ${ex.message}" }
+        if (publicRequestMatcher.matches(request)) {
+            kotlinLogger.info { "Public endpoint accessed, skipping JWT filter." }
+            filterChain.doFilter(request, response)
             return
         }
 
+        try {
+            extractToken(request)?.let { token ->
+                SecurityContextHolder.getContext().authentication = tokenProvider.getAuthentication(token)
+                kotlinLogger.info { "Authentication saved successfully." }
+            } ?: kotlinLogger.info { "No token provided, skipping token verification." }
+
+        } catch (ex: Exception) {
+            val customException = when (ex) {
+                is UnsupportedJwtException -> JWTFilterException("Unsupported JWT token: ${ex.message}")
+                is JwtException -> JWTFilterException("Invalid JWT token: ${ex.message}")
+                is IllegalArgumentException -> JWTFilterException("Token is invalid or malformed: ${ex.message}")
+                else -> JWTFilterException("Unexpected JWT error: ${ex.message}")
+            }
+
+            kotlinLogger.error(ex) { "JWT Error: ${customException.message}" }
+            throw customException
+        }
 
         filterChain.doFilter(request, response)
     }
@@ -47,6 +59,5 @@ class JWTFilter(
         request.getHeader("Authorization")
             ?.takeIf { it.startsWith("Bearer ") }
             ?.substring(7)
-
 
 }
