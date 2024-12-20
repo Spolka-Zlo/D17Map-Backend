@@ -1,11 +1,8 @@
 package inc.evil.d17map.security.config
 
 import inc.evil.d17map.security.authentication.jwt.JWTFilter
-import inc.evil.d17map.security.authorization.policy.PolicyAuthorizationManager
-import inc.evil.d17map.security.authorization.test.PolicyRequestMatcher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
@@ -28,23 +25,9 @@ class SecurityConfig(
     private val userDetailsService: UserDetailsService,
     private val jwtFilter: JWTFilter,
     private val customAccessDeniedHandler: CustomAccessDeniedHandler,
-    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
+    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
+    private val publicRequestMatcher: PublicRequestMatcher
 ) {
-
-    private companion object {
-        private val SWAGGER_ENDPOINTS = arrayOf(
-            "/v2/api-docs",
-            "/v3/api-docs",
-            "/v3/api-docs/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/swagger-ui/**",
-            "/webjars/**"
-        )
-    }
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -61,15 +44,11 @@ class SecurityConfig(
             .logout { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers(
-                        "/auth/**",
-                        *SWAGGER_ENDPOINTS
-                    ).permitAll()
-                    .requestMatchers(
-                        HttpMethod.OPTIONS, "/**"
-                    ).permitAll()
-                    .requestMatchers(PolicyRequestMatcher()).access(PolicyAuthorizationManager())
-                    .anyRequest().permitAll()
+
+                    .requestMatchers(publicRequestMatcher).permitAll()
+                    .anyRequest().authenticated()
+
+//                    .requestMatchers(PolicyRequestMatcher()).access(PolicyAuthorizationManager())
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
