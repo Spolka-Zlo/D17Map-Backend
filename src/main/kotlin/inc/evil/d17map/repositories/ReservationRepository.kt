@@ -82,4 +82,11 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
 
     @Query("SELECT r FROM Reservation r WHERE r.classroom.floor.building.name = :buildingName")
     fun findAllByBuildingName(@Param("buildingName") buildingName: String): List<Reservation>
+
+    @Query(
+        "SELECT r FROM Reservation r " +
+            "WHERE r.classroom.floor.building.name = :buildingName  " +
+                "AND r.recurringId = :recurringId"
+    )
+    fun findAllByRecurringIdAndBuildingName(recurringId: UUID, buildingName: String): List<Reservation>
 }

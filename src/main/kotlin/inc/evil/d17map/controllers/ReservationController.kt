@@ -279,4 +279,36 @@ class ReservationController(private val reservationService: ReservationService) 
         val reservations = reservationService.getAllReservationsForBuilding(buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
+
+    @GetMapping("$BUILDING_PATH/recurringReservations/{recurringId}")
+    @Operation(
+        summary = "Get all reservations in a recurring cycle",
+        description = "Retrieve all reservations (upcoming and past, excluding deleted) for a specific recurring cycle.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not found")
+        ]
+    )
+    fun getAllReservationsInCycle(
+        @PathVariable buildingName: String,
+        @PathVariable recurringId: UUID
+    ): List<ReservationResponse> {
+        return reservationService.getAllReservationsInCycle(buildingName, recurringId)
+    }
+
+    @DeleteMapping("$BUILDING_PATH/recurringReservations/{recurringId}")
+    @Operation(
+        summary = "Remove upcoming reservations in a recurring cycle",
+        description = "Delete all upcoming reservations for a specific recurring cycle. Past reservations remain unaffected.",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully deleted reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not found")
+        ]
+    )
+    fun removeUpcomingReservationsInCycle(
+        @PathVariable buildingName: String,
+        @PathVariable recurringId: UUID
+    ) {
+        reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId)
+    }
 }

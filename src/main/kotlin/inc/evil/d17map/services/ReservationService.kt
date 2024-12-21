@@ -202,4 +202,20 @@ class ReservationService(
         return reservations.map { toReservationResponse(it) }
     }
 
+    fun getAllReservationsInCycle(buildingName: String, recurringId: UUID): List<ReservationResponse> {
+        val reservations = reservationRepository.findAllByRecurringIdAndBuildingName(recurringId, buildingName)
+        return reservations.map { toReservationResponse(it) }
+    }
+
+    fun removeUpcomingReservationsInCycle(buildingName: String, recurringId: UUID) {
+        val now = LocalDateTime.now()
+
+        val reservations = reservationRepository.findAllByRecurringIdAndBuildingName(recurringId, buildingName)
+            .filter { it.date.atTime(it.startTime).isAfter(now) }
+
+        if (reservations.isEmpty()) {
+            throw RecurringReservationNotFoundException(recurringId)
+        }
+        reservations.forEach { reservationRepository.delete(it) }
+    }
 }
