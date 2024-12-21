@@ -328,4 +328,24 @@ class ReservationController(private val reservationService: ReservationService) 
         val result = reservationService.createRecurringReservation(buildingName, reservationRequest)
         return ResponseEntity.ok(result)
     }
+
+
+    @PostMapping("$BUILDING_PATH/reservations/recurring/skip-collisions")
+    @Operation(
+        summary = "Add reservations in a recurring cycle and skip collisions",
+        description = "Create all reservations for a specific recurring cycle (ignore collisions).",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully added recurring reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not added.")
+        ]
+    )
+    fun createRecurringReservationSkippingCollisions(
+        @RequestParam buildingName: String,
+        @RequestBody request: ReservationRequest,
+        @RequestBody collisions: List<LocalDate>
+    ): ResponseEntity<Map<String, Any>> {
+        val response = reservationService.createRecurringReservationWithoutCollisions(buildingName, request, collisions)
+        return ResponseEntity.ok(response)
+    }
+
 }

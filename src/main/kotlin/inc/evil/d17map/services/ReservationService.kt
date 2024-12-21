@@ -299,4 +299,29 @@ class ReservationService(
         )
         reservationRepository.save(reservation)
     }
+
+    fun createRecurringReservationWithoutCollisions(
+        buildingName: String,
+        request: ReservationRequest,
+        collisions: List<LocalDate>
+    ): Map<String, Any> {
+        val username = SecurityContextHolder.getContext().authentication.name
+        val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
+
+        val recurringId = UUID.randomUUID()
+        var current = request.date
+
+        while (!current.isAfter(request.recurringEndDate!!)) {
+            if (!collisions.contains(current)) {
+                createReservation(request, current, user, recurringId)
+            }
+            current = getNextReservationDate(current, request.recurringType!!)
+        }
+
+        return mapOf(
+            "message" to "Recurring reservation created successfully, skipping dates with collisions.",
+            "recurringId" to recurringId.toString()
+        )
+    }
+
 }
