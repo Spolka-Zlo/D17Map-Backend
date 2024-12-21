@@ -1,6 +1,7 @@
 package inc.evil.d17map.dtos
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import inc.evil.d17map.enums.RecurringType
 import inc.evil.d17map.enums.ReservationType
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.*
@@ -34,7 +35,12 @@ data class ReservationRequest(
     val type: ReservationType,
 
     @field:Positive(message = "Number of participants must be at least 1.")
-    val numberOfParticipants: Int
+    val numberOfParticipants: Int,
+
+    var recurringId: UUID? = null,
+    var recurringStartDate: LocalDate? = null,
+    var recurringEndDate: LocalDate? = null,
+    var recurringType: RecurringType? = null
 )
 
 data class ReservationUpdateRequest(
@@ -45,5 +51,10 @@ data class ReservationUpdateRequest(
     val description: String,
 
     val type: ReservationType,
-    val classroomId: UUID
+    val classroomId: UUID,
+
+    var recurringId: UUID? = null,
+    var recurringStartDate: LocalDate? = null,
+    var recurringEndDate: LocalDate? = null,
+    var recurringType: RecurringType? = null
 )

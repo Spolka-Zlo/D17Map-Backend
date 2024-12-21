@@ -1,6 +1,7 @@
 package inc.evil.d17map.dtos
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import inc.evil.d17map.enums.RecurringType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 import java.time.LocalTime
@@ -25,4 +26,9 @@ data class ReservationResponse(
     val classroom: ClassroomSummary,
     val type: String,
     val numberOfParticipants: Int,
+
+    var recurringId: UUID? = null,
+    var recurringStartDate: LocalDate? = null,
+    var recurringEndDate: LocalDate? = null,
+    var recurringType: RecurringType? = null
 )
