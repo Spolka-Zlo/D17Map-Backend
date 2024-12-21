@@ -95,14 +95,14 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
     WHERE r.classroom.id = :classroomId
       AND r.date = :date  
       AND (:startTime < r.endTime AND :endTime > r.startTime)
-      AND r.classroom.floor.building.id = :buildingId
+      AND r.classroom.floor.building.name = :buildingName
 """)
     fun findCollisions(
         @Param("classroomId") classroomId: UUID,
         @Param("date") date: LocalDate,
         @Param("startTime") startTime: LocalTime,
         @Param("endTime") endTime: LocalTime,
-        @Param("buildingId") buildingId: String
+        @Param("buildingName") buildingName: String
     ): List<Reservation>
 
 }

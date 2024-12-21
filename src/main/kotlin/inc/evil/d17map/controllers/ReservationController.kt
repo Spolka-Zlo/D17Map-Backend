@@ -322,7 +322,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     fun createRecurringReservation(
-        @PathVariable buildingName: UUID,
+        @PathVariable buildingName: String,
         @RequestBody reservationRequest: ReservationRequest
     ): ResponseEntity<Map<String, Any>> {
         val result = reservationService.createRecurringReservation(buildingName, reservationRequest)
