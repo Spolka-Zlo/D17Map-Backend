@@ -311,4 +311,21 @@ class ReservationController(private val reservationService: ReservationService) 
     ) {
         reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId)
     }
+
+    @PostMapping("$BUILDING_PATH/recurringReservations")
+    @Operation(
+        summary = "Add reservations in a recurring cycle",
+        description = "Create all reservations for a specific recurring cycle.",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully added recurring reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not added.")
+        ]
+    )
+    fun createRecurringReservation(
+        @PathVariable buildingName: UUID,
+        @RequestBody reservationRequest: ReservationRequest
+    ): ResponseEntity<Map<String, Any>> {
+        val result = reservationService.createRecurringReservation(buildingName, reservationRequest)
+        return ResponseEntity.ok(result)
+    }
 }

@@ -89,4 +89,20 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
                 "AND r.recurringId = :recurringId"
     )
     fun findAllByRecurringIdAndBuildingName(recurringId: UUID, buildingName: String): List<Reservation>
+
+    @Query("""
+    SELECT r FROM Reservation r
+    WHERE r.classroom.id = :classroomId
+      AND r.date = :date  
+      AND (:startTime < r.endTime AND :endTime > r.startTime)
+      AND r.classroom.floor.building.id = :buildingId
+""")
+    fun findCollisions(
+        @Param("classroomId") classroomId: UUID,
+        @Param("date") date: LocalDate,
+        @Param("startTime") startTime: LocalTime,
+        @Param("endTime") endTime: LocalTime,
+        @Param("buildingId") buildingId: String
+    ): List<Reservation>
+
 }

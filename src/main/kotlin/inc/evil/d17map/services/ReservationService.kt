@@ -4,6 +4,9 @@ import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.dtos.ReservationUpdateRequest
 import inc.evil.d17map.entities.Reservation
+import inc.evil.d17map.entities.User
+import inc.evil.d17map.enums.RecurringType
+import inc.evil.d17map.enums.RecurringType.*
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.exceptions.*
 import inc.evil.d17map.findOne
@@ -218,4 +221,75 @@ class ReservationService(
         }
         reservations.forEach { reservationRepository.delete(it) }
     }
+
+    fun createRecurringReservation(buildingId: UUID, request: ReservationRequest): Map<String, Any> {
+        val collisions = mutableListOf<LocalDate>()
+        var current = request.recurringStartDate!!
+
+        while (!current.isAfter(request.recurringEndDate!!)) {
+            val collisionDates = reservationRepository.findCollisions(
+                request.classroomId,
+                current,
+                request.startTime,
+                request.endTime,
+                buildingId.toString()
+            )
+
+            if (collisionDates.isNotEmpty()) {
+                collisions.add(current)
+            }
+            current = getNextReservationDate(current, request.recurringType!!)
+        }
+
+        if (collisions.isNotEmpty()) {
+            return mapOf(
+                "question" to "There are collisions for the following dates: $collisions. Do you want to reject the cycle or create the cycle without collisions?",
+                "collisions" to collisions
+            )
+        }
+
+        createRecurringReservations(request)
+        return mapOf("message" to "Recurring reservation created successfully.")
+    }
+
+    private fun getNextReservationDate(current: LocalDate, recurringType: RecurringType): LocalDate {
+        return when (recurringType) {
+            DAILY -> current.plusDays(1)
+            WEEKLY -> current.plusWeeks(1)
+            EVERY_TWO_WEEKS -> current.plusWeeks(2)
+            MONTHLY -> current.plusMonths(1)
+        }
+    }
+
+    private fun createRecurringReservations(request: ReservationRequest) {
+        var current = request.recurringStartDate!!
+        val username = SecurityContextHolder.getContext().authentication.name
+        val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
+
+        while (!current.isAfter(request.recurringEndDate!!)) {
+            createReservation(request, current, user)
+            current = getNextReservationDate(current, request.recurringType!!)
+        }
+    }
+
+    private fun createReservation(request: ReservationRequest, current: LocalDate, user: User) {
+        val reservation = Reservation(
+            title = request.title,
+            description = request.description,
+            date = current,
+            startTime = request.startTime,
+            endTime = request.endTime,
+            classroom = classroomRepository.findOne(request.classroomId)!!,
+            type = request.type,
+            numberOfParticipants = request.numberOfParticipants,
+            recurringId = request.recurringId,
+            recurringStartDate = request.recurringStartDate,
+            recurringEndDate = request.recurringEndDate,
+            recurringType = request.recurringType,
+            user = user
+        )
+        reservationRepository.save(reservation)
+    }
+
+
 }
