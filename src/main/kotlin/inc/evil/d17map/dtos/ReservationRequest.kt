@@ -38,7 +38,6 @@ data class ReservationRequest(
     val numberOfParticipants: Int,
 
     var recurringId: UUID? = null,
-    var recurringStartDate: LocalDate? = null,
     var recurringEndDate: LocalDate? = null,
     var recurringType: RecurringType? = null
 )
@@ -54,7 +53,6 @@ data class ReservationUpdateRequest(
     val classroomId: UUID,
 
     var recurringId: UUID? = null,
-    var recurringStartDate: LocalDate? = null,
     var recurringEndDate: LocalDate? = null,
     var recurringType: RecurringType? = null
 )

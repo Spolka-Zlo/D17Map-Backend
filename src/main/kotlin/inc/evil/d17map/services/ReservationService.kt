@@ -224,7 +224,7 @@ class ReservationService(
 
     fun createRecurringReservation(buildingName: String, request: ReservationRequest): Map<String, Any> {
         val collisions = mutableListOf<LocalDate>()
-        var current = request.recurringStartDate!!
+        var current = request.date
 
         while (!current.isAfter(request.recurringEndDate!!)) {
             val collisionDates = reservationRepository.findCollisions(
@@ -249,7 +249,8 @@ class ReservationService(
         }
 
         val recurringId = createRecurringReservations(request)
-        return mapOf("message" to "Recurring reservation created successfully.", "recurringId"  to recurringId.toString())
+        return mapOf("message" to "Recurring reservation created successfully.",
+            "recurringId"  to recurringId.toString())
     }
 
     private fun getNextReservationDate(current: LocalDate, recurringType: RecurringType): LocalDate {
@@ -262,7 +263,7 @@ class ReservationService(
     }
 
     private fun createRecurringReservations(request: ReservationRequest): UUID {
-        var current = request.recurringStartDate!!
+        var current = request.date
         val username = SecurityContextHolder.getContext().authentication.name
         val user = userRepository.findByEmail(username) ?: throw UserNotFoundException(username)
 
@@ -291,7 +292,6 @@ class ReservationService(
             classroom = classroomRepository.findOne(request.classroomId)!!,
             type = request.type,
             numberOfParticipants = request.numberOfParticipants,
-            recurringStartDate = request.recurringStartDate,
             recurringEndDate = request.recurringEndDate,
             recurringType = request.recurringType,
             user = user,
