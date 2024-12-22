@@ -3,12 +3,15 @@ package inc.evil.d17map.services
 import inc.evil.d17map.dtos.ClassroomRequest
 import inc.evil.d17map.dtos.ClassroomResponse
 import inc.evil.d17map.entities.Classroom
+import inc.evil.d17map.entities.Photo
 import inc.evil.d17map.exceptions.ClassroomNotFoundException
 import inc.evil.d17map.exceptions.InvalidClassroomDataException
+import inc.evil.d17map.findOne
 import inc.evil.d17map.mappers.toClassroomResponse
 import inc.evil.d17map.repositories.ClassroomRepository
 import inc.evil.d17map.repositories.EquipmentRepository
 import inc.evil.d17map.repositories.FloorRepository
+import inc.evil.d17map.repositories.PhotoRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -19,7 +22,8 @@ import java.util.*
 class ClassroomService(
     private val classroomRepository: ClassroomRepository,
     private val equipmentRepository: EquipmentRepository,
-    private val floorRepository: FloorRepository
+    private val floorRepository: FloorRepository,
+    private val photoRepository: PhotoRepository
 ) {
     fun getByBuildingAndFloor(buildingName: String, floorName: String): List<ClassroomResponse> {
         val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
@@ -36,6 +40,8 @@ class ClassroomService(
         val floor = floorRepository.findByNameAndBuildingName(floorName, buildingName)
             ?: throw InvalidClassroomDataException("Floor '$floorName' not found in building '$buildingName'")
         val equipments = equipmentRepository.findAllById(classroomRequest.equipmentIds)
+        val photo = classroomRequest.photo
+        val photoId = photo?.let { photoRepository.save(Photo(data = it)).id }
         val classroom = Classroom(
             name = classroomRequest.name,
             description = classroomRequest.description,
@@ -43,7 +49,7 @@ class ClassroomService(
             modelKey = classroomRequest.modelKey,
             equipments = equipments.toMutableSet(),
             floor = floor,
-            photo = classroomRequest.photo
+            photoId = photoId
         )
         val savedClassroom = classroomRepository.save(classroom)
         return toClassroomResponse(savedClassroom)
@@ -84,7 +90,8 @@ class ClassroomService(
     fun getClassroomPhotoById(buildingName: String, id: UUID): ByteArray? {
         val classroom = classroomRepository.findById(id)
             .orElseThrow { ClassroomNotFoundException(id) }
-        return classroom.photo?.takeIf { it.isNotEmpty() }
+        val photoId = classroom.photoId
+        return photoRepository.findOne(photoId!!)?.data ?: throw ClassroomNotFoundException(id)
     }
 
     fun deleteByBuildingAndFloor(buildingName: String, id: UUID) {
