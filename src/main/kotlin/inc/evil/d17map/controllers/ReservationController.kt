@@ -309,7 +309,7 @@ class ReservationController(private val reservationService: ReservationService) 
         @PathVariable buildingName: String,
         @PathVariable recurringId: UUID
     ) {
-        reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId)
+        reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId, removeOnlyUpcoming = true)
     }
 
     @PostMapping("$BUILDING_PATH/recurringReservations")
@@ -330,7 +330,7 @@ class ReservationController(private val reservationService: ReservationService) 
     }
 
 
-    @PostMapping("$BUILDING_PATH/reservations/recurring/skip-collisions")
+    @PostMapping("$BUILDING_PATH/recurringReservations/skip-collisions")
     @Operation(
         summary = "Add reservations in a recurring cycle and skip collisions",
         description = "Create all reservations for a specific recurring cycle (ignore collisions).",
@@ -346,6 +346,22 @@ class ReservationController(private val reservationService: ReservationService) 
     ): ResponseEntity<Map<String, Any>> {
         val response = reservationService.createRecurringReservationWithoutCollisions(buildingName, request, collisions)
         return ResponseEntity.ok(response)
+    }
+
+    @DeleteMapping("$BUILDING_PATH/recurringReservations/rejectReservation")
+    @Operation(
+        summary = "Removes all blocking reservations (the user decided not to create this reservation due to collisions).",
+        description = "Delete all upcoming reservations for a specific recurring cycle. Past reservations are also removed.",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully deleted reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not found")
+        ]
+    )
+    fun rejectRecurringReservations(
+        @PathVariable buildingName: String,
+        @RequestBody recurringId: UUID,
+    ) {
+        reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId, removeOnlyUpcoming = false)
     }
 
 }

@@ -8,5 +8,6 @@ enum class ReservationType(val value: String) {
     CONSULTATIONS("Konsultacje"),
     CONFERENCE("Konferencja"),
     STUDENTS_CLUB_MEETING("Spotkanie Koła Naukowego"),
-    EVENT("Wydarzenie")
+    EVENT("Wydarzenie"),
+    BLOCKED("Rezerwacja oczekująca na potwierdzenie")
 }
