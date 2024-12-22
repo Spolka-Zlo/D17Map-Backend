@@ -27,7 +27,8 @@ class ReservationService(
     private val reservationRepository: ReservationRepository,
     private val classroomRepository: ClassroomRepository,
     private val userRepository: UserRepository,
-    private val buildingRepository: BuildingRepository
+    private val buildingRepository: BuildingRepository,
+    private val classroomService: ClassroomService
 ) {
     fun getGivenDayReservations(date: LocalDate, buildingName: String): List<ReservationResponse> {
         val reservations = reservationRepository.findAllByDateAndBuildingName(date, buildingName)
@@ -133,8 +134,6 @@ class ReservationService(
         }
         reservationRepository.deleteById(id)
     }
-
-
 
     fun updateReservation(id: UUID, buildingName: String, updateRequest: ReservationUpdateRequest): ReservationResponse {
         val reservation = reservationRepository.findById(id).orElseThrow { ReservationNotFoundException(id) }
@@ -248,7 +247,7 @@ class ReservationService(
                 buildingName, request, collisions, ReservationType.BLOCKED
             )
             return mapOf(
-                "question" to "There are collisions for the following dates: $collisions. Do you want to reject the cycle or create the cycle without collisions?",
+                "message" to "Collisions detected.",
                 "collisions" to collisions,
                 "recurringId"  to recurringId.toString()
             )
