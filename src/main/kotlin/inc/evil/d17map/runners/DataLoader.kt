@@ -452,7 +452,6 @@ class DataLoader(
 
         val reservationUUID = UUID.randomUUID()
 
-
         val reservations = listOf(
             Reservation(
                 title = "Egzamin Algebra",

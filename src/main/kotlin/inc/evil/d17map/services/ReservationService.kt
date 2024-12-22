@@ -249,7 +249,7 @@ class ReservationService(
             return mapOf(
                 "message" to "Collisions detected.",
                 "collisions" to collisions,
-                "recurringId"  to recurringId.toString()
+                "recurringId"  to recurringId["recurringId"].toString()
             )
         }
 

@@ -63,7 +63,8 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         classroom = toClassroomSummary(reservation.classroom),
         type = reservation.type.value,
         description = reservation.description,
-        numberOfParticipants = reservation.numberOfParticipants
+        numberOfParticipants = reservation.numberOfParticipants,
+        recurringId = reservation.recurringId
     )
 
 fun toRoleResponse(authorities: Collection<GrantedAuthority>) =
