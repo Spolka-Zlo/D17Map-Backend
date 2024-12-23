@@ -341,7 +341,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     fun createRecurringReservationSkippingCollisions(
-        @RequestParam buildingName: String,
+        @PathVariable buildingName: String,
         @RequestBody recurringRequest: RecurringReservationRequest,
     ): ResponseEntity<Map<String, Any>> {
         val response = reservationService
