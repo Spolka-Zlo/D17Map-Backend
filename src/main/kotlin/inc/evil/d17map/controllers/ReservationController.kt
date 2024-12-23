@@ -1,5 +1,6 @@
 package inc.evil.d17map.controllers
 
+import inc.evil.d17map.dtos.RecurringReservationRequest
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.dtos.ReservationUpdateRequest
@@ -341,10 +342,14 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     fun createRecurringReservationSkippingCollisions(
         @RequestParam buildingName: String,
-        @RequestBody request: ReservationRequest,
-        @RequestBody collisions: List<LocalDate>
+        @RequestBody recurringRequest: RecurringReservationRequest,
     ): ResponseEntity<Map<String, Any>> {
-        val response = reservationService.createRecurringReservationWithoutCollisions(buildingName, request, collisions)
+        val response = reservationService
+            .acceptBlockedReservations(
+                buildingName,
+                recurringRequest.request,
+                recurringRequest.collisions
+            )
         return ResponseEntity.ok(response)
     }
 

@@ -331,4 +331,25 @@ class ReservationService(
         )
     }
 
+    fun acceptBlockedReservations(
+        buildingName: String,
+        request: ReservationRequest,
+        collisions: List<LocalDate>,
+        reservationType: ReservationType = request.type
+    ): Map<String, Any> {
+
+        val recurringId = request.recurringId!!
+        val allReservations = reservationRepository.findAllByRecurringIdAndBuildingName(recurringId, buildingName)
+
+        allReservations.forEach { reservation ->
+            reservation.type = reservationType
+            reservationRepository.save(reservation)
+        }
+
+        return mapOf(
+            "message" to "Recurring reservation created successfully, skipping dates with collisions.",
+            "recurringId" to recurringId.toString()
+        )
+    }
+
 }
