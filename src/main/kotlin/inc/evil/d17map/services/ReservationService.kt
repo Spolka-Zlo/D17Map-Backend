@@ -28,7 +28,6 @@ class ReservationService(
     private val classroomRepository: ClassroomRepository,
     private val userRepository: UserRepository,
     private val buildingRepository: BuildingRepository,
-    private val classroomService: ClassroomService
 ) {
     fun getGivenDayReservations(date: LocalDate, buildingName: String): List<ReservationResponse> {
         val reservations = reservationRepository.findAllByDateAndBuildingName(date, buildingName)
