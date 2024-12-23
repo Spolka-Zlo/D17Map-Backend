@@ -334,7 +334,6 @@ class ReservationService(
     fun acceptBlockedReservations(
         buildingName: String,
         request: ReservationRequest,
-        collisions: List<LocalDate>,
         reservationType: ReservationType = request.type
     ): Map<String, Any> {
 

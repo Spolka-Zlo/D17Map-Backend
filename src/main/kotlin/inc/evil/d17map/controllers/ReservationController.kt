@@ -347,8 +347,7 @@ class ReservationController(private val reservationService: ReservationService) 
         val response = reservationService
             .acceptBlockedReservations(
                 buildingName,
-                recurringRequest.request,
-                recurringRequest.collisions
+                recurringRequest.request
             )
         return ResponseEntity.ok(response)
     }
