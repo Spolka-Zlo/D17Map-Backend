@@ -18,6 +18,10 @@ class ReservationNotFoundException(
     id: UUID
 ) : RuntimeException("Reservation with id '$id' not found")
 
+class RecurringReservationNotFoundException(
+    id: UUID
+) : RuntimeException("Recurring Reservation with recurring id '$id' not found")
+
 class UserNotFoundException : RuntimeException {
     constructor(id: UUID) : super("User with id '$id' not found")
     constructor(email: String) : super("User with email '$email' not found")

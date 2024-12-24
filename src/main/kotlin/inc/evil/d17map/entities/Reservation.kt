@@ -1,9 +1,11 @@
 package inc.evil.d17map.entities
 
+import inc.evil.d17map.enums.RecurringType
 import inc.evil.d17map.enums.ReservationType
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
 
@@ -39,5 +41,8 @@ class Reservation(
     @JoinColumn(name = "user_id")
     var user: User,
 
-    var numberOfParticipants: Int
+    var numberOfParticipants: Int,
+    var recurringId: UUID? = null,
+    var recurringEndDate: LocalDate? = null,
+    var recurringType: RecurringType? = null
 )
