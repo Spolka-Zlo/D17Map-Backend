@@ -86,7 +86,8 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
     @Query(
         "SELECT r FROM Reservation r " +
             "WHERE r.classroom.floor.building.name = :buildingName  " +
-                "AND r.recurringId = :recurringId"
+                "AND r.recurringId = :recurringId" +
+                    " ORDER BY r.date ASC"
     )
     fun findAllByRecurringIdAndBuildingName(recurringId: UUID, buildingName: String): List<Reservation>
 
