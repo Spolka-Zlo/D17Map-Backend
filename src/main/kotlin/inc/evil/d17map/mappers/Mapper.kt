@@ -53,8 +53,8 @@ fun toClassroomSummary(classroom: Classroom): ClassroomSummary =
 fun toEquipmentIds(equipments: Set<Equipment>): Set<UUID> = equipments.map { it.id!! }.toSet()
 
 
-fun toReservationResponse(reservation: Reservation): ReservationResponse =
-    ReservationResponse(
+fun toReservationResponse(reservation: Reservation): ReservationResponse {
+    return ReservationResponse(
         id = reservation.id!!,
         title = reservation.title,
         date = reservation.date,
@@ -64,8 +64,12 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse =
         type = reservation.type.value,
         description = reservation.description,
         numberOfParticipants = reservation.numberOfParticipants,
-        recurringId = reservation.recurringId
+        recurringId = reservation.recurringId,
+        recurringType = reservation.recurringType,
+        recurringEndDate = reservation.recurringEndDate
     )
+}
+
 
 fun toRoleResponse(authorities: Collection<GrantedAuthority>) =
     authorities

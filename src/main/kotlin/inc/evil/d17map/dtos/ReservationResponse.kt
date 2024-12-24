@@ -28,4 +28,6 @@ data class ReservationResponse(
     val numberOfParticipants: Int,
 
     var recurringId: UUID? = null,
+    var recurringType: RecurringType? = null,
+    var recurringEndDate: LocalDate? = null,
 )
