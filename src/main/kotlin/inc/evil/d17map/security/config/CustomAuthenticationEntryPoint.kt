@@ -1,13 +1,16 @@
 package inc.evil.d17map.security.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import inc.evil.d17map.exceptions.EnhancedErrorResponse
+import inc.evil.d17map.exceptions.ErrorCodes
+import inc.evil.d17map.exceptions.ErrorResponse
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
+
+private val logger = KotlinLogging.logger {}
 
 @Component
 class CustomAuthenticationEntryPoint(private val objectMapper: ObjectMapper) : AuthenticationEntryPoint {
@@ -16,16 +19,17 @@ class CustomAuthenticationEntryPoint(private val objectMapper: ObjectMapper) : A
         response: HttpServletResponse,
         authException: AuthenticationException
     ) {
-        response.contentType = "application/json"
-        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        logger.error(authException) { "Exception caught in AuthenticationEntryPoint: ${authException.message}" }
 
-        val errorResponse = EnhancedErrorResponse(
-            errorCode = "UNAUTHORIZED",
-            message = "Unauthorized: ${authException.message}",
-            timestamp = LocalDateTime.now()
+        val errorResponse = ErrorResponse(
+            errorCode = ErrorCodes.UNAUTHORIZED_ERROR,
+            message = "${authException.message}",
         )
 
         val jsonResponse = objectMapper.writeValueAsString(errorResponse)
-        response.writer.write(jsonResponse)
+        response.contentType = "application/json"
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.writer.use { it.write(jsonResponse) }
+
     }
 }
