@@ -352,7 +352,7 @@ class ReservationController(private val reservationService: ReservationService) 
         return ResponseEntity.ok(response)
     }
 
-    @DeleteMapping("$BUILDING_PATH/recurringReservations/rejectReservation")
+    @DeleteMapping("$BUILDING_PATH/recurringReservations/{recurringId}/reject")
     @Operation(
         summary = "Removes all blocking reservations (the user decided not to create this reservation due to collisions).",
         description = "Delete all upcoming reservations for a specific recurring cycle. Past reservations are also removed.",
@@ -363,7 +363,7 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     fun rejectRecurringReservations(
         @PathVariable buildingName: String,
-        @RequestBody recurringId: UUID,
+        @PathVariable recurringId: UUID,
     ) {
         reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId, removeOnlyUpcoming = false)
     }
