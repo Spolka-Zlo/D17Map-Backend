@@ -21,16 +21,14 @@ class CustomAccessDeniedHandler(private val objectMapper: ObjectMapper) : Access
     ) {
         logger.error(accessDeniedException) { "Exception caught in AccessDeniedHandler: ${accessDeniedException.message}" }
 
-
-        response.contentType = "application/json"
-        response.status = HttpServletResponse.SC_FORBIDDEN
-
         val errorResponse = ErrorResponse(
             errorCode = ErrorCodes.ACCESS_DENIED_ERROR,
             message = "Forbidden: ${accessDeniedException.message}",
         )
 
         val jsonResponse = objectMapper.writeValueAsString(errorResponse)
-        response.writer.write(jsonResponse)
+        response.contentType = "application/json"
+        response.status = HttpServletResponse.SC_FORBIDDEN
+        response.writer.use { it.write(jsonResponse) }
     }
 }

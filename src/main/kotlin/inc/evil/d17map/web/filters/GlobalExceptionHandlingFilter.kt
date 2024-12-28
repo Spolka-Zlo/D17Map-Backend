@@ -34,7 +34,7 @@ class GlobalExceptionHandlingFilter(private val objectMapper: ObjectMapper) : On
 
     private fun handleException(
         response: HttpServletResponse,
-        ex: Exception,
+        ex: Exception
     ) {
         kotlinLogger.error(ex) { "Exception caught in GlobalExceptionHandlingFilter: ${ex.message}" }
 
@@ -46,6 +46,7 @@ class GlobalExceptionHandlingFilter(private val objectMapper: ObjectMapper) : On
                     message = "${ex.message}"
                 )
             }
+
             else -> {
                 response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
                 ErrorResponse(
@@ -55,8 +56,8 @@ class GlobalExceptionHandlingFilter(private val objectMapper: ObjectMapper) : On
             }
         }
 
-        response.contentType = "application/json"
         val jsonResponse = objectMapper.writeValueAsString(errorResponse)
-        response.writer.write(jsonResponse)
+        response.contentType = "application/json"
+        response.writer.use { it.write(jsonResponse) }
     }
 }

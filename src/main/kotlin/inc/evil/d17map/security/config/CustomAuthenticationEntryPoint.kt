@@ -21,15 +21,15 @@ class CustomAuthenticationEntryPoint(private val objectMapper: ObjectMapper) : A
     ) {
         logger.error(authException) { "Exception caught in AuthenticationEntryPoint: ${authException.message}" }
 
-        response.contentType = "application/json"
-        response.status = HttpServletResponse.SC_UNAUTHORIZED
-
         val errorResponse = ErrorResponse(
             errorCode = ErrorCodes.UNAUTHORIZED_ERROR,
             message = "${authException.message}",
         )
 
         val jsonResponse = objectMapper.writeValueAsString(errorResponse)
-        response.writer.write(jsonResponse)
+        response.contentType = "application/json"
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.writer.use { it.write(jsonResponse) }
+
     }
 }

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class PublicRequestMatcher : RequestMatcher {
-    private companion object {
+
+    companion object {
         private val SWAGGER_ENDPOINTS = listOf(
             "/v2/api-docs",
             "/v3/api-docs",
@@ -21,6 +22,7 @@ class PublicRequestMatcher : RequestMatcher {
             "/swagger-ui/**",
             "/webjars/**"
         )
+
         private val OPEN_ENDPOINTS = listOf(
             "/buildings/{buildingName}/extra-rooms/**",
             "/buildings/{buildingName}/floors/**",
@@ -32,19 +34,19 @@ class PublicRequestMatcher : RequestMatcher {
         )
     }
 
-    private val publicMatchers: List<RequestMatcher> = mutableListOf<RequestMatcher>().apply {
-        SWAGGER_ENDPOINTS.forEach { endpoint ->
-            add(AntPathRequestMatcher(endpoint))
-        }
-        OPEN_ENDPOINTS.forEach { endpoint ->
-            add(AntPathRequestMatcher(endpoint, HttpMethod.GET.name()))
-        }
-        add(AntPathRequestMatcher("/auth/**"))
-        add(AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name()))
-    }
+    private val publicMatchers: List<RequestMatcher> = buildPublicMatchers()
 
     override fun matches(request: HttpServletRequest): Boolean {
-        println(request.requestURI.toString())
+        println(request.requestURI)
         return publicMatchers.any { it.matches(request) }
+    }
+
+    private fun buildPublicMatchers(): List<RequestMatcher> {
+        return SWAGGER_ENDPOINTS.map { AntPathRequestMatcher(it) } +
+                OPEN_ENDPOINTS.map { AntPathRequestMatcher(it, HttpMethod.GET.name()) } +
+                listOf(
+                    AntPathRequestMatcher("/auth/**"),
+                    AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())
+                )
     }
 }

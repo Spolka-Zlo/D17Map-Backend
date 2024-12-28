@@ -35,29 +35,35 @@ class JWTFilter(
         }
 
         try {
-            extractToken(request)?.let { token ->
-                SecurityContextHolder.getContext().authentication = tokenProvider.getAuthentication(token)
-                kotlinLogger.info { "Authentication saved successfully." }
-            } ?: kotlinLogger.info { "No token provided, skipping token verification." }
-
+            authenticateRequest(request)
         } catch (ex: Exception) {
-            val customException = when (ex) {
-                is UnsupportedJwtException -> JWTFilterException("Unsupported JWT token: ${ex.message}")
-                is JwtException -> JWTFilterException("Invalid JWT token: ${ex.message}")
-                is IllegalArgumentException -> JWTFilterException("Token is invalid or malformed: ${ex.message}")
-                else -> JWTFilterException("Unexpected JWT error: ${ex.message}")
-            }
+            val customException = buildCustomException(ex)
 
             kotlinLogger.error(ex) { "JWT Error: ${customException.message}" }
             throw customException
         }
-
         filterChain.doFilter(request, response)
     }
 
-    fun extractToken(request: HttpServletRequest) =
+
+    private fun extractToken(request: HttpServletRequest) =
         request.getHeader("Authorization")
             ?.takeIf { it.startsWith("Bearer ") }
             ?.substring(7)
+
+    private fun authenticateRequest(request: HttpServletRequest) {
+        extractToken(request)?.let { token ->
+            SecurityContextHolder.getContext().authentication = tokenProvider.getAuthentication(token)
+            kotlinLogger.info { "Authentication saved successfully." }
+        } ?: kotlinLogger.info { "No token provided, skipping token verification." }
+    }
+
+    private fun buildCustomException(ex: Exception): JWTFilterException = when (ex) {
+        is UnsupportedJwtException -> JWTFilterException("Unsupported JWT token: ${ex.message}")
+        is JwtException -> JWTFilterException("Invalid JWT token: ${ex.message}")
+        is IllegalArgumentException -> JWTFilterException("Token is invalid or malformed: ${ex.message}")
+        else -> JWTFilterException("Unexpected JWT error: ${ex.message}")
+    }
+
 
 }
