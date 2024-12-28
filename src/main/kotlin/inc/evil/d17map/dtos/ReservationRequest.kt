@@ -56,8 +56,3 @@ data class ReservationUpdateRequest(
     var recurringEndDate: LocalDate? = null,
     var recurringType: RecurringType? = null
 )
-
-data class RecurringReservationRequest(
-    val request: ReservationRequest,
-    val collisions: List<LocalDate>
-)
