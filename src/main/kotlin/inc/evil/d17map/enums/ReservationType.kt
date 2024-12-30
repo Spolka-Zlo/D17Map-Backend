@@ -8,5 +8,6 @@ enum class ReservationType {
     CONSULTATIONS,
     CONFERENCE,
     STUDENTS_CLUB_MEETING,
-    EVENT
+    EVENT,
+    BLOCKED
 }
