@@ -280,4 +280,69 @@ class ReservationController(private val reservationService: ReservationService) 
         val reservations = reservationService.getAllReservationsForBuilding(buildingName)
         return ResponseEntity(reservations, HttpStatus.OK)
     }
+
+    @GetMapping("$BUILDING_PATH/recurringReservations/{recurringId}")
+    @Operation(
+        summary = "Get all reservations in a recurring cycle",
+        description = "Retrieve all reservations (upcoming and past, excluding deleted) for a specific recurring cycle.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not found")
+        ]
+    )
+    fun getAllReservationsInCycle(
+        @PathVariable buildingName: String,
+        @PathVariable recurringId: UUID
+    ): List<ReservationResponse> {
+        return reservationService.getAllReservationsInCycle(buildingName, recurringId)
+    }
+
+    @DeleteMapping("$BUILDING_PATH/recurringReservations/{recurringId}")
+    @Operation(
+        summary = "Remove upcoming reservations in a recurring cycle",
+        description = "if reject = false: Delete all upcoming reservations for a specific recurring cycle. Past reservations remain unaffected." +
+                "if reject = true: Removes all blocking reservations (the user decided not to create this reservation due to collisions).",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully deleted reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not found")
+        ]
+    )
+    fun removeUpcomingReservationsInCycle(
+        @PathVariable buildingName: String,
+        @PathVariable recurringId: UUID,
+        @RequestParam(defaultValue = "false") reject: Boolean
+    ) {
+        if (reject)
+            reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId, removeOnlyUpcoming = false)
+        else
+            reservationService.removeUpcomingReservationsInCycle(buildingName, recurringId, removeOnlyUpcoming = true)
+    }
+
+    @PostMapping("$BUILDING_PATH/recurringReservations")
+    @Operation(
+        summary = "Add reservations in a recurring cycle",
+        description = "Create all reservations for a specific recurring cycle.",
+        responses = [
+            ApiResponse(responseCode = "204", description = "Successfully added recurring reservations"),
+            ApiResponse(responseCode = "404", description = "Recurring reservation not added.")
+        ]
+    )
+    fun createRecurringReservation(
+        @PathVariable buildingName: String,
+        @RequestBody reservationRequest: ReservationRequest,
+        @RequestParam(defaultValue = "false") skipCollisions: Boolean
+    ): ResponseEntity<Map<String, Any>> {
+        if (skipCollisions) {
+            val response = reservationService
+                .acceptBlockedReservations(
+                    buildingName,
+                    reservationRequest
+                )
+            return ResponseEntity.ok(response)
+        }
+        else {
+            val result = reservationService.createRecurringReservation(buildingName, reservationRequest)
+            return ResponseEntity.ok(result)
+        }
+    }
 }

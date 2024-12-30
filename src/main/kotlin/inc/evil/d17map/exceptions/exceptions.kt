@@ -14,12 +14,17 @@ class ReservationNotFoundException(id: UUID) : NotFoundException("Reservation wi
 
 class UserNotFoundException(email: String) : NotFoundException("User with email '$email' not found")
 
+class RecurringReservationNotFoundException(
+    id: UUID
+) : RuntimeException("Recurring Reservation with recurring id '$id' not found")
+
+
+class RoleNotFoundException(roleName: String) : RuntimeException("Role with name '$roleName' not found")
+
+
 class BuildingNotFoundException(buildingName: String) : RuntimeException(
     "Building with name '$buildingName' not found."
 )
-
-class RoleNotFoundException(roleName: String) : NotFoundException("Role with name '$roleName' not found")
-
 
 // INVALID DATA
 
