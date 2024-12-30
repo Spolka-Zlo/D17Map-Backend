@@ -3,6 +3,7 @@ package inc.evil.d17map.controllers
 import inc.evil.d17map.dtos.ReservationRequest
 import inc.evil.d17map.dtos.ReservationResponse
 import inc.evil.d17map.dtos.ReservationUpdateRequest
+import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.services.ReservationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -138,7 +139,7 @@ class ReservationController(private val reservationService: ReservationService) 
         ]
     )
     @GetMapping("reservations/types")
-    fun getReservationTypes(): ResponseEntity<List<String>> {
+    fun getReservationTypes(): ResponseEntity<List<ReservationType>> {
         return ResponseEntity(reservationService.getReservationTypes(), HttpStatus.OK)
     }
 

@@ -1,31 +1,23 @@
 package inc.evil.d17map.exceptions
 
 import java.util.*
-import java.lang.RuntimeException
 
+// BASE CLASS FOR NOT FOUND EXCEPTIONS
+open class NotFoundException(message: String) : RuntimeException(message)
 
-// NOT FOUND
+// SPECIFIC NOT FOUND EXCEPTIONS
+class ClassroomNotFoundException(id: UUID) : NotFoundException("Classroom with id '$id' not found")
 
-class ClassroomNotFoundException(
-    id: UUID
-) : RuntimeException("Classroom with id '$id' not found")
+class EquipmentNotFoundException(id: UUID) : NotFoundException("Equipment with id '$id' not found")
 
-class EquipmentNotFoundException(
-    id: UUID
-) : RuntimeException("Equipment with id '$id' not found")
+class ReservationNotFoundException(id: UUID) : NotFoundException("Reservation with id '$id' not found")
 
-class ReservationNotFoundException(
-    id: UUID
-) : RuntimeException("Reservation with id '$id' not found")
+class UserNotFoundException(email: String) : NotFoundException("User with email '$email' not found")
 
 class RecurringReservationNotFoundException(
     id: UUID
 ) : RuntimeException("Recurring Reservation with recurring id '$id' not found")
 
-class UserNotFoundException : RuntimeException {
-    constructor(id: UUID) : super("User with id '$id' not found")
-    constructor(email: String) : super("User with email '$email' not found")
-}
 
 class RoleNotFoundException(roleName: String) : RuntimeException("Role with name '$roleName' not found")
 
@@ -42,21 +34,9 @@ class InvalidClassroomDataException(message: String) : RuntimeException(message)
 
 class InvalidExtraRoomDataException(message: String) : RuntimeException(message)
 
-class InvalidEquipmentDataException(message: String) : RuntimeException(message) {
-    companion object {
-        fun blankName(): InvalidEquipmentDataException {
-            return InvalidEquipmentDataException("Invalid equipment data: name cannot be blank.")
-        }
-
-        fun emptyEquipmentList(): InvalidEquipmentDataException {
-            return InvalidEquipmentDataException("Invalid equipment data: equipment list cannot be empty.")
-        }
-    }
-}
-
-// Missing parameters
-
-class MissingParameterException(parameterName: String)
-    : RuntimeException("Query parameter '$parameterName' must be specified")
-
+// ALREADY EXISTS
 class UserAlreadyExistsException(email: String) : RuntimeException("User with email '$email' already exists")
+
+// CUSTOM SECURITY EXCEPTIONS
+class JWTFilterException(message: String) : RuntimeException(message)
+

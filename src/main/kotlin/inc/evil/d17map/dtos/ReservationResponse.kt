@@ -1,6 +1,7 @@
 package inc.evil.d17map.dtos
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.enums.RecurringType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
@@ -24,7 +25,7 @@ data class ReservationResponse(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     val endTime: LocalTime,
     val classroom: ClassroomSummary,
-    val type: String,
+    val type: ReservationType,
     val numberOfParticipants: Int,
 
     var recurringId: UUID? = null,

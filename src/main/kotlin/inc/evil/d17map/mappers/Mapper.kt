@@ -1,12 +1,8 @@
 package inc.evil.d17map.mappers
 
 import inc.evil.d17map.dtos.*
-import inc.evil.d17map.entities.Classroom
-import inc.evil.d17map.entities.Equipment
-import inc.evil.d17map.entities.ExtraRoom
-import inc.evil.d17map.entities.Reservation
-import org.springframework.security.core.GrantedAuthority
 import inc.evil.d17map.entities.*
+import org.springframework.security.core.GrantedAuthority
 import java.util.*
 
 
@@ -26,7 +22,6 @@ fun toClassroomResponse(classroom: Classroom): ClassroomResponse {
         id = classroom.id!!,
         equipmentIds = toEquipmentIds(classroom.equipments),
         floorName = classroom.floor.name,
-        buildingName = classroom.floor.building.name
     )
 }
 
@@ -38,7 +33,6 @@ fun toExtraRoomResponse(extraRoom: ExtraRoom): ExtraRoomResponse =
         description = extraRoom.description,
         type = extraRoom.type,
         floorName = extraRoom.floor.name,
-        buildingName = extraRoom.floor.building.name
     )
 
 fun toClassroomSummary(classroom: Classroom): ClassroomSummary =
@@ -61,7 +55,7 @@ fun toReservationResponse(reservation: Reservation): ReservationResponse {
         startTime = reservation.startTime,
         endTime = reservation.endTime,
         classroom = toClassroomSummary(reservation.classroom),
-        type = reservation.type.value,
+        type = reservation.type,
         description = reservation.description,
         numberOfParticipants = reservation.numberOfParticipants,
         recurringId = reservation.recurringId,
@@ -78,11 +72,9 @@ fun toRoleResponse(authorities: Collection<GrantedAuthority>) =
         .map { it.substring(5) }
 
 
-
 fun toFloorResponse(floor: Floor): FloorResponse {
     return FloorResponse(
         id = floor.id!!,
         floorName = floor.name,
-        buildingName = floor.building.name
     )
 }
