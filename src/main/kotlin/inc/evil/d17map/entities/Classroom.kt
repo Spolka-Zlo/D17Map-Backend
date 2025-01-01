@@ -18,7 +18,7 @@ class Classroom(
     @JoinColumn(name = "floor_id", nullable = false)
     val floor: Floor,
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "classrooms_equipments",
         joinColumns = [JoinColumn(name = "classroom_id")],

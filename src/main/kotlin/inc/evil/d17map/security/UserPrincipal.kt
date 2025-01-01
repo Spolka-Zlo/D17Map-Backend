@@ -1,19 +1,29 @@
 package inc.evil.d17map.security
 
-
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserPrincipal(
     private val username: String,
-    private val password: String,
-    private val authorities: Collection<GrantedAuthority>
+    private val password: String
 ) : UserDetails {
+    constructor(username: String) : this(username, "")
 
-    constructor(
-        username: String,
-        authorities: Collection<GrantedAuthority>
-    ) : this(username, "", authorities)
+    private val authorities: MutableSet<GrantedAuthority> = mutableSetOf()
+
+
+    fun setAuthorities(authorities: Collection<GrantedAuthority>) {
+        this.authorities.clear()
+        this.authorities.addAll(authorities)
+    }
+
+    fun addAuthority(authority: GrantedAuthority) {
+        authorities.add(authority)
+    }
+
+    fun removeAuthority(authority: GrantedAuthority) {
+        authorities.remove(authority)
+    }
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return authorities

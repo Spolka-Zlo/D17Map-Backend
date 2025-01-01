@@ -26,12 +26,28 @@ class DataLoader(
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
+        val buildings = listOf(
+            Building(name = "D17"),
+            Building(name = "D5"),
+            Building(name = "D11")
+        )
+        buildingRepository.saveAll(buildings)
+
+
+        val floors = listOf(
+            Floor(name = "1", building = buildings[0]),
+            Floor(name = "2", building = buildings[0]),
+            Floor(name = "3", building = buildings[0]),
+            Floor(name = "4", building = buildings[0])
+        )
+        floorRepository.saveAll(floors)
+
+
         val roles = listOf(
             Role(name = "ROLE_STUDENT"),
             Role(name = "ROLE_TEACHER"),
             Role(name = "ROLE_ADMIN"),
         )
-
         roleRepository.saveAll(roles)
 
 
@@ -43,16 +59,6 @@ class DataLoader(
         )
         equipmentRepository.saveAll(equipments)
 
-        val building = Building(name = "D17")
-        buildingRepository.save(building)
-
-        val floors = listOf(
-            Floor(name = "1", building = building),
-            Floor(name = "2", building = building),
-            Floor(name = "3", building = building),
-            Floor(name = "4", building = building)
-        )
-        floorRepository.saveAll(floors)
 
         val photos = listOf(
             (ClassPathResource("photos/119.jpg").inputStream.readBytes()),
@@ -425,19 +431,16 @@ class DataLoader(
         val admin = User(
             email = "admin",
             password = passwordEncoder.encode("admin"),
-            roles = mutableSetOf(roles[2])
         )
 
         val teacher = User(
             email = "teacher@agh.edu.pl",
             password = passwordEncoder.encode("teacher"),
-            roles = mutableSetOf(roles[1])
         )
 
         val student = User(
             email = "example@student.agh.edu.pl",
             password = passwordEncoder.encode("student"),
-            roles = mutableSetOf(roles[0])
         )
 
         val users = listOf(

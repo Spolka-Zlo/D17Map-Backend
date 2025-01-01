@@ -64,9 +64,9 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
                 .map { SimpleGrantedAuthority(it) }
 
         val userPrincipal = UserPrincipal(
-            username = claims.subject,
-            authorities = authorities
+            username = claims.subject
         )
+        userPrincipal.authorities = authorities
         return UsernamePasswordAuthenticationToken(userPrincipal, null, authorities)
     }
 }

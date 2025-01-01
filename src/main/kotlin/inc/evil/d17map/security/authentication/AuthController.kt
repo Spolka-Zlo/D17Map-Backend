@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*
 class AuthController(
     private val authService: AuthService
 ) {
+    companion object {
+        private const val BUILDINGS_PATH = "/buildings/{buildingName}"
+    }
 
     @Operation(
         summary = "Create a new user",
@@ -24,9 +27,12 @@ class AuthController(
             ApiResponse(responseCode = "409", description = "User already exists with the given username."),
         ]
     )
-    @PostMapping("/register")
+    @PostMapping("${BUILDINGS_PATH}/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun register(@RequestBody authRequest: AuthRequest) = authService.registerUser(authRequest)
+    fun register(
+        @PathVariable buildingName: String,
+        @RequestBody authRequest: AuthRequest
+    ) = authService.registerUser(authRequest, buildingName)
 
     @Operation(
         summary = "Authenticate a user and return JWT",
@@ -35,7 +41,10 @@ class AuthController(
             ApiResponse(responseCode = "401", description = "Invalid username or password."),
         ]
     )
-    @PostMapping("/login")
-    fun login(@RequestBody authRequest: AuthRequest) = authService.verifyUser(authRequest)
+    @PostMapping("${BUILDINGS_PATH}/login")
+    fun login(
+        @PathVariable buildingName: String,
+        @RequestBody authRequest: AuthRequest
+    ) = authService.verifyUser(authRequest, buildingName)
 
 }
