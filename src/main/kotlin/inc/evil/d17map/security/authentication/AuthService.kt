@@ -19,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -57,36 +58,21 @@ class AuthService(
     fun verifyUser(loginRequest: AuthRequest, buildingName: String): AuthResponse {
         logger.info { "Checking user's ${loginRequest.username} credentials." }
 
+        findBuilding(buildingName)
+
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
 
-        val userPrincipal = authentication.principal as UserPrincipal
-
-        buildingRepository.findByName(buildingName)
-            ?: throw BuildingNotFoundException(buildingName)
-
-        val userRoles =
-            userBuildingRoleRepository.findAllByUserEmailAndBuildingName(loginRequest.username, buildingName)
-                .map { SimpleGrantedAuthority(it.role.name) }
-                .toMutableList()
-
-
-        if (userRoles.isEmpty()) {
-            userRoles.add(SimpleGrantedAuthority(DEFAULT_ROLE))
-        }
-
-        userPrincipal.authorities = userRoles
-
         logger.info { "Generating token..." }
-        val token = tokenProvider.generateToken(authentication)
-        val roles = toRoleResponse(userRoles)
+        val token = tokenProvider.generateToken(authentication, buildingName)
+        val roles = tokenProvider.getRoles(authentication.name, buildingName)
 
         logger.info { "Token generated successfully" }
         logger.info { "Logged user's roles: $roles" }
         return AuthResponse(
             token = token,
-            roles = roles
+            roles = roles.map { it.name }
         )
     }
 
@@ -110,7 +96,7 @@ class AuthService(
 
     private fun findBuilding(buildingName: String): Building =
         buildingRepository.findByName(buildingName)
-            ?: throw BuildingNotFoundException("")
+            ?: throw BuildingNotFoundException(buildingName)
 
 
     private fun findRole(roleName: String): Role =

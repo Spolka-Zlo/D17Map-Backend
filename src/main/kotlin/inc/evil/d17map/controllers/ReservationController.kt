@@ -61,6 +61,7 @@ class ReservationController(private val reservationService: ReservationService) 
     )
     @PostMapping(BUILDING_PATH)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("@roleService.hasAccessToClass(#reservationRequest.component6())")
     fun createReservation(
         @PathVariable buildingName: String,
         @RequestBody @Valid reservationRequest: ReservationRequest

@@ -2,6 +2,9 @@ package inc.evil.d17map.security.authentication.jwt
 
 
 import inc.evil.d17map.security.UserPrincipal
+import inc.evil.d17map.security.authentication.AuthService
+import inc.evil.d17map.security.authorization.Role
+import inc.evil.d17map.security.authorization.UserBuildingRoleRepository
 import inc.evil.d17map.security.config.SecurityProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -18,7 +21,10 @@ import javax.crypto.SecretKey
 
 
 @Service
-class TokenProvider(private val securityProperties: SecurityProperties) {
+class TokenProvider(
+    private val securityProperties: SecurityProperties,
+    private val userBuildingRoleRepository: UserBuildingRoleRepository
+) {
     private val secretKey: SecretKey = try {
         val keyGenerator = KeyGenerator.getInstance(securityProperties.jwt.keyGenerator)
         keyGenerator.generateKey()
@@ -26,10 +32,18 @@ class TokenProvider(private val securityProperties: SecurityProperties) {
         throw RuntimeException(e)
     }
 
-    fun generateToken(authentication: Authentication): String {
-        val principal = authentication.principal as UserPrincipal
+    fun getRoles(username: String, buildingName: String) =
+        userBuildingRoleRepository.findAllByUserEmailAndBuildingName(username, buildingName)
+            .map { it.role }
+            .takeIf { it.isNotEmpty() }
+            ?: listOf(Role(name = AuthService.DEFAULT_ROLE))
 
-        val authorities = authentication.authorities.joinToString(",") { it.authority }
+
+    fun generateToken(authentication: Authentication, buildingName: String): String {
+        val principal = authentication.principal as UserPrincipal
+        val roles = getRoles(principal.username, buildingName)
+
+        val authorities = roles.joinToString(",") { it.name }
 
         val now = ZonedDateTime.now()
         val expirationDateTime = now.plusSeconds(securityProperties.jwt.ttlInSeconds)

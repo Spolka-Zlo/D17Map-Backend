@@ -6,6 +6,8 @@ import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.repositories.*
 import inc.evil.d17map.security.authorization.Role
 import inc.evil.d17map.security.authorization.RoleRepository
+import inc.evil.d17map.security.authorization.UserBuildingRole
+import inc.evil.d17map.security.authorization.UserBuildingRoleRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.core.io.ClassPathResource
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -25,6 +27,7 @@ class DataLoader(
     private val passwordEncoder: PasswordEncoder,
     private val buildingRepository: BuildingRepository,
     private val floorRepository: FloorRepository,
+    private val userBuildingRoleRepository: UserBuildingRoleRepository
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
@@ -51,6 +54,50 @@ class DataLoader(
             Role(name = "ROLE_ADMIN"),
         )
         roleRepository.saveAll(roles)
+
+
+        val admin = User(
+            email = "admin@agh.edu.pl",
+            password = passwordEncoder.encode("admin"),
+        )
+
+        val teacher = User(
+            email = "teacher@agh.edu.pl",
+            password = passwordEncoder.encode("teacher"),
+        )
+
+        val student = User(
+            email = "example@student.agh.edu.pl",
+            password = passwordEncoder.encode("student"),
+        )
+
+        val users = listOf(
+            admin,
+            teacher,
+            student,
+        )
+        userRepository.saveAll(users)
+
+
+        val usersBuildingsRoles = listOf(
+            UserBuildingRole(
+                user = student,
+                building = buildings[0],
+                role = roles[0]
+            ),
+            UserBuildingRole(
+                user = teacher,
+                building = buildings[0],
+                role = roles[1]
+            ),
+            UserBuildingRole(
+                user = admin,
+                building = buildings[0],
+                role = roles[2]
+            ),
+
+            )
+        userBuildingRoleRepository.saveAll(usersBuildingsRoles)
 
 
         val equipments = listOf(
@@ -430,28 +477,6 @@ class DataLoader(
         )
         extraRoomRepository.saveAll(extraRooms)
 
-        val admin = User(
-            email = "admin",
-            password = passwordEncoder.encode("admin"),
-        )
-
-        val teacher = User(
-            email = "teacher@agh.edu.pl",
-            password = passwordEncoder.encode("teacher"),
-        )
-
-        val student = User(
-            email = "example@student.agh.edu.pl",
-            password = passwordEncoder.encode("student"),
-        )
-
-        val users = listOf(
-            admin,
-            teacher,
-            student,
-        )
-
-        userRepository.saveAll(users)
 
         val reservationUUID = UUID.randomUUID()
 
