@@ -1,6 +1,7 @@
 package inc.evil.d17map.runners
 
 import inc.evil.d17map.entities.*
+import inc.evil.d17map.enums.RecurringType
 import inc.evil.d17map.enums.ReservationType
 import inc.evil.d17map.repositories.*
 import inc.evil.d17map.security.authorization.Role
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.*
 
 @Component
 class DataLoader(
@@ -451,6 +453,8 @@ class DataLoader(
 
         userRepository.saveAll(users)
 
+        val reservationUUID = UUID.randomUUID()
+
         val reservations = listOf(
             Reservation(
                 title = "Egzamin Algebra",
@@ -506,6 +510,63 @@ class DataLoader(
                 user = teacher,
                 type = ReservationType.EVENT,
                 numberOfParticipants = 80
+            ),
+
+            Reservation(
+                title = "Analiza matematyczna",
+                description = "Codzienne zajęcia z analizy matematycznej",
+                date = LocalDate.of(2027, 1, 1),
+                startTime = LocalTime.of(12, 0),
+                endTime = LocalTime.of(15, 0),
+                classroom = classrooms[0],
+                user = teacher,
+                type = ReservationType.CLASS,
+                numberOfParticipants = 80,
+                recurringId = reservationUUID,
+                recurringEndDate = LocalDate.of(2027, 1, 4),
+                recurringType = RecurringType.DAILY
+            ),
+            Reservation(
+                title = "Analiza matematyczna",
+                description = "Codzienne zajęcia z analizy matematycznej",
+                date = LocalDate.of(2027, 1, 2),
+                startTime = LocalTime.of(12, 0),
+                endTime = LocalTime.of(15, 0),
+                classroom = classrooms[0],
+                user = teacher,
+                type = ReservationType.CLASS,
+                numberOfParticipants = 80,
+                recurringId = reservationUUID,
+                recurringEndDate = LocalDate.of(2027, 1, 4),
+                recurringType = RecurringType.DAILY
+            ),
+            Reservation(
+                title = "Analiza matematyczna",
+                description = "Codzienne zajęcia z analizy matematycznej",
+                date = LocalDate.of(2027, 1, 3),
+                startTime = LocalTime.of(12, 0),
+                endTime = LocalTime.of(15, 0),
+                classroom = classrooms[0],
+                user = teacher,
+                type = ReservationType.CLASS,
+                numberOfParticipants = 80,
+                recurringId = reservationUUID,
+                recurringEndDate = LocalDate.of(2027, 1, 4),
+                recurringType = RecurringType.DAILY
+            ),
+            Reservation(
+                title = "Analiza matematyczna",
+                description = "Codzienne zajęcia z analizy matematycznej",
+                date = LocalDate.of(2027, 1, 4),
+                startTime = LocalTime.of(12, 0),
+                endTime = LocalTime.of(15, 0),
+                classroom = classrooms[0],
+                user = teacher,
+                type = ReservationType.CLASS,
+                numberOfParticipants = 80,
+                recurringId = reservationUUID,
+                recurringEndDate = LocalDate.of(2027, 1, 4),
+                recurringType = RecurringType.DAILY
             )
         )
         reservationRepository.saveAll(reservations)
