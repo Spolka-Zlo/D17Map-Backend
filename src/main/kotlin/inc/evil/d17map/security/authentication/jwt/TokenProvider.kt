@@ -81,6 +81,6 @@ class TokenProvider(
             username = claims.subject
         )
         userPrincipal.authorities = authorities
-        return UsernamePasswordAuthenticationToken(userPrincipal, null, authorities)
+        return UsernamePasswordAuthenticationToken.authenticated(userPrincipal, null, authorities)
     }
 }

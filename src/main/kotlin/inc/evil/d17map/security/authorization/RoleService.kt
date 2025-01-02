@@ -12,13 +12,14 @@ private val logger = KotlinLogging.logger {}
 class RoleService(
     private val roleRepository: RoleRepository
 ) {
-    fun hasAccessToClass(classId: UUID) {
+    fun hasAccessToClass(classId: UUID): Boolean {
 
-        logger.info { "HELLOOOOOOOOOOOOOOOOOO" }
+        val roles = SecurityContextHolder.getContext().authentication.authorities.map { it.authority }
+        val l = roleRepository.findRolesWithClassroomAccess(roles, classId).isNotEmpty()
+        logger.info { l }
 
-        val roles = SecurityContextHolder.getContext().authentication.authorities
-        val roleNames = toRoleResponse(roles)
-        roleRepository.findRolesWithClassroomAccess(roleNames, classId).isEmpty()
+        return l
+
     }
 
 
