@@ -7,7 +7,7 @@ import java.util.*
 
 interface RoleRepository : JpaRepository<Role, UUID> {
     fun findByName(name: String): Role?
-    fun existsByName(name: String): Boolean
+    fun findAllByNameIn(names: List<String>): List<Role>
 
     @Query("""
         SELECT r FROM Role r

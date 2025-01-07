@@ -23,7 +23,7 @@ class User(
     val reservations: MutableSet<Reservation> = mutableSetOf()
 ) {
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val usersBuildingsRoles: MutableSet<UserBuildingRole> = mutableSetOf()
+    var usersBuildingsRoles: MutableSet<UserBuildingRole> = mutableSetOf()
 
     constructor(
         id: UUID? = null,

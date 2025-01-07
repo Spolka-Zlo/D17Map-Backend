@@ -4,6 +4,7 @@ package inc.evil.d17map.security.authentication.jwt
 import inc.evil.d17map.security.UserPrincipal
 import inc.evil.d17map.security.authentication.AuthService
 import inc.evil.d17map.security.authorization.Role
+import inc.evil.d17map.security.authorization.RoleService
 import inc.evil.d17map.security.authorization.UserBuildingRoleRepository
 import inc.evil.d17map.security.config.SecurityProperties
 import io.jsonwebtoken.Claims
@@ -36,7 +37,7 @@ class TokenProvider(
         userBuildingRoleRepository.findAllByUserEmailAndBuildingName(username, buildingName)
             .map { it.role }
             .takeIf { it.isNotEmpty() }
-            ?: listOf(Role(name = AuthService.DEFAULT_ROLE))
+            ?: listOf(Role(name = RoleService.DEFAULT_ROLE))
 
 
     fun generateToken(authentication: Authentication, buildingName: String): String {

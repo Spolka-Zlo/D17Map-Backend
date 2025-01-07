@@ -8,4 +8,5 @@ import java.util.UUID
 @Repository
 interface BuildingRepository : JpaRepository<Building, UUID> {
     fun findByName(name: String): Building?
+    fun existsByName(name: String): Boolean
 }

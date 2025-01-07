@@ -1,6 +1,7 @@
 package inc.evil.d17map.mappers
 
 import inc.evil.d17map.dtos.*
+import inc.evil.d17map.dtos.users.UserResponse
 import inc.evil.d17map.entities.*
 import org.springframework.security.core.GrantedAuthority
 import java.util.*

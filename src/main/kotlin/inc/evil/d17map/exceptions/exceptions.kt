@@ -19,10 +19,13 @@ class RecurringReservationNotFoundException(
 ) : RuntimeException("Recurring Reservation with recurring id '$id' not found")
 
 
-class RoleNotFoundException(roleName: String) : RuntimeException("Role with name '$roleName' not found")
+class RoleNotFoundException(roleName: String) : NotFoundException("Role with name '$roleName' not found")
+class MultipleRolesNotFoundException(roles: List<String>) :
+    NotFoundException("Roles: ${roles.joinToString(",", "(", ")")}} not found")
 
 class BuildingNotFoundException(buildingName: String) :
     NotFoundException("Building with name '$buildingName' not found.")
+
 
 // INVALID DATA
 
